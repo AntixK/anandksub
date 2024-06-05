@@ -1,0 +1,11 @@
+content_dir = "content"
+build_dir = "build"
+
+ignore_dirs = []
+ignore_files = []
+
+resize_images = true
+highlight_code = true
+pre_render_math = false
+minify_html=false
+
