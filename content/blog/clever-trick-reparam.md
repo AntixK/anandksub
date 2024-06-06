@@ -2,8 +2,8 @@
 @def published = "18 June 2020"
 @def description = "Implicit differentiation can lead to an efficient computation of the gradient of reparametrized samples."
 @def tags = ["math","ml", "gradient", "deep-learning"]
-@def hasmath = true
-@def draft = false
+@def has_math = true
+@def is_draft = false
 
 
 &emsp;  The famous *reparametrization trick* has been employed in estimating the gradients of samples from probability distributions by replacing an equivalent estimator that is *deterministic* and a *differential transformation* of a simple distribution.  

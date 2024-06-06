@@ -3,3 +3,4 @@ pygments
 markdown
 click
 watchdog
+pillow

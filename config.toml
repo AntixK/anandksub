@@ -4,8 +4,38 @@ build_dir = "build"
 ignore_dirs = []
 ignore_files = []
 
+# Dirs to include in the build
+include_dirs = ["assets"]
+# Files to include in the build
+include_files = []
+
+# Rendering Info
+[render]
 resize_images = true
 highlight_code = true
 pre_render_math = false
-minify_html=false
+minify_html = false
 
+# Website Info
+[site]
+# Name of your website
+name = "Anand K Subramanian"
+# Website Description
+description = "Anand's Personal Site"
+# Author's name
+author = "Anand K Subramanian"
+# Author's email
+email = "anandkrish894@gmail.com"
+# Encoding
+encoding = "UTF-8"
+
+# Defaults for posts
+[post]
+title = "No Title"
+published = "1 Jansuary 1970"
+description = "this is an empty post"
+is_draft = true
+has_chart = false
+has_math = false
+has_code = false
+tags = []
