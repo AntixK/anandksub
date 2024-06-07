@@ -219,14 +219,11 @@ td {
 /* Page Footer */
 
 .pagefoot {
-    font-size: 1.4em;
-    font-family: var(--header-font);
-    color: var(--c-4);
-    text-align: center;
-    margin-top: 6em;
-    border-top: 1px solid var(--c-1);
-    padding-top: 2em;
-    margin-bottom: 4em;
+    font-size: 42px;
+    /* font-family: var(--header-font);
+    color: var(--c-5); */
+    border-top: 1px solid;
+    border-width: 55%;
 }
 
 /* Labels */

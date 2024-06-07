@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- Link Style Sheets -->
+  <link rel="stylesheet" href="/_css/ak.css">
+
+  {% if has_math %}
+  <link rel="stylesheet" href="/_libs/katex/katex.min.css">
+
+  <script defer src="/_libs/katex/katex.min.js" crossorigin="anonymous"></script>
+  <!-- <script defer src="/_libs/katex/auto-render.min.js"></script> -->
+  <script defer src="/_libs/katex/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  <!-- <script>renderMathInElement(document.body)</script> -->
+  <script>
+    // https://github.com/KaTeX/KaTeX/blob/main/docs/autorender.md
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        throwOnError: false,
+        // output: "html",
+        // customised options
+        // • auto-render specific keys, e.g.:
+        delimiters: [
+          { left: '$$', right: '$$', display: true }, // block
+          { left: '$', right: '$', display: false }, // Inline
+          { left: "\begin{align}", right: "\end{align}", display: true }, // block
+          { left: "\begin{aligned}", right: "\end{aligned}", display: true }, // block
+        ],
+        ignoredTags: [
+          "pre",
+          "code",
+          "script",
+          "style",
+        ],
+        macros: {
+          "\\D": "\\mathbb{D}",
+          "\\E": "\\mathbb{E}",
+          "\\S": "\\mathbb{S}",
+          "\\F": "\\mathbb{F}",
+          "\\R": "\\mathbb{R}",
+          "\\C": "\\mathbb{C}",
+          "\\Z": "\\mathbb{Z}",
+          "\\N": "\\mathbb{N}",
+
+          "\\fD": "\\mathcal{D}",
+          "\\fF": "\\mathcal{F}",
+          "\\fN": "\\mathcal{N}",
+          "\\fG": "\\mathcal{G}",
+          "\\fS": "\\mathcal{S}",
+          "\\fO": "\\mathcal{O}",
+          "\\fI": "\\mathcal{I}",
+          "\\fU": "\\mathcal{U}",
+          "\\fX": "\\mathcal{X}",
+          "\\fL": "\\mathcal{L}",
+          "\\fA": "\\mathcal{A}",
+
+          "\\x": "\\times",
+          "\\vx": "\\mathbf{x}",
+          "\\vy": "\\mathbf{y}",
+          "\\vz": "\\mathbf{z}",
+
+          "\\vmu": "\\boldsymbol \\mu",
+          "\\vnu": "\\boldsymbol \\nu",
+          "\\veps": "\\boldsymbol \\epsilon",
+          "\\vtheta": "\\boldsymbol \\theta",
+          "\\vomega": "\\boldsymbol \\omega",
+          "\\vlambda": "\\boldsymbol \\lambda",
+
+          "\argmin": "\mathop{\mathrm{argmin}} \;",
+          "\argmax": "\mathop{\mathrm{argmax}} \;",
+
+        },
+        globalGroup: true,
+      });
+    });
+  </script>
+
+  {% endif %}
+
+  {% if has_code %}
+  <script src="/_libs/highlight/highlight.min.js"></script>
+  <script>hljs.highlightAll(); hljs.configure({ tabReplace: '    ' });</script>
+  <link rel="stylesheet" href="/_libs/highlight/decaf.css">
+
+  <script src="/_libs/clipboard/clipboard.min.js"></script>
+  <!-- <script>
+    (function () {
+
+      // Get the elements.
+      // - the 'pre' element.
+      // - the 'div' with the 'paste-content' id.
+
+      var pre = document.getElementsByTagName('pre');
+
+      // Add a copy button in the 'pre' element.
+      // which only has the className of 'language-'.
+
+      for (var i = 0; i < pre.length; i++) {
+        var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+        if (isLanguage === 0) {
+          var button = document.createElement('button');
+          button.className = 'copy-button';
+          button.textContent = 'Copy';
+
+          pre[i].appendChild(button);
+        }
+      };
+
+      // Run Clipboard
+      var copyCode = new Clipboard('.copy-button', {
+        target: function (trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+
+      // On success:
+      // - Change the "Copy" text to "Copied".
+      // - Swap it to "Copy" in 2s.
+      // - Lead user to the "contenteditable" area with Velocity scroll.
+
+      copyCode.on('success', function (event) {
+        event.clearSelection();
+        event.trigger.textContent = 'Copied';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 2000);
+
+      });
+
+      // On error (Safari):
+      // - Change the  "Press Ctrl+C to copy"
+      // - Swap it to "Copy" in 2s.
+
+      copyCode.on('error', function (event) {
+        event.trigger.textContent = 'Press "Ctrl + C" to copy';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 5000);
+      });
+
+    })();
+  </script> -->
+  {% endif %}
+
+  {% if has_chart %}
+  {% endif %}
+
+  <title>{{title}}</title>
+</head>
+
+<body>
+  <!-- Site Header -->
+  <header>
+    <h1><a href="/">{{name}}</a><br><br></h1>
+  </header>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <span><a href="/blog">Blog</a><span class="vl"></span></span>
+    <span><a href="/notes">Notes</a> <span class="vl"></span></span>
+    <span><a href="/art/">Art</a> <span class="vl"></span></span>
+    <span><a href="/CV">CV</a> <span class="vl"></span></span>
+    <span><a href="/tags/">Tags</a>
+  </nav>
+
+  <!-- Article Info -->
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/bookmark.svg" alt="clock-icon">&ensp;{% for tag in tags%}<span
+      class="pound">#</span>{{tag}} {% endfor %}
+  </p>
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/calendar.svg" alt="clock-icon">&ensp;{{published}}
+  </p>
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/timer.svg" alt="clock-icon">&ensp;{{read_time}} mins
+  </p>
+
+  <!-- Article Title -->
+  <h1>{{title}}</h1>
+  <!-- Insert TLDR -->
+
+  <p class="tldr">{{description}}</p>
+
+  <main>
+    {{html_content}}
+  </main>
+
+
+
+  <!-- Footer -->
+  <div class="pagefoot">
+    &copy; 2024 {{author}} <span class=" vl"></span>
+    License <span class="vl"></span>
+    Design<span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 1.3rem;">&hearts;</span>
+  </div>
+</body>
+
+</html>

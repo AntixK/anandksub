@@ -1,11 +1,17 @@
+[build]
+# Some sane defaults
 content_dir = "content"
 build_dir = "build"
+assets_dir = "assets"
+libs_dir = "_libs"
+templates_dir = "_templates"
+css_dir = "_css"
 
 ignore_dirs = []
 ignore_files = []
 
 # Dirs to include in the build
-include_dirs = ["assets"]
+include_dirs = []
 # Files to include in the build
 include_files = []
 
@@ -20,8 +26,6 @@ minify_html = false
 [site]
 # Name of your website
 name = "Anand K Subramanian"
-# Website Description
-description = "Anand's Personal Site"
 # Author's name
 author = "Anand K Subramanian"
 # Author's email
@@ -32,10 +36,11 @@ encoding = "UTF-8"
 # Defaults for posts
 [post]
 title = "No Title"
-published = "1 Jansuary 1970"
+published = "1 January 1970"
 description = "this is an empty post"
 is_draft = true
 has_chart = false
 has_math = false
 has_code = false
 tags = []
+read_time = 0
