@@ -104,7 +104,7 @@ html {
 body {
     width: 80%;
     max-width: 800px;
-    /* min-width: vw; */
+    min-width: 350px;
     margin-left: auto;
     margin-right: auto;
     font-family: var(--serif-font);
@@ -219,11 +219,14 @@ td {
 /* Page Footer */
 
 .pagefoot {
-    font-size: 42px;
-    /* font-family: var(--header-font);
-    color: var(--c-5); */
-    border-top: 1px solid;
-    border-width: 55%;
+    font-size: 1.4em;
+    font-family: var(--header-font);
+    color: var(--c-4);
+    text-align: center;
+    margin-top: 6em;
+    border-top: 1px solid var(--c-1);
+    padding-top: 2em;
+    margin-bottom: 4em;
 }
 
 /* Labels */
@@ -283,9 +286,9 @@ blockquote {
     /* background-color: var(--c-x); */
     text-align: left;
     border-radius: 15px;
-    padding: 10px;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding: 1%;
+    /* padding-left: 30px;
+    padding-right: 30px; */
 }
 
 /* ==================================================================
@@ -352,8 +355,9 @@ img {
     float: none;
     margin-left: auto;
     margin-right: auto;
-    width: 70%;
+    width: 90%;
     height: auto;
+    min-width: 350px;
 }
 
 .icon-image {
@@ -365,6 +369,8 @@ img {
     overflow: hidden;
     margin-bottom: -0.3em;
     pointer-events: none;
+    min-width: 0;
+
 }
 
 .social-image {
@@ -376,6 +382,8 @@ img {
     overflow: hidden;
     margin-bottom: -0.3em;
     pointer-events: none;
+    min-width: 0;
+
 }
 
 .genart-image {
@@ -520,12 +528,16 @@ ul.cloud li {
 }
 
 canvas {
-    padding: 0;
+    /* padding: 0; */
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
     display: block;
-    margin: 0 auto;
+    /* margin: 0 auto; */
     border: 1px solid black;
     border-radius: 20px;
-    min-width: 300px;
+    min-width: 320px;
     aspect-ratio: 1;
     text-align: center;
 }
@@ -539,19 +551,21 @@ canvas {
 
 
 .chart {
-    padding: 20px;
+    padding: 0;
     /* display: block; */
-    margin: auto;
-    border: 0.5px solid rgb(255, 255, 255);
+    margin-left: auto;
+    margin-right: auto;
+    border: 0.5px solid rgb(110, 56, 56);
     /* border-radius: 10px; */
-    width: 95%;
+    width: 100%;
     text-align: center;
 }
 
 .slider-container {
     text-align: left;
     margin: auto;
-    width: 50%;
+    min-width: 300px;
+    width: 75%;
 }
 
 /* ================================================================ */

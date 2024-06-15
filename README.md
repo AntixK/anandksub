@@ -2,23 +2,23 @@
 
 TODO
 - [ ] Basic Features
-  - [ ] Convert markdown to HTML
-  - [ ] Directly render HTML
+  - [x] Convert markdown to HTML
+  - [x] Directly render HTML
   - [ ] Pagination
   - [ ] Pre-commit hooks
-  - [ ] Math support
+  - [x] Math support
   - [ ] footnotes support
   - [ ] Utility Functions
     - [ ] recent posts
     - [ ] sorted posts list
-    - [ ] read time
+    - [x] read time
   - [ ] Live updates
   - [ ] Shortcodes
   - [ ] Metrics (web-page sizes)
   - [ ] Build-time
   - [ ] logging
   - [ ] Convert fonts to woff2 (atleast set warning)
-  - [ ] Katex macros
+  - [x] Katex macros
 - [ ] Advanced Features
   - [ ] Resize Images
   - [ ] Auto convert images to webp
@@ -41,6 +41,15 @@ Non-goals
 Note:
 1. For block math code, you need a new line before and after the $$.
 
+
+Bugs
+- [x] Replace @ defs with ::
+- [x] Handle images
+- [ ] Eqrefs
+- [x] Divs
+- [ ] clipboard
+- [ ] chart.js
+ 
 ## Usage
 
 ```

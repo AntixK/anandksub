@@ -13,8 +13,14 @@ import os
 # from ext import MyExtension
 
 # from markdown import markdown
-import mistune
-from ext import MyRenderer
+# import mistune
+# from mistune.directives import FencedDirective, Admonition, TableOfContents
+# from ext import MyRenderer
+
+import mistletoe
+# from mistletoe.latex_renderer import LaTeXRenderer
+# from mistletoe.contrib.mathjax import MathJaxRenderer
+from ext import MyHtmlRenderer
 
 t1_start = perf_counter() 
 
@@ -57,7 +63,7 @@ content_pattern = re.compile(r'@.*$', re.MULTILINE)
 
 def gather_md_files(dir, only_modified:bool = False) -> List:
     # TODO: Optionally return only modified files
-    return list(dir.glob("**/*.md"))
+    return sorted(list(dir.glob("**/*.md")))
 
 def render(clean: bool = False):
     if clean:
@@ -77,6 +83,7 @@ def render(clean: bool = False):
     # TODO: Get modified files only when clean is false
     md_files = gather_md_files(CONTENT_DIR)
     for md_file in md_files:
+        print(md_file)
         render_html(md_file)
 
 
@@ -93,18 +100,45 @@ def render_html(file):
 
     # Parse header information
     md_headers= header_pattern.findall(content)
+    # print(md_headers)
     md_content = content_pattern.sub('', content).strip()
 
     # print(len(md_content))
 
+    _header_data = {}
     header_extraction_pattern = r'(\w+)\s*=\s*(.*?)(?=\s*$)'
     matches = (re.findall(header_extraction_pattern, head)[0] for head in md_headers)
     _header_data = {k:v.strip("\"") for k,v in matches}
     # Convert tags to list of strings
     if "tags" in _header_data:
         _header_data["tags"] = list(map(str.strip, _header_data["tags"].strip('][').replace('"', '').split(',')))
+    
+    if "has_code" in _header_data:
+        _header_data["has_code"] = True if _header_data["has_code"] == "true" else False
+    
+    
+    if "is_draft" in _header_data:
+        _header_data["is_draft"] = True if _header_data["is_draft"] == "true" else False
+    
+    
+    if "has_chart" in _header_data:
+        _header_data["has_chart"] = True if _header_data["has_chart"] == "true" else False
+    
 
+    if "has_math" in _header_data:
+        _header_data["has_math"] = True if _header_data["has_math"] == "true" else False
+    
+
+    if "show_info" in _header_data:
+        _header_data["show_info"] = True if _header_data["show_info"] == "true" else False
+    
+    _header_data["read_time"] = get_read_time(md_content)
+    # print(header_data)
+    # print(_header_data)
     header_data.update(_header_data)
+
+    print(header_data)
+
 
     html_data = deepcopy(header_data)
     html_data.update(site_data)
@@ -119,9 +153,17 @@ def render_html(file):
     #                                              'markdown.extensions.fenced_code',
     #                                             #  MyExtension(),
     #                                              ])
-    markdown = mistune.create_markdown(plugins=['footnotes', 'math'], 
-                                       renderer=MyRenderer())
-    html_content = markdown(md_content)
+    # markdown = mistune.create_markdown(plugins=['footnotes', 
+    #                                             'math',
+    #                                              FencedDirective([
+    #                                                 Admonition(),
+    #                                                 TableOfContents(),
+    #                                             ]),
+    #                                             ], 
+    #                                    renderer="html")
+    # html_content = markdown(md_content)
+
+    html_content = mistletoe.markdown(md_content, MyHtmlRenderer)
 
     # print(html_content)
 
@@ -130,7 +172,6 @@ def render_html(file):
     html_template = env.get_template("article.html")
     html = html_template.render(html_data)
 
-    # print(html)
     # =============================================
     # Save html content to file
     if file.parent == CONTENT_DIR:
@@ -141,6 +182,17 @@ def render_html(file):
         with open(BUILD_DIR / file.parent.name / f"{file.stem}.html", "w+") as f:
             f.write(html)
 
+# ========================= Utilities =====================#
+def get_read_time(text) -> int:
+    num_words = len(text.split())
+    reading_speed = 180 # Accounting for math equations
+    return num_words  // reading_speed
+
+def get_recent_posts():
+    pass
+
+def get_posts_by_tag():
+    pass
 
 # # observer =  Observer()
 # # event_handler = LoggingEventHandler()

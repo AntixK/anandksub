@@ -168,6 +168,7 @@
   </nav>
 
   <!-- Article Info -->
+  {% if show_info %}
   <p class="tags">
     <img class="icon-image" src="/assets/icons/bookmark.svg" alt="clock-icon">&ensp;{% for tag in tags%}<span
       class="pound">#</span>{{tag}} {% endfor %}
@@ -178,12 +179,14 @@
   <p class="tags">
     <img class="icon-image" src="/assets/icons/timer.svg" alt="clock-icon">&ensp;{{read_time}} mins
   </p>
-
+  {% endif %}
   <!-- Article Title -->
   <h1>{{title}}</h1>
   <!-- Insert TLDR -->
 
+  {% if show_info %}
   <p class="tldr">{{description}}</p>
+  {% endif %}
 
   <main>
     {{html_content}}

@@ -4,33 +4,31 @@
 @def tags = ["math","ml","code", "jax"]
 @def has_math = true
 @def has_code = true
-@def draft = false
+@def is_draft = false
+@def show_info = true
 
 &emsp; RANSAC (RANdom SAmple Consensus) is a popular method for model estimation from a data with a large number of outliers. This belongs to a family of methods called robust estimation methods. Another example in this family is the *least-median squares estimation*. In this note, we shall discuss the RANSAC algorithm and a recently proposed improvement to it.
 
-$$
-\begin{aligned}
-x &= 1 \\
-y &= 2
-\end{aligned}
-$$
 
 > **Problem Setting:** Consider a dataset $\fD$ with $d-$dimensional points $\vx, \vy \in \R^d$ of size $N$. The data is known to have a significant number of outliers. The objective is to fit a model $f(\theta)$ accounting for the outliers in $\fD$. 
 
 For illustration, let us consider a simple 2D linear fitting. The figure shows a dataset with a lot of outliers with the ground truth and least-squares fit.
 
-<img  style="width:80%;min-width:300px;" src="/assets/post_images/ransac_input.svg" alt="Data with outliers and LS fit">
+!!!
+
+<img  style="width:80%;min-width:300px;" src="/media/post_images/ransac_input.svg " alt="Data with outliers and LS fit">
+!!!
 
 
 From the above figure, the usual least-squares estimate fails horribly. The more robust RANSAC algorithm proceeds as follows -
 
-
+::: important
 1. Sample a random subset $\fS \sim \fD$
 2. Fit model $\theta_s = \underset{\theta}{\argmin}f(\theta; \fS)$
 3. Determine the inlier (consensus) set  based on some threshold $\color{OrangeRed}{\sigma}$ as $\fI(\theta_s, \sigma, \fD) = \{(\vx, \vy) \in \fD | {\color{OrangeRed}{D}} (\theta_s, \vx, \vy) < {\color{OrangeRed}{\sigma}} \}$
-4. If $\frac{|\fI(\theta_s, \sigma, \fD)|}{N} >= \color{OrangeRed}{\beta}$ refit the model and return. $\theta^* = \underset{\theta}{\argmin} f(\theta; \fI)$; Else, Goto step 1.
-5. After $T$ iterations, return the model with the largest consensus set $\theta^* = \underset{\theta}{\argmin} f(\theta, \fI_{max}(\theta, \sigma, \fD))$.
-
+4. If $\frac{|\fI(\theta_s, \sigma, \fD)|}{N} >= \color{OrangeRed}{\beta}$ refit the model and return. $\theta^\ast = \underset{\theta}{\argmin} f(\theta; \fI)$; Else, Goto step 1.
+5. After $T$ iterations, return the model with the largest consensus set $\theta^\ast = \underset{\theta}{\argmin} f(\theta, \fI_{max}(\theta, \sigma, \fD))$.
+:::
 
 The above RANSAC algorithm has 3 main components (as highlighted above), the inlier-outlier threshold $\sigma$, the cutoff $\beta$ which specifies the probability of a point being an inlier in the given model, and the distance function $D$ which estimates the distance between the given point $(\vx_i, \vy_i)$ and the model $\theta$.
 
@@ -144,16 +142,17 @@ def ransac(data: Tuple,
 ```
 
 
-<img  style="width:80%;min-width:300px;" src="/assets/post_images/ransac_result.svg" alt="RANSAC result">
 
+
+!["RANSAC result"](/media/post_images/ransac_result.svg "RANSAC result")
 
 ## MAGSAC : Marginalizing over the σ threshold
 
 &emsp; One major difficulty of RANSAC in practice is choosing the value for the inlier-outlier threshold $\sigma$. This is a hard problem because, the threshold should ideally correspond to the noise level in the sought inliers and setting this threshold requires prior knowledge about the data and its geometry. The distance (albeit Euclidean), can still be unintuitive when the data lies on a higher dimensional manifold. Furthermore, the $\beta$ parameter, in a way, also depends on the $\sigma$. If the noise threshold is known and set correctly, then $\beta$ becomes irrelevant. The $\beta$ value can be viewed as accounting for the error in $\sigma$ value. But if the noise threshold is known, then we wouldn't really the RANSAC algorithm, would we? Naturally, There is a whole family of methods that address this noise level estimation.
 
-The initial techniques, such as the RANSAAC, relied on model ensembles where a set of minimal sample models $\theta^*_1, \theta^*_2, \ldots, \theta^*_k$ are trained using the RANSAC algorithm each corresponding to $\sigma_1, \sigma_2, \ldots, \sigma_k$ and the final model $f(\theta^*)$ is obtained using weighted average of model parameters.
+The initial techniques, such as the RANSAAC, relied on model ensembles where a set of minimal sample models $\theta^\ast_1, \theta^\ast_2, \ldots, \theta^\ast_k$ are trained using the RANSAC algorithm each corresponding to $\sigma_1, \sigma_2, \ldots, \sigma_k$ and the final model $f(\theta^\ast)$ is obtained using weighted average of model parameters.
 
-The next apparent extension is marginalization over the $\sigma$ parameter rather than relying on ensembles, as marginalization over $\sigma$ can be viewed as a generalization of ensembles. This avoids issues with the ensembles such as choosing appropriate weights for the ensembles. Secondly, the final model $f(\theta^*)$ can be obtained without a strict inlier/outlier decision. This is precisely what the MAGSAC (MArGinalizing SAmple Consensus) algorithm does[^1]. Interestingly, this makes it a *Bayesian model*[^2], although the authors didn't claim it to be one. 
+The next apparent extension is marginalization over the $\sigma$ parameter rather than relying on ensembles, as marginalization over $\sigma$ can be viewed as a generalization of ensembles. This avoids issues with the ensembles such as choosing appropriate weights for the ensembles. Secondly, the final model $f(\theta^\ast)$ can be obtained without a strict inlier/outlier decision. This is precisely what the MAGSAC (MArGinalizing SAmple Consensus) algorithm does[^1]. Interestingly, this makes it a *Bayesian model*[^2], although the authors didn't claim it to be one. 
 
 This paper, in my opinion, is a great example where a theoretical motivation is insufficient to lead to a proper algorithm. As such, the theoretical derivation of a $\sigma$-free model and the actual algorithm (the $\sigma-$consensus) are quite different. First, let's look at the marginalization part. 
 
@@ -174,14 +173,14 @@ $$
 
 Where $\Gamma$ is the Gamma function. This provides the likelihood of the point $\vx, \vy$ belonging to the model $\theta$, given the threshold $\tau(\sigma)$, based on the Euclidean distance metric $D$. If the point is an outlier, then the likelihood is 0. 
 
-$$\label{eq:magsac_lik}
+$$
 \begin{aligned}
 L(\vx, \vy | \theta, \sigma) = \begin{cases}
 h(\vx, \vy | \sigma) &, D(\vx, \vy, \theta) \geq \tau(\sigma)\\
 0 &, D(\vx, \vy, \theta) < \tau(\sigma)
 \end{cases} && \qquad \color{OrangeRed} (\text{Likelihood})
 \end{aligned}
-$$
+$$\label{eq:magsac_lik}
 
 By marginalizing over $\sigma$, we can get the likelihood of the point simply being an inlier to the model. 
 
@@ -201,17 +200,17 @@ Interestingly, we can consider the likelihood as the importance or *weight* of t
 Given a max noise level in the data $\sigma_{\max}$, we can get the worse possible inlier set $\fI$ as the initial set, based on the given model $\theta$ and the inlier threshold is given by $\tau(\sigma_{\max})$. We then divide the max noise level into $m$ sub-levels $\sigma'$. When we encounter a data point that has a greater noise level than the current one, we update the model and the likelihood, and move onto the next noise level.
 
 
-1. Initialize $\delta_{\sigma} \leftarrow \sigma_{\max} / m, \fI^* \leftarrow \emptyset$
+1. Initialize $\delta_{\sigma} \leftarrow \sigma_{\max} / m, \fI^\ast \leftarrow \emptyset$
 2. For each point $\vx, \vy$ in $\fI$
    1. If $D(\theta, \vx, \vy) < \tau(\sigma')$, then 
-      1. $\fI^* \leftarrow \fI^* \cup \{\vx, \vy\}$. Add the point to consensus set $\fI^*$. **note:** It is helpful to pre-sort the inlier points based on their distance $D(\theta, \fI_i)$ and get their corresponding noise level $\sigma_i$. So, the points at smaller noise levels are gathered first.
+      1. $\fI^\ast \leftarrow \fI^\ast \cup \{\vx, \vy\}$. Add the point to consensus set $\fI^\ast$. **note:** It is helpful to pre-sort the inlier points based on their distance $D(\theta, \fI_i)$ and get their corresponding noise level $\sigma_i$. So, the points at smaller noise levels are gathered first.
    2. Otherwise, 
-      1. $\theta = \underset{\theta}{\argmin}f(\theta; \fI^*)$. Refit the model to the consensus set $\fI^*$ using least squares.
+      1. $\theta = \underset{\theta}{\argmin}f(\theta; \fI^\ast)$. Refit the model to the consensus set $\fI^\ast$ using least squares.
       2. $w_i \leftarrow w_i + L(\vx', \vy', \theta)/\sigma_{\max}, \forall \vx', \vy' \in \fI.$ Update the weights $w_i$ for *all the points* from the marginal likelihood (equation \eqref{eq:marglik})
         
-      3. $\fI^* \leftarrow \fI^* \cup \{\vx, \vy\}$. Add the point to the consensus set.
+      3. $\fI^\ast \leftarrow \fI^\ast \cup \{\vx, \vy\}$. Add the point to the consensus set.
       4. $\sigma' \leftarrow \sigma' + \delta_{\sigma}$. Update to the next noise level.
-3. $\theta^* = \underset{\theta}{\argmin}f(\theta; \fI^*, w)$. Refit model on the consensus set using **weighted least squares**.
+3. $\theta^\ast = \underset{\theta}{\argmin}f(\theta; \fI^\ast, w)$. Refit model on the consensus set using **weighted least squares**.
 
 
 

@@ -11,7 +11,7 @@ ignore_dirs = []
 ignore_files = []
 
 # Dirs to include in the build
-include_dirs = []
+include_dirs = ["content/media"]
 # Files to include in the build
 include_files = []
 
@@ -44,3 +44,4 @@ has_math = false
 has_code = false
 tags = []
 read_time = 0
+show_info = true
