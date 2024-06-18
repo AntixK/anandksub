@@ -9,13 +9,6 @@
   <link rel="stylesheet" href="/_css/ak.css">
 
   {% if has_math %}
-  <link rel="stylesheet" href="/_libs/katex/katex.min.css">
-
-  <script defer src="/_libs/katex/katex.min.js" crossorigin="anonymous"></script>
-  <!-- <script defer src="/_libs/katex/auto-render.min.js"></script> -->
-  <script defer src="/_libs/katex/auto-render.min.js" crossorigin="anonymous"
-    onload="renderMathInElement(document.body);"></script>
-  <!-- <script>renderMathInElement(document.body)</script> -->
   <script>
     // https://github.com/KaTeX/KaTeX/blob/main/docs/autorender.md
     document.addEventListener("DOMContentLoaded", function () {
@@ -47,16 +40,21 @@
           "\\N": "\\mathbb{N}",
 
           "\\fD": "\\mathcal{D}",
+          "\\fE": "\\mathcal{E}",
           "\\fF": "\\mathcal{F}",
           "\\fN": "\\mathcal{N}",
           "\\fG": "\\mathcal{G}",
+          "\\fH": "\\mathcal{H}",
           "\\fS": "\\mathcal{S}",
+          "\\fN": "\\mathcal{N}",
           "\\fO": "\\mathcal{O}",
           "\\fI": "\\mathcal{I}",
           "\\fU": "\\mathcal{U}",
           "\\fX": "\\mathcal{X}",
           "\\fL": "\\mathcal{L}",
           "\\fA": "\\mathcal{A}",
+          "\\fB": "\\mathcal{B}",
+          "\\fC": "\\mathcal{C}",
 
           "\\x": "\\times",
           "\\vx": "\\mathbf{x}",
@@ -79,75 +77,19 @@
     });
   </script>
 
-  {% endif %}
+  <link rel="stylesheet" href="/_libs/katex/katex.min.css">
 
-  {% if has_code %}
-  <script src="/_libs/highlight/highlight.min.js"></script>
-  <script>hljs.highlightAll(); hljs.configure({ tabReplace: '    ' });</script>
-  <link rel="stylesheet" href="/_libs/highlight/decaf.css">
+  <script defer src="/_libs/katex/katex.min.js" crossorigin="anonymous"></script>
+  <!-- <script defer src="/_libs/katex/auto-render.min.js"></script> -->
+  <script defer src="/_libs/katex/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  <!-- <script>renderMathInElement(document.body)</script> -->
 
-  <script src="/_libs/clipboard/clipboard.min.js"></script>
-  <!-- <script>
-    (function () {
 
-      // Get the elements.
-      // - the 'pre' element.
-      // - the 'div' with the 'paste-content' id.
-
-      var pre = document.getElementsByTagName('pre');
-
-      // Add a copy button in the 'pre' element.
-      // which only has the className of 'language-'.
-
-      for (var i = 0; i < pre.length; i++) {
-        var isLanguage = pre[i].children[0].className.indexOf('language-');
-
-        if (isLanguage === 0) {
-          var button = document.createElement('button');
-          button.className = 'copy-button';
-          button.textContent = 'Copy';
-
-          pre[i].appendChild(button);
-        }
-      };
-
-      // Run Clipboard
-      var copyCode = new Clipboard('.copy-button', {
-        target: function (trigger) {
-          return trigger.previousElementSibling;
-        }
-      });
-
-      // On success:
-      // - Change the "Copy" text to "Copied".
-      // - Swap it to "Copy" in 2s.
-      // - Lead user to the "contenteditable" area with Velocity scroll.
-
-      copyCode.on('success', function (event) {
-        event.clearSelection();
-        event.trigger.textContent = 'Copied';
-        window.setTimeout(function () {
-          event.trigger.textContent = 'Copy';
-        }, 2000);
-
-      });
-
-      // On error (Safari):
-      // - Change the  "Press Ctrl+C to copy"
-      // - Swap it to "Copy" in 2s.
-
-      copyCode.on('error', function (event) {
-        event.trigger.textContent = 'Press "Ctrl + C" to copy';
-        window.setTimeout(function () {
-          event.trigger.textContent = 'Copy';
-        }, 5000);
-      });
-
-    })();
-  </script> -->
   {% endif %}
 
   {% if has_chart %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
   {% endif %}
 
   <title>{{title}}</title>
@@ -202,6 +144,73 @@
     Built with SSG
     <span style="color: #e25555; font-size: 1.3rem;">&hearts;</span>
   </div>
+
+  {% if has_code %}
+  <script src="/_libs/highlight/highlight.min.js"></script>
+  <script>hljs.highlightAll(); hljs.configure({ tabReplace: '    ' });</script>
+  <link rel="stylesheet" href="/_libs/highlight/decaf.css">
+
+  <script src="/_libs/clipboard/clipboard.min.js"></script>
+  <script>
+    (function () {
+
+      // Get the elements.
+      // - the 'pre' element.
+      // - the 'div' with the 'paste-content' id.
+
+      var pre = document.getElementsByTagName('pre');
+
+      // Add a copy button in the 'pre' element.
+      // which only has the className of 'language-'.
+
+      for (var i = 0; i < pre.length; i++) {
+        var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+        if (isLanguage === 0) {
+          var button = document.createElement('button');
+          button.className = 'copy-button';
+          button.textContent = 'Copy';
+
+          pre[i].appendChild(button);
+        }
+      };
+
+      // Run Clipboard
+
+      var copyCode = new Clipboard('.copy-button', {
+        target: function (trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+
+      // On success:
+      // - Change the "Copy" text to "Copied".
+      // - Swap it to "Copy" in 2s.
+      // - Lead user to the "contenteditable" area with Velocity scroll.
+
+      copyCode.on('success', function (event) {
+        event.clearSelection();
+        event.trigger.textContent = 'Copied';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 2000);
+
+      });
+
+      // On error (Safari):
+      // - Change the  "Press Ctrl+C to copy"
+      // - Swap it to "Copy" in 2s.
+
+      copyCode.on('error', function (event) {
+        event.trigger.textContent = 'Press "Ctrl + C" to copy';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 5000);
+      });
+
+    })();
+  </script>
+  {% endif %}
 </body>
 
 </html>

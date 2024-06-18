@@ -2,6 +2,7 @@ import re
 import shutil
 import tomllib
 # import markdown
+from datetime import datetime
 from pathlib import Path
 from typing import List
 from copy import deepcopy
@@ -26,32 +27,38 @@ t1_start = perf_counter()
 
 CONFIG_FILE: Path = Path("config.toml")
 
-# Parse config.toml file
-with CONFIG_FILE.open("rb") as f:
-    config = tomllib.load(f)
+def parse_config(CONFIG_FILE : str= CONFIG_FILE):
+    # Parse config.toml file
+    with CONFIG_FILE.open("rb") as f:
+        config = tomllib.load(f)
 
-BUILD_DIR: Path =  Path("build") if config["build"]["build_dir"] == "" else Path(config["build"]['build_dir'])
+    config["build"]["build_dir"] =  Path("build") if config["build"]["build_dir"] == "" else Path(config["build"]['build_dir'])
 
-if config["build"]["content_dir"] == "":
-    raise ValueError(f"'content_dir' in config.toml is empty. Set the correct content directory.")
+    if config["build"]["content_dir"] == "":
+        raise ValueError(f"'content_dir' in config.toml is empty. Set the correct content directory.")
 
-if config["build"]['assets_dir'] == "":
-    raise ValueError(f"'assets_dir' in config.toml is empty. Set the correct content directory.")
+    if config["build"]['assets_dir'] == "":
+        raise ValueError(f"'assets_dir' in config.toml is empty. Set the correct content directory.")
 
-if config["build"]['templates_dir'] == "":
-    raise ValueError(f"'templates_dir' in config.toml is empty. Set the correct content directory.")
+    if config["build"]['templates_dir'] == "":
+        raise ValueError(f"'templates_dir' in config.toml is empty. Set the correct content directory.")
 
-if config["build"]['css_dir'] == "":
-    raise ValueError(f"'css_dir' in config.toml is empty. Set the correct content directory.")
+    if config["build"]['css_dir'] == "":
+        raise ValueError(f"'css_dir' in config.toml is empty. Set the correct content directory.")
 
-if config["build"]['libs_dir'] == "":
-    raise ValueError(f"'libs_dir' in config.toml is empty. Set the correct content directory.")
+    if config["build"]['libs_dir'] == "":
+        raise ValueError(f"'libs_dir' in config.toml is empty. Set the correct content directory.")
+    
+    return config
 
-CONTENT_DIR: Path = Path(config["build"]['content_dir'])
+config = parse_config()
+BUILD_DIR: Path = config["build"]["build_dir"]
+
+CONTENT_DIR: Path  = Path(config["build"]['content_dir'])
 TEMPLATE_DIR: Path = Path(config["build"]['templates_dir'])
-LIBS_DIR: Path = Path(config["build"]['libs_dir'])
-ASSETS_DIR: Path = Path(config["build"]['assets_dir'])
-CSS_DIR: Path = Path(config["build"]['css_dir'])
+LIBS_DIR: Path     = Path(config["build"]['libs_dir'])
+ASSETS_DIR: Path   = Path(config["build"]['assets_dir'])
+CSS_DIR: Path      = Path(config["build"]['css_dir'])
 
 # Load our template environment
 env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
@@ -62,7 +69,6 @@ header_pattern = re.compile(r'^\s*@.*$', re.MULTILINE)
 content_pattern = re.compile(r'@.*$', re.MULTILINE)
 
 def gather_md_files(dir, only_modified:bool = False) -> List:
-    # TODO: Optionally return only modified files
     return sorted(list(dir.glob("**/*.md")))
 
 def render(clean: bool = False):
@@ -84,14 +90,14 @@ def render(clean: bool = False):
     md_files = gather_md_files(CONTENT_DIR)
     for md_file in md_files:
         print(md_file)
-        render_html(md_file)
+        # TODO: Only render the ones that has changed
+        render_html(md_file, config)
 
+def get_meta_info(file):
+    config = parse_config()
 
-def render_html(file):
     # Get default post data
     header_data = config['post']
-    # Get default website data
-    site_data = config['site']
 
     # =============================================
     # Read markdown content
@@ -116,15 +122,12 @@ def render_html(file):
     if "has_code" in _header_data:
         _header_data["has_code"] = True if _header_data["has_code"] == "true" else False
     
-    
     if "is_draft" in _header_data:
         _header_data["is_draft"] = True if _header_data["is_draft"] == "true" else False
-    
     
     if "has_chart" in _header_data:
         _header_data["has_chart"] = True if _header_data["has_chart"] == "true" else False
     
-
     if "has_math" in _header_data:
         _header_data["has_math"] = True if _header_data["has_math"] == "true" else False
     
@@ -132,14 +135,19 @@ def render_html(file):
     if "show_info" in _header_data:
         _header_data["show_info"] = True if _header_data["show_info"] == "true" else False
     
+
     _header_data["read_time"] = get_read_time(md_content)
     # print(header_data)
     # print(_header_data)
     header_data.update(_header_data)
 
-    print(header_data)
+    return header_data, md_content
 
+def render_html(file, config) -> None:
+    # Get default website data
+    site_data = config['site']
 
+    header_data, md_content = get_meta_info(file)
     html_data = deepcopy(header_data)
     html_data.update(site_data)
 
@@ -181,17 +189,28 @@ def render_html(file):
         (BUILD_DIR / file.parent.name).mkdir(parents=True, exist_ok=True)
         with open(BUILD_DIR / file.parent.name / f"{file.stem}.html", "w+") as f:
             f.write(html)
+    
 
 # ========================= Utilities =====================#
-def get_read_time(text) -> int:
+def get_read_time(text: str) -> int:
     num_words = len(text.split())
     reading_speed = 180 # Accounting for math equations
-    return num_words  // reading_speed
+    return num_words // reading_speed
 
-def get_recent_posts():
-    pass
+def get_recent_posts(dir: Path, N:int = -1) -> dict:
+    md_files = gather_md_files(dir)
+    header_infos = {}
+    for md_file in md_files:
+        header_data, _ = get_meta_info(md_file)
+        # print(md_file, header_data['published'])
+        header_infos[header_data['published']] =  str(md_file)
+    # print( header_infos)
+    recent_posts = dict(sorted(header_infos.items(), key=lambda x: datetime.strptime(x[0], '%d %B %Y'), reverse=True))
+    print(recent_posts)
+    # print(sorted(header_infos.keys(), key=lambda x: datetime.strptime(x, '%d %B %Y'), reverse=True))
+    
 
-def get_posts_by_tag():
+def get_posts_by_tag(tag:str):
     pass
 
 # # observer =  Observer()
@@ -209,6 +228,8 @@ def get_posts_by_tag():
 render(clean=True)
 t1_stop = perf_counter()
 print(f"Elapsed time: {(t1_stop - t1_start)*100:.4f}ms") 
+
+get_recent_posts(CONTENT_DIR)
 # Utils
 # 1. current_year
 # 2. time_now

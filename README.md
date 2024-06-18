@@ -8,6 +8,8 @@ TODO
   - [ ] Pre-commit hooks
   - [x] Math support
   - [ ] footnotes support
+  - [x] Code highlighting
+  - [x] Math
   - [ ] Utility Functions
     - [ ] recent posts
     - [ ] sorted posts list
@@ -15,7 +17,7 @@ TODO
   - [ ] Live updates
   - [ ] Shortcodes
   - [ ] Metrics (web-page sizes)
-  - [ ] Build-time
+  - [x] Build-time
   - [ ] logging
   - [ ] Convert fonts to woff2 (atleast set warning)
   - [x] Katex macros
@@ -23,7 +25,7 @@ TODO
   - [ ] Resize Images
   - [ ] Auto convert images to webp
   - [ ] Pre-render equations
-  - [ ] Pre-render code highlighting
+  - [ ] Pre-render code highlighting (pygments)
   - [ ] Minify HTML
   - [ ] RSS Feed
 
@@ -47,8 +49,10 @@ Bugs
 - [x] Handle images
 - [ ] Eqrefs
 - [x] Divs
-- [ ] clipboard
-- [ ] chart.js
+- [x] clipboard
+- [x] chart.js
+- [ ] Watchdogs for changes in files
+- [ ] Clean up parse config
  
 ## Usage
 
