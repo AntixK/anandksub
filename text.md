@@ -2,6 +2,7 @@ $$
 f =  ma
 $$
 
+This is a test with footnotes [^footnote_1].
 
 $$
 \begin{aligned}
@@ -14,12 +15,19 @@ $$
 
 :::important
 
-this is some important text!.
+this is some important text!. This is [An Internal Link](/guides/content/editing-an-existing-page).
 :::
 
 !!!
 
 <span>This is raw html code!</span>
+
+<p>this is a line.</p>
+!!!
+
+!!!
+
+<span>This is another raw html code!</span>
 
 <p>this is a line.</p>
 !!!
@@ -38,3 +46,11 @@ f &=  ma \\
 $$\label{eq:test}
 
 Where $\Gamma$ and $\theta^*$.
+
+Finally, another footnote [^2].
+
+This is [An Internal Link](/guides/content/editing-an-existing-page).
+
+[^footnote_1]: This is the first footnote.
+
+[^2]: Footnote #2

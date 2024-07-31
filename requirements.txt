@@ -5,3 +5,5 @@ click
 watchdog
 pillow
 mistune
+htmlmin
+loguru

@@ -38,10 +38,10 @@ The above function is constructed rather purposefully to satisfy the following  
 Moreover, since $g(\mu, \nu)$ uses the $l_2$ regularization, it is differentiable and biconvex. Thus,  the auxiliary function is amenable to gradient-based optimization algorithms like SGD, Adam, etc. Interestingly, Ziyin et. al.[^spred] also proved a stronger property compared to $\inf f = \inf g$. They show that at all stationary points of \eqref{eq:had_reparam}, $|\mu_i| = |\nu_i| \; \forall i $ and every local minima of $g(\mu, \nu)$, given by equation \eqref{eq:had_reparam} is a local minima of $f(x)$, given by equation \eqref{eq:l1}.
 
 
-~~~
-<img style="width:80%;min-width:300px;" src="/assets/post_images/HP_opt.webp" alt="Hadamard_optimization">
+!!!
+<img style="width:80%;min-width:300px;" src="/media/post_images/HP_opt.webp" alt="Hadamard_optimization">
 <p class="caption-text">Optimization trajectory of l1 and HP regularizations</p>
-~~~
+!!!
 
 The above figure shows that, for the same initial conditions and optimization parameters, the $l_1$ regularized objective function (Griewank, in this case) gets stuck in a local minima, while the Hadamard-parameterized function correctly reaches the global minima, which is at $(0, 0)$. Note that the $l_1$ regularized objective can be used with Pytorch's SGD optimizer, as  they use a _subgradient_ of 1 at the non-differentiable point. But this is a convention, as the subgradient of $|x|$ at $0$ is the set $[-1, 1]$.
 

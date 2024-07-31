@@ -7,9 +7,9 @@ TODO
   - [ ] Pagination
   - [ ] Pre-commit hooks
   - [x] Math support
-  - [ ] footnotes support
+    - [ ] Equation labels
+  - [x] footnotes support (Issue: https://github.com/miyuchina/mistletoe/issues/47)
   - [x] Code highlighting
-  - [x] Math
   - [ ] Utility Functions
     - [ ] recent posts
     - [ ] sorted posts list
@@ -18,7 +18,7 @@ TODO
   - [ ] Shortcodes
   - [ ] Metrics (web-page sizes)
   - [x] Build-time
-  - [ ] logging
+  - [x] logging
   - [ ] Convert fonts to woff2 (atleast set warning)
   - [x] Katex macros
 - [ ] Advanced Features
@@ -26,10 +26,10 @@ TODO
   - [ ] Auto convert images to webp
   - [ ] Pre-render equations
   - [ ] Pre-render code highlighting (pygments)
-  - [ ] Minify HTML
+  - [x] Minify HTML
   - [ ] RSS Feed
 
-goals
+Goals
 - Minimal dependencies
 - fast load and reload times
 - Optimized output
@@ -39,6 +39,7 @@ goals
 Non-goals
 1. Support for mdx
 2. Support for sass
+3. MathML (complex equations look stright-up ugly and almost unreadable)
 
 Note:
 1. For block math code, you need a new line before and after the $$.
@@ -53,6 +54,7 @@ Bugs
 - [x] chart.js
 - [ ] Watchdogs for changes in files
 - [ ] Clean up parse config
+- [ ] Clean up footnote labels
  
 ## Usage
 

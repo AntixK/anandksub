@@ -45,3 +45,4 @@ has_code = false
 tags = []
 read_time = 0
 show_info = true
+is_index = false
