@@ -10,7 +10,6 @@
 
   {% if has_math %}
   <script>
-    // https://github.com/KaTeX/KaTeX/blob/main/docs/autorender.md
     document.addEventListener("DOMContentLoaded", function () {
       renderMathInElement(document.body, {
         throwOnError: false,
@@ -80,11 +79,14 @@
   <link rel="stylesheet" href="/_libs/katex/katex.min.css">
 
   <script defer src="/_libs/katex/katex.min.js" crossorigin="anonymous"></script>
-  <!-- <script defer src="/_libs/katex/auto-render.min.js"></script> -->
   <script defer src="/_libs/katex/auto-render.min.js" crossorigin="anonymous"
     onload="renderMathInElement(document.body);"></script>
-  <!-- <script>renderMathInElement(document.body)</script> -->
 
+  <!-- TEMML Instead of KATEX -->
+  <!-- <link rel="stylesheet" href="/_libs/temml/Temml-Latin-Modern.css"> -->
+  <!-- <script src="/_libs/temml/temml.min.js"></script> -->
+  <!-- <script src="/_libs/temml/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script> -->
 
   {% endif %}
 
