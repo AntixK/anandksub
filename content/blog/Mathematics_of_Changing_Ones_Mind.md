@@ -3,8 +3,11 @@
 @def description = "A guide to updating probabilistic beliefs using Jeffrey's rule and Pearl's method."
 @def tags = ["math", "ml", "probability"]
 @def has_math = true
-@def is_draft = false
 @def has_chart = true
+@def has_code = true
+@def show_info = true
+@def is_draft = false
+@def is_index = false
 
 <!-- TODO
 - [ ] Interactive demo

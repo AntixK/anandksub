@@ -2,9 +2,12 @@
 @def published = "18 March 2024"
 @def description = "A short note on over-parameterizing the L1 regularizer to make it differentiable"
 @def tags = ["math", "ml"]
-@def is_draft = false
 @def has_math = true
+@def has_chart = false
+@def has_code = false
 @def show_info = true
+@def is_draft = false
+@def is_index = false
 
 
 &emsp; The $l_1$ regularized optimization problems are quite common in machine learning. They lead to a sparse solution to the modelling problem. Consider the following optimization problem with $l_1$ penalty[^lnot]. 

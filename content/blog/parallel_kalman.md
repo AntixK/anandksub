@@ -2,8 +2,12 @@
 @def published = "31 May 2022"
 @def description = "The associative property of Kalman (Bayesian) filters can yield a parallel algorithm in O(log N). "
 @def tags = ["math","ml", "parallel", "code", "jax"]
-@def hasmath = true
-@def draft = false
+@def has_math = true
+@def has_chart = false
+@def has_code = true
+@def show_info = true
+@def is_draft = false
+@def is_index = false
 
 &emsp; *Parallel scan* or the *Associative scan* algorithm is a popular parallel computing technique that is used to parallelize sequential algorithms using the associative property of that algorithm. This technique is a generalization of the earlier and much more popular *prefix sum* algorithm (summing operation is associative). 
 

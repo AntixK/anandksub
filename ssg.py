@@ -4,13 +4,14 @@ import tomllib
 # import markdown
 from datetime import datetime
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 from copy import deepcopy
 from jinja2 import Environment, FileSystemLoader
 # from watchdog.observers import Observer
 # from watchdog.events import LoggingEventHandler
 from time import perf_counter
 import os
+from pprint import pformat
 # from ext import MyExtension
 
 # from markdown import markdown
@@ -24,6 +25,7 @@ import mistletoe
 from ext import MyHtmlRenderer
 from loguru import logger
 from htmlmin import Minifier
+import itertools
 
 
 def parse_config(CONFIG_FILE : str):
@@ -58,6 +60,9 @@ content_pattern = re.compile(r'@def.*$', re.MULTILINE)
 def gather_md_files(dir, only_modified:bool = False) -> List:
     return sorted(list(dir.glob("**/*.md")))
 
+def gather_html_files(dir, only_modified:bool = False) -> List:
+    return sorted(list(dir.glob("**/index.html")))
+
 def render(clean: bool = False):
     if clean:
         shutil.rmtree(BUILD_DIR)
@@ -75,19 +80,113 @@ def render(clean: bool = False):
 
     # TODO: Get modified files only when clean is false
     md_files = gather_md_files(CONTENT_DIR)
+
+    logger.info(f"Found {len(md_files)} markdown file(s).")
     for md_file in md_files:
         # print(md_file)
         logger.info(f"Rendering {md_file}")
         # TODO: Only render the ones that has changed
         render_html(md_file, config)
+    
+    # Gather index html files
+    html_files = gather_html_files(CONTENT_DIR)
+    logger.info(f"Found {len(html_files)} html file(s).")
+    for html_file in html_files:
+        logger.info(f"Copying {html_file}")
 
-def get_meta_info(file, config):
+        #TODO: insert the html content into the template
+        insert_hfun(html_file, config)
 
-    # Get default post data
-    header_data = config['post']
 
-    # =============================================
-    # Read markdown content
+# =============================================
+## HELPER FUNCTIONS
+
+def recent_posts(N:int = 5) -> dict:
+    return dict(itertools.islice(posts_by_dir(CONTENT_DIR / "blog").items(), N)) 
+
+def posts_by_tag(tag:str) -> dict:
+    posts = gather_md_files(CONTENT_DIR)
+
+    result = {}
+    for post in posts:
+        # Get the header information
+        header_info, _ = get_header_info(post)
+        if tag in header_info["tags"]:
+            result[header_info["published"]] = post.relative_to(CONTENT_DIR)
+    
+    return result
+
+def posts_by_dir(directory:Path) -> dict:
+    posts = gather_md_files(directory)
+
+    result = {}
+    for post in posts:
+        # Get the header information
+        header_info, _ = get_header_info(post)
+
+        # Convert tags to list of strings
+        if "tags" in header_info:
+            header_info["tags"] = list(map(str.strip, header_info["tags"].strip('][').replace('"', '').split(',')))
+
+        result[header_info["published"]] = {
+            "url": f"{post.relative_to(directory).stem}.html",
+            "title": header_info["title"],
+            "description": header_info["description"],
+            "tags": header_info["tags"],
+        }
+    
+    # Sort the posts by date
+    result = dict(sorted(result.items(), key=lambda x: datetime.strptime(x[0], '%d %B %Y'), reverse=True))
+    
+    return result
+
+
+def dict_to_html_table(data: dict) -> str:
+    html = """
+    <table><colgroup>
+    <col span="1" style="width: 30%;">
+    <col span="1" style="width: 70%;">
+    </colgroup>
+    """
+
+    for date, post in data.items():
+        tags = [f"<span class='pound'>#</span>{t}" for t in post['tags']]
+        html += f"""
+        <tr>
+            <td>
+                <h3 class="date">{date}</h3>
+            </td>
+            <td>
+                <h3>
+                <a href={post['url']}>{post['title']}</a>
+                </h3>
+                <p class="tags">{post['description']}
+                </br>
+                {" ".join(i for i in tags)}
+                </p>
+            </td>
+        </tr>"""
+    html += """</table>"""
+    return html
+
+# =============================================
+def insert_hfun(file: Path, config: dict):
+    default_header = config["site"]
+
+    index_data = {
+        **default_header,
+        "all_articles": dict_to_html_table(posts_by_dir(CONTENT_DIR / "blog")),
+        "recent_posts": dict_to_html_table(recent_posts(5)),
+    }
+
+    _env = Environment(loader=FileSystemLoader(str(file.parent)))
+    template = _env.get_template(str(file.relative_to(file.parent)))
+    html = template.render(index_data)
+    save_html(file, html)
+
+
+def get_header_info(file: Path) -> Tuple[dict, str]:
+     # Read markdown content
     with open(file, "r") as f:
         content = f.read()
 
@@ -99,45 +198,86 @@ def get_meta_info(file, config):
     header_extraction_pattern = r'(\w+)\s*=\s*(.*?)(?=\s*$)'
     matches = (re.findall(header_extraction_pattern, head)[0] for head in md_headers)
     _header_data = {k:v.strip("\"") for k,v in matches}
+
+    return _header_data, md_content
+
+
+def get_meta_info(file, config: dict):
+
+    default_header = config["post"]
+    # =============================================
+    
+    _header_data, md_content = get_header_info(file)
+
+    header_data = {}
+    header_data["title"] = _header_data["title"]
+
+    if "published" in _header_data:
+        header_data["published"] = _header_data["published"]
+    else:
+        header_data["published"] = default_header["published"]
+        logger.warning(f"Published date not set for {file}.")
+    
+    if "description" in _header_data:
+        header_data["description"] = _header_data["description"]
+    else:
+        header_data["description"] = default_header["description"]
+        logger.warning(f"description not set for {file}.")
+
     # Convert tags to list of strings
     if "tags" in _header_data:
-        _header_data["tags"] = list(map(str.strip, _header_data["tags"].strip('][').replace('"', '').split(',')))
+        header_data["tags"] = list(map(str.strip, _header_data["tags"].strip('][').replace('"', '').split(',')))
     
     if "has_code" in _header_data:
-        _header_data["has_code"] = True if _header_data["has_code"] == "true" else False
+        header_data["has_code"] = True if _header_data["has_code"] == "true" else False
+    else:
+        header_data["has_code"] = default_header["has_code"]
+        logger.warning(f"Code status not set for {file}.")
     
     if "is_draft" in _header_data:
-        _header_data["is_draft"] = True if _header_data["is_draft"] == "true" else False
+        header_data["is_draft"] = True if _header_data["is_draft"] == "true" else False
+    else:
+        header_data["is_draft"] = True
+        logger.warning(f"Draft status not set for {file}.")
     
     if "has_chart" in _header_data:
-        _header_data["has_chart"] = True if _header_data["has_chart"] == "true" else False
+        header_data["has_chart"] = True if _header_data["has_chart"] == "true" else False
+    else:
+        header_data["has_chart"] = False
+        logger.warning(f"Chart status not set for {file}.")
     
     if "has_math" in _header_data:
-        _header_data["has_math"] = True if _header_data["has_math"] == "true" else False
+        header_data["has_math"] = True if _header_data["has_math"] == "true" else False
+    else:
+        header_data["has_math"] = False
+        logger.warning(f"Math status not set for {file}.")
     
-
     if "show_info" in _header_data:
-        _header_data["show_info"] = True if _header_data["show_info"] == "true" else False
+        header_data["show_info"] = True if _header_data["show_info"] == "true" else False
+    else:
+        header_data["show_info"] = False
+        logger.warning(f"Info status not set for {file}.")
 
     if "is_index" in _header_data:
-        _header_data["is_index"] == True if _header_data["is_index"] == "true" else False
+        header_data["is_index"] = True if _header_data["is_index"] == 'true' else False
+    else:
+        header_data["is_index"] = True
+        logger.warning(f"Index status not set for {file}.")
 
-
-    _header_data["read_time"] = get_read_time(md_content)
-    header_data.update(_header_data)
+    header_data["read_time"] = get_read_time(md_content)
 
     return header_data, md_content
 
 def render_html(file: Path, config: dict) -> None:
-    # Get default website data
+    # Get the general info about the website
     site_data = config['site']
 
     header_data, md_content = get_meta_info(file, config)
     if header_data["is_index"]:
         html_data = deepcopy(site_data)
     else:
-        html_data = deepcopy(header_data)
-        html_data.update(site_data)
+        html_data = deepcopy(site_data)
+        html_data.update(header_data)
 
     # Convert to html content
     # html_content = markdown.markdown(md_content, 
@@ -159,14 +299,15 @@ def render_html(file: Path, config: dict) -> None:
     #                                    renderer="html")
     # html_content = markdown(md_content)
 
+    # print(html_data)
     html_content = mistletoe.markdown(md_content, MyHtmlRenderer)
-
-    # print(html_content)
 
     html_data.update({"html_content":html_content})
 
     html_template = env.get_template("article.html")
     html = html_template.render(html_data)
+
+    # print(html)
 
     if DO_MINIFY:
         # print()
@@ -174,6 +315,9 @@ def render_html(file: Path, config: dict) -> None:
         html = minify_html(html)
 
     # =============================================
+    save_html(file, html)
+
+def save_html(file: Path, html: str) -> None:
     # Save html content to file
     if file.parent == CONTENT_DIR:
         with open(BUILD_DIR  / f"{file.stem}.html", "w+") as f:
@@ -233,7 +377,34 @@ def get_posts_by_tag(tag:str):
 def check_for_optimized_font_files():
     # parse css, html, and js files
     # look for corresponding font files
-    pass
+    logger.info(f"Looking for unoptimized font assets in {LIBS_DIR} and {ASSETS_DIR}...")
+
+    font_suffixes = ['woff', 'woff2', 'ttf', 'otf']
+    font_files = {suffix: list(LIBS_DIR.glob(f'**/*.{suffix}')) for suffix in font_suffixes}
+    font_files.update({suffix: font_files[suffix] + list(ASSETS_DIR.glob(f'**/*.{suffix}')) for suffix in font_suffixes})
+
+    if len(font_files['ttf']) > 0:
+        logger.info(f"Consider converting the following ttf fonts to woff/woff2 {font_files['ttf']}")
+    
+    if len(font_files['otf']) > 0:
+        logger.info(f"Consider converting the following otf fonts to woff/woff2 {font_files['ttf']}")
+    
+    if len(font_files['otf']) == 0 and len(font_files['ttf']) == 0:
+        logger.info(f"All font assets are optimized.")
+    # pass
+
+def check_for_optimized_image_formats():
+    media_dir = CONTENT_DIR / "media"
+    media_files = sorted(list(media_dir.glob('**/*.*')))
+    logger.info(f"Looking for unoptimized media in {media_dir}...")
+    logger.info(f"Found {len(media_files)} media assets.")
+
+    un_opt = [m for m in media_files if m.suffix not in ['.webp', '.svg', '.pdf', '.mp4']]
+    # print(media_files[0].suffix)
+    if len(un_opt) > 0:
+        logger.warning(f"The following assets are not optimized. Consider optimizing them before publishing.{pformat(un_opt)}")
+    else:
+        logger.info(f"All media assets are optimized.")
 
 html_minifier = Minifier(
         remove_comments=True,
@@ -268,8 +439,7 @@ if __name__ == "__main__":
     env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 
     render(clean=True)
-    # minify_html()
+    check_for_optimized_image_formats()
+    check_for_optimized_font_files()
     t1_stop = perf_counter()
     logger.info(f"Elapsed time: {(t1_stop - t1_start)*100:.4f}ms") 
-
-# get_recent_posts(CONTENT_DIR)

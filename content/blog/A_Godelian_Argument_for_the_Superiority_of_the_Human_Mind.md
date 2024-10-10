@@ -2,7 +2,12 @@
 @def published = "14 August 2021"
 @def description = "A discussion of an argument that no Turing Machine can adequately mimic human cognitive abilities, following Gödel's theorems."
 @def tags = ["philosophy", "ai", "math"]
-@def draft = false
+@def has_math = true
+@def has_chart = false
+@def has_code = false
+@def show_info = true
+@def is_draft = false
+@def is_index = false
 
 
 &emsp; Can machines be as _intelligent_ as us Humans? There seems to be a significant consensus-driven effort to realise this. Somehow, the time when machine intelligence will be commensurate with human intelligence is always thirty to fifty years away. Many will agree that at this state of affairs, we would have achieved _artificial general intelligence_ (AGI). 

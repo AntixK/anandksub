@@ -1,5 +1,7 @@
 # My Static Site Generator
 
+Posts must be markdown files only. Write index files in html.
+
 TODO
 - [ ] Basic Features
   - [x] Convert markdown to HTML
@@ -10,20 +12,20 @@ TODO
     - [ ] Equation labels
   - [x] footnotes support (Issue: https://github.com/miyuchina/mistletoe/issues/47)
   - [x] Code highlighting
-  - [ ] Utility Functions
-    - [ ] recent posts
-    - [ ] sorted posts list
+  - [x] Utility Functions
+    - [x] recent posts
+    - [x] sorted posts list
     - [x] read time
   - [ ] Live updates
   - [ ] Shortcodes
-  - [ ] Metrics (web-page sizes)
+  - [x] Metrics (web-page sizes)
   - [x] Build-time
   - [x] logging
-  - [ ] Convert fonts to woff2 (atleast set warning)
+  - [x] Convert fonts to woff2 (atleast set warning)
   - [x] Katex macros
 - [ ] Advanced Features
   - [ ] Resize Images
-  - [ ] Auto convert images to webp
+  - [x] Auto convert images to webp (atleast set warning)
   - [ ] Pre-render equations
   - [ ] Pre-render code highlighting (pygments)
   - [x] Minify HTML
@@ -53,7 +55,7 @@ Bugs
 - [x] clipboard
 - [x] chart.js
 - [ ] Watchdogs for changes in files
-- [ ] Clean up parse config
+- [x] Clean up parse config
 - [ ] Clean up footnote labels
  
 ## Usage

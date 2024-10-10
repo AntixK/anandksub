@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Link Style Sheets -->
+    <link rel="stylesheet" href="/_css/ak.css">
+
+    <title>Articles</title>
+</head>
+
+<body>
+    <!-- Site Header -->
+    <header>
+        <h1><a href="/">{{name}}</a><br><br></h1>
+    </header>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <span><a href="/blog">Blog</a><span class="vl"></span></span>
+        <span><a href="/notes">Notes</a> <span class="vl"></span></span>
+        <span><a href="/art/">Art</a> <span class="vl"></span></span>
+        <span><a href="/CV">CV</a> <span class="vl"></span></span>
+        <span><a href="/tags/">Tags</a>
+    </nav>
+
+
+    <h1>Articles</h1>
+
+
+    <main>
+        {{all_articles}}
+    </main>
+
+
+    <!-- Footer -->
+    <div class="pagefoot">
+        &copy; 2024 {{author}} <span class=" vl"></span>
+        License <span class="vl"></span>
+        Design<span class="vl"></span>
+        Built with SSG
+        <span style="color: #e25555; font-size: 1.3rem;">&hearts;</span>
+    </div>
+
+</body>
+
+</html>

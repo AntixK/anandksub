@@ -2,8 +2,12 @@
 @def published = "4 July 2023"
 @def description = "A short note of ideas used in the high-performance python profiler - Scalene"
 @def tags = ["python", "profiling", "memory"]
-@def draft = false
-
+@def has_math = true
+@def has_chart = false
+@def has_code = false
+@def show_info = true
+@def is_draft = false
+@def is_index = false
 
 &emsp; What makes a good profiler for scientific computing tasks?
 

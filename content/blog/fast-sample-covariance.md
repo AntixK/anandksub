@@ -2,8 +2,12 @@
 @def published = "23 September 2021"
 @def description = "A quick discussion and a vectorized Python implementation for the computation of sample covariance matrices for multi-dimensional arrays."
 @def tags = ["math","ml", "code"]
-@def hasmath = true
-@def draft = false
+@def has_math = true
+@def has_chart = false
+@def has_code = true
+@def show_info = true
+@def is_draft = false
+@def is_index = false
 
 &emsp; Consider the following problem -
 
