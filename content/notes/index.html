@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- Link Style Sheets -->
+  <link rel="stylesheet" href="/_css/ak.css">
+
+  <title>Articles</title>
+</head>
+
+<body>
+  <!-- Site Header -->
+  <header>
+    <h1><a href="/">{{name}}</a><br><br></h1>
+  </header>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <span><a href="/blog">Blog</a><span class="vl"></span></span>
+    <span><a href="/notes">Notes</a> <span class="vl"></span></span>
+    <span><a href="/art/">Art</a> <span class="vl"></span></span>
+    <span><a href="/CV">CV</a> <span class="vl"></span></span>
+    <span><a href="/tags/">Tags</a>
+  </nav>
+
+  <main>
+    <br>
+    <br>
+    <h1>General Notes</h1>
+
+    {{all_notes}}
+
+    <br>
+
+    <hr />
+
+    <h1>Technical Notes</h1>
+
+    <table>
+      <colgroup>
+        <col span="1" style="width: 5%;">
+        <col span="1" style="width: 95%;">
+      </colgroup>
+      <tbody <tr>
+        <td>
+          <h3>
+            <img class="icon-image" src="/assets/icons/notes.svg" style="padding-bottom:0.2em;">
+          </h3>
+        </td>
+        <td>
+          <h3>
+            <a href="pdfs/variational_bounds.pdf" target="_blank" style="text-decoration:none;">
+              Notes on Variational Lower Bound for Some Models</a>
+          </h3>
+        </td>
+        </tr>
+
+        <tr>
+          <td>
+            <h3>
+              <img class="icon-image" src="/assets/icons/notes.svg" style="padding-bottom:0.2em;">
+            </h3>
+          </td>
+          <td>
+            <h3>
+              <a href="https://drive.google.com/file/d/1xPzZUUUKVWMbaTJ8G9Ej9PIHeD1IiS77/view?usp=sharing"
+                target="_blank" style="text-decoration:none;">
+                Farrago of Concepts in Machine Learning</a>
+            </h3>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <h3>
+              <img class="icon-image" src="/assets/icons/notes.svg" style="padding-bottom:0.2em;">
+            </h3>
+          </td>
+          <td>
+            <h3>
+              <a href="https://drive.google.com/file/d/15P16I3pZe18DLcn5SrgDBQ-7_nCPL_pB/view?usp=sharing"
+                target="_blank" style="text-decoration:none;">
+                Mean Spectral Normalization for Deep Neural Networks (Master's Thesis)</a>
+            </h3>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <br>
+    <br>
+
+
+  </main>
+
+
+  <!-- Footer -->
+  <div
+    style="font-size: 1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;">
+    &copy; {{current_year}} {{author}} <span class="vl"></span>
+    <a href="/license">License</a> <span class="vl"></span>
+    <a href="/design">Design</a> <span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 24px;">&hearts;</span>
+  </div>
+
+</body>
+
+</html>

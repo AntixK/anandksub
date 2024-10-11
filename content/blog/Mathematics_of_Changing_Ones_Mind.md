@@ -8,11 +8,6 @@
 @def show_info = true
 @def is_draft = false
 
-<!-- TODO
-- [ ] Interactive demo
-- [ ] Relation with Bayes' factor
-- [ ] Jeffry;s rule is indeed bayesian
-- [ ] 3b1b's question analysis? -->
 
 &emsp; Bayes' rule, despite its far-reaching influence, has a fundamental problem. Say we have an initial belief about some event $A$. This belief can be represented as a probability that *we* have about that event. This is called the *prior* probability $p(A)$. Now, we observe another $E$, whose probability of occurring is $p(E)$. If the two events are unrelated, *i.e.* independent, then there is no need to *update* our belief regarding the event $A$. However, if they are related, in any way, then the Bayes' rule provides a general to update our belief about $A$.
 

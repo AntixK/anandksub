@@ -67,7 +67,8 @@ class MyHtmlRenderer(HtmlRenderer, LaTeXRenderer):
     def render_foot_note(self, token) -> str:
         inner = self.render_inner(token)
         
-
+        # print(self.fn_map)
+        # print(token.tag)
         return f"""
         <p><table class="fndef" id="fndef:{token.tag}">
             <tr>

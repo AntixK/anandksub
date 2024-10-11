@@ -8,18 +8,6 @@
 @def has_code = true
 @def has_chart = false
 
-<!-- # A Beautiful Way to Characterize Directed Acyclic Graphs -->
-
-
-<!-- TODO:
-- [x] Introduction
-- [ ] Why is acyclicity important?
-- [x] Combinatorial problem
-- [x] Naive way
-- [x] No Tears way
-- [ x why doesnt it work for negative weighted matrices
-- [x] Intuition for digraph lemma -->
-
 
 &emsp; Directed Acyclic Graphs, or simply *DAGs*, are graphs in which the connections/edges are one way (directed) and does not contain cycles *i.e.* no vertex can be reached from itself through other edges. 
 

@@ -134,15 +134,20 @@ def posts_by_dir(directory:Path) -> dict:
         if "tags" in header_info:
             header_info["tags"] = list(map(str.strip, header_info["tags"].strip('][').replace('"', '').split(',')))
 
-        result[header_info["published"]] = {
+        pub_date = datetime.strptime(header_info["published"], '%d %B %Y')
+        pub_date = pub_date.strftime('%d %b %Y')
+
+        result[pub_date] = {
             "url": f"{post.relative_to(directory).stem}.html",
             "title": header_info["title"],
-            "description": header_info["description"],
             "tags": header_info["tags"],
         }
+
+        if "description" in header_info:
+            result[pub_date].update({"description":header_info["description"]})
     
     # Sort the posts by date
-    result = dict(sorted(result.items(), key=lambda x: datetime.strptime(x[0], '%d %B %Y'), reverse=True))
+    result = dict(sorted(result.items(), key=lambda x: datetime.strptime(x[0], '%d %b %Y'), reverse=True))
     
     return result
 
@@ -157,21 +162,37 @@ def dict_to_html_table(data: dict) -> str:
 
     for date, post in data.items():
         tags = [f"<span class='pound'>#</span>{t}" for t in post['tags']]
-        html += f"""
-        <tr>
-            <td>
-                <h3 class="date">{date}</h3>
-            </td>
-            <td>
-                <h3>
-                <a href={post['url']}>{post['title']}</a>
-                </h3>
-                <p class="tags">{post['description']}
-                </br>
-                {" ".join(i for i in tags)}
-                </p>
-            </td>
-        </tr>"""
+        if "description" in post:
+            html += f"""
+            <tr>
+                <td>
+                    <h3 class="date">{date}</h3>
+                </td>
+                <td>
+                    <h3>
+                    <a href={post['url']}>{post['title']}</a>
+                    </h3>
+                    <p class="tags">{post['description']}
+                    </br>
+                    {" ".join(i for i in tags)}
+                    </p>
+                </td>
+            </tr>"""
+        else:
+            html += f"""
+            <tr>
+                <td>
+                    <h3 class="date">{date}</h3>
+                </td>
+                <td>
+                    <h3>
+                    <a href={post['url']}>{post['title']}</a>
+                    </h3>
+                    <p class="tags">{" ".join(i for i in tags)}
+                    </p>
+                </td>
+            </tr>"""
+        
     html += """</table>"""
     return html
 
@@ -183,6 +204,8 @@ def insert_hfun(file: Path, config: dict):
     index_data = {
         **default_header,
         "all_articles": dict_to_html_table(posts_by_dir(CONTENT_DIR / "blog")),
+        "all_notes": dict_to_html_table(posts_by_dir(CONTENT_DIR / "notes")),
+
         "recent_posts": dict_to_html_table(recent_posts(5)),
     }
 
@@ -263,7 +286,7 @@ def get_meta_info(file, config: dict):
     if "show_info" in _header_data:
         header_data["show_info"] = True if _header_data["show_info"] == "true" else False
     else:
-        header_data["show_info"] = False
+        header_data["show_info"] = True
         logger.warning(f"Info status not set for {file}.")
 
     # if "is_index" in _header_data:
