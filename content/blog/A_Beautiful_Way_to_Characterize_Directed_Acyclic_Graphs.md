@@ -30,10 +30,10 @@ DAGs themselves, are just a model to understand the given data or a process. It 
 
  Mathematically this is written as a constraint when building a model that closely follows our observations. Given a set of $n$ observations $X \in \R^{n \times d}$, each of $d$ dimensions ($d$ variables of interest), we wish to construct a model $M$ such that a discrepancy function $f(X,M)$ is minimized, while enforcing the model to be a DAG.
 
-$$ \label{eq:1}
+$$ 
 \min f(M,X) \\
 \text{subject to: } M \text{ must be a DAG} 
-$$
+$$\label{eq:1}
 
 The latter line of equation \eqref{eq:1} is the focus of this article. To begin, *any* square matrix $A \in \R^{d \x d}$ can be considered as a *weight adjacency matrix* corresponding to some graph $\fG(A)$. Each element $A_{ij}$ is the edge weight between the adjacent nodes $i, j$ the graph. Therefore, given any square matrix $A$, we can say that it induces a graph $\fG(A)$ whose weight adjacency matrix is $A$. We can now replace few words by symbols in our constraint. Our model is essentially a square matrix $W \in R^{d \x d}$ whose induced graph must be a DAG.
 
@@ -73,9 +73,9 @@ $$
 \sum_{k=1}^\infty tr(A^k) &= 0 \\
 \sum_{k=1}^\infty tr(A^k) + d &= d \\
 tr  \sum_{k=1}^\infty A^k + tr(I) &= d \\
-tr \big (\sum_{k=0}^\infty A^k \big) &= d \label{eq:2}
+tr \big (\sum_{k=0}^\infty A^k \big) &= d 
 \end{aligned}
-$$
+$$\label{eq:2}
 
 #### Intuition behind the Digraph Lemma
 Consider the following directed graph $\fG$ -

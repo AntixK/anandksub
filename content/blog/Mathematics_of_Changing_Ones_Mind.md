@@ -31,25 +31,25 @@ Note that the above rule combines our initial belief $p(A)$, which may or may no
 
 Before discussing the two belief updates, let's extend the above Bayes' rule to a set of possible states or events $\fE = \{e_1, e_2, ... e_k\}$ and $\fA = \{a_1, a_2,...a_n\}$. This set can be discrete, as shown, or continuous, but the following discussion applies to both. The Bayes' rule states that
 
-$$ \label{eq:bayes}
+$$ 
 \begin{aligned}
 p(\fA = a_i|\fE = e_j) = p(a_i|e_j) &=  \frac{p(\fE = e_j|\fA= a_i)p(\fA=a_i)}{p(\fE = e_j)} \\
 &= \frac{p(e_j|a_i)p(a_i)}{\sum_{i=1}^np(e_j|a_i)p(a_i)}
 \end{aligned}
-$$
+$$\label{eq:bayes}
 
 Now, the soft evidence problem can be understood as the way of updating the above posterior $p(a_i|e_j)$ when $p(e_j)$ is uncertain. Depending on the way the uncertainty is injected into the above equation, the update method changes correspondingly.
 
 ### Jeffrey's Rule
 Say we have another belief $q(e_j)$ over $p(e_j)$ which specifies the degree of uncertainty in the occurrence of the event $e_j$. Then, Jeffrey's rule states that the *posterior* should be updated as 
 
-$$ \label{eq:jeffrys}
+$$ 
 \begin{aligned} 
 p_{\text{JR}}(a_i | q_j) &= \sum_{j=1}^k p(a_i|e_j) q(e_j) && {\color{OrangeRed} \text{(Jeffrey's Rule})}\\
 &= \sum_{j=1}^k \frac{p(e_j|a_i)p(a_i)}{p(e_j)} q(e_j) \\
 &= \sum_{j=1}^k \frac{q(e_j)}{p(e_j)} p(a_i, e_j), \quad \forall e_j \in \fE \\
 \end{aligned}
-$$
+$$\label{eq:jeffrys}
 
 The following can be observed from the above equation -
 - Jeffrey's rule considers the uncertainty $q(e_j)$ as a distribution over that event unrelated to the evidence $p(e_j)$.
@@ -61,13 +61,13 @@ Pearl's method considers the uncertain information as a conditional belief over 
 
 The new posterior, according to Pearl, is given by
 
-$$\label{eq:pearl}
+$$
 \begin{aligned} 
 p_{\text{PM}}(a_i | q_j) &= \sum_{j=1}^k p(a_i|e_j) p(e_j | q_j) && {\color{OrangeRed} \text{(Pearl's Method})}\\
 &= \sum_{j=1}^k \frac{p(a_i|e_j) p(q_j | e_j)p(e_j)}{p(q_j)} \\
 &= \sum_{j=1}^k \frac{ p(q_j | e_j)}{p(q_j)}p(a_i, e_j), \quad \forall e_j \in \fE \\
 \end{aligned}
-$$
+$$\label{eq:pearl}
 
 - Pearl's method recasts the soft evidence (uncertainty over the evidence) as a new evidence (virtual evidence) that is conditioned upon the uncertainty. There is no "surprise element" to the uncertainty.
 - In case of multiple uncertain evidence $q_j, r_j, ...$, Pearl's method produces the same final result irrespective of their order of updates to the posterior, while Jeffrey's rule does not. In other words, Pearl's method is linear across virtual events. This is a crucial difference between the two, that affects the applicability of the two methods. 

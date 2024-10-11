@@ -186,12 +186,12 @@ $$\label{eq:magsac_lik}
 
 By marginalizing over $\sigma$, we can get the likelihood of the point simply being an inlier to the model. 
 
-$$ \label{eq:marglik}
+$$
 \begin{aligned}
 L(\vx, \vy | \theta) &= \int L(\vx, \vy | \theta, \sigma)\fU(0, \sigma_{\text{max}}) \; d\sigma = \int h(\vx, \vy | \theta, \sigma) \; \fU(0, \sigma_{\text{max}}) \; d\sigma \\
 &= \frac{2C(d)}{ \sigma_{\text{max}}} \sum_{i=1}^K (\sigma_i - \sigma_{i-1}) \sigma_i^{-d} D^{d-1}(\vx, \vy, \theta) \exp \bigg (\frac{-D^2(\vx, \vy,\theta)}{2 \sigma_i^2} \bigg ) &&  \color{OrangeRed} (\text{Marginal Likelihood})
 \end{aligned}
-$$
+$$\label{eq:marglik}
 
 Where $\sigma_1 < \sigma_2 <\cdots < \sigma_K < \sigma_{\max}$.
 Interestingly, we can consider the likelihood as the importance or *weight* of that point and fit the model using weighted least squares (WLS).

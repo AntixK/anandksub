@@ -261,11 +261,11 @@ def get_meta_info(file, config: dict):
         header_data["show_info"] = False
         logger.warning(f"Info status not set for {file}.")
 
-    if "is_index" in _header_data:
-        header_data["is_index"] = True if _header_data["is_index"] == 'true' else False
-    else:
-        header_data["is_index"] = True
-        logger.warning(f"Index status not set for {file}.")
+    # if "is_index" in _header_data:
+    #     header_data["is_index"] = True if _header_data["is_index"] == 'true' else False
+    # else:
+    #     header_data["is_index"] = True
+    #     logger.warning(f"Index status not set for {file}.")
 
     header_data["read_time"] = get_read_time(md_content)
 
@@ -276,11 +276,11 @@ def render_html(file: Path, config: dict) -> None:
     site_data = config['site']
 
     header_data, md_content = get_meta_info(file, config)
-    if header_data["is_index"]:
-        html_data = deepcopy(site_data)
-    else:
-        html_data = deepcopy(site_data)
-        html_data.update(header_data)
+    # if header_data["is_index"]:
+    #     html_data = deepcopy(site_data)
+    # else:
+    html_data = deepcopy(site_data)
+    html_data.update(header_data)
 
     # Convert to html content
     # html_content = markdown.markdown(md_content, 

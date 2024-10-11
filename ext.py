@@ -16,9 +16,14 @@ class MyHtmlRenderer(HtmlRenderer, LaTeXRenderer):
         super().__init__(TripleCommaDiv, 
                          FootNote, 
                          SpanFootNote, 
+                         EqLabel,
+                         EqrefLabel,
                          HTMLInMD, 
                          process_html_tokens=True)
         self.fn_counter = 0
+
+        self.eq_counter = 0
+        self.eq_map = {}
 
     def render_math(self, token):
         """
@@ -41,6 +46,17 @@ class MyHtmlRenderer(HtmlRenderer, LaTeXRenderer):
     def render_span_foot_note(self, token) -> str:
         self.fn_counter += 1
         return f'<sup id="{token.label}"><a class="fnref" href="#{token.label}">[{token.label}]</a></sup>'
+
+    def render_eq_label(self, token) -> str:
+        # print(token.eqtag)
+        self.eq_counter += 1
+
+        self.eq_map[token.eqtag] = self.eq_counter
+        
+        return f"<a id={token.eqtag} class='anchor'></a>"
+    
+    def render_eqref_label(self, token) -> str:
+        return f"<span class='eqref'>(<a href='#{token.eqtag}'>{token.eqtag}</a>)</span>"
 
     def render_foot_note(self, token) -> str:
         inner = self.render_inner(token)
@@ -117,6 +133,24 @@ class SpanFootNote(SpanToken):
         # print(match.group(1))
         self.tag = match.group()
         self.label = match.group(1)
+
+class EqLabel(SpanToken):
+    pattern = re.compile(r'\\label\{(.*)\}')
+    parse_inner = False
+
+    def __init__(self, match):
+        # print(match)
+        # print(match.group(2))
+        self.eqtag = match.group(1)
+
+class EqrefLabel(SpanToken):
+    pattern = re.compile(r'\\eqref\{(.*)\}')
+    parse_inner = False
+    # parse_group = 2
+
+    def __init__(self, match):
+        # print(match.group(1))
+        self.eqtag = match.group(1)
 
 
 class FootNote(BlockToken):

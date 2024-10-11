@@ -139,8 +139,8 @@ p(\vx_2 | \vy_{1:2}) &= p(\vx_2 | \vy_1, \vy_2)\frac{p(\vy_2 | \vy_1)}{p(\vy_2 |
 
 &= \frac{\int  p( \vy_2 | \vx_1) p(\vx_2 | \vy_2, \vx_1) p(\vx_1 | \vy_1, \vx_0) d\vx_1}{\int p(\vy_2 | \vx_1) p(\vx_1 | \vy_1, \vx_0) d\vx_1} &&& \big (p(\vx_1 | \vy_1, \vx_0) = p(\vx_1 | \vy_1) \big ) 
 \end{aligned}
-\label{eq:filter-decomp}
-$$
+$$\label{eq:filter-decomp}
+
 The above equation can be expressed as the following by grouping terms
 $$
 p(\vx_2 | \vy_{1:2}) = \frac{\int \lambda_2 \phi_2 \phi_1 }{\int \lambda_2 \phi_1 }
@@ -154,13 +154,13 @@ p(\vy_{1:2}) &= p(\vy_1, \vy_2) \\
 &= p(\vy_1 | \vx_0) \int p(\vy_2 | \vx_1) p(\vx_1 | \vy_1, \vx_0) d \vx_1 &&& \bigg (p(\vy_1) = p(\vy_1 | \vx_0); p(\vx_1 | \vy_1) = p(\vx_1 | \vy_1, \vx_0) \bigg )\\
 &= \lambda_1 \int \lambda_2 \phi_1
 \end{aligned}
-\label{eq:marginal-decomp}
-$$
+$$\label{eq:marginal-decomp}
+
 Equations \eqref{eq:filter-decomp} and \eqref{eq:marginal-decomp} can be combined to result 
 $$
 \begin{pmatrix} \phi_1 \\ \lambda_1 \end{pmatrix} \otimes \begin{pmatrix} \phi_2 \\ \lambda_2 \end{pmatrix} = \begin{pmatrix} p(\vx_2 | \vy_{1:2}) \\ p(\vy_{1:2}) \end{pmatrix}
-\label{eq:operator-k2}
-$$
+$$\label{eq:operator-k2}
+
 The point of equations \eqref{eq:filter-decomp} to \eqref{eq:operator-k2} is to sever the dependence of the filtering update on the previous hidden state $\vx$ as they depend only upon $\vx_1$. For instance,
 $$
 \begin{aligned}

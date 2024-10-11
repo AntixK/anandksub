@@ -34,10 +34,11 @@ Usually, such problems are solved by gradient-free model-specific methods like r
 Consider the usual gradient-descent update for optimizing the network parameters $\vtheta$.
 
 $$
-\begin{aligned} \label{eq:sgd}
+\begin{aligned} 
 \vtheta_{t+1} &= \vtheta_t - \alpha \nabla \vtheta_t  \qquad t = 1,2,..., T
 \end{aligned}
-$$
+$$\label{eq:sgd}
+
 Where $\nabla \vtheta = \nabla_{\vtheta} f(\vx_{t}; \vtheta_t, \vlambda)$ and $\alpha$ is the learning rate. The convergence guarantees of SGD imply that the above procedure yields the near-optimum $\vtheta_T \approxeq \vtheta^*$ after a certain number of updates, irrespective of the initial $\vtheta_1$, even with the same hyper-parameters $\vlambda$.
 
 !!!

@@ -45,7 +45,7 @@ Non-goals
 
 Note:
 1. For block math code, you need a new line before and after the $$.
-
+2. Equation labels must be at the end of the equation block.
 
 Bugs
 - [x] Replace @ defs with ::

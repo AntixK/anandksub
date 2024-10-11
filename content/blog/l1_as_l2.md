@@ -12,12 +12,13 @@
 
 &emsp; The $l_1$ regularized optimization problems are quite common in machine learning. They lead to a sparse solution to the modelling problem. Consider the following optimization problem with $l_1$ penalty[^lnot]. 
 
-$$\label{eq:l1}
-\min_{\theta \in \R} f(\theta) := h(\theta) + \lambda |\theta| 
 $$
+\min_{\theta \in \R} f(\theta) := h(\theta) + \lambda |\theta| 
+$$\label{eq:l1}
+
 Where $\theta$ are the parameters of the model $f$ to be optimized. Let us study the reparameterization $\theta = \mu \circ \nu$ for all $\theta \in \R$, where $\circ$ represents the element-wise (Hadamard) product of the vectors $\mu$ and $\nu$. This is called the *Hadamard product parameterization* (HPP) or simply the Hadamard paramterization[^hoff]. Then the equation \eqref{eq:l1} can be written as
 
-$$\label{eq:had_sub}
+$$
 \begin{aligned}
 \min_{\theta \in \R} f(\theta) &= h(\theta) + \lambda |\theta| \\
 % &\leq h(\theta) + \lambda \|\theta\|_2 \\
@@ -27,12 +28,12 @@ $$\label{eq:had_sub}
 &\leq h(\mu \circ \nu) + \frac{\lambda}{2} \big ( \| \mu\|_2^2 + \|\nu\|_2^2 \big ) \\
 & \leq \min_{\mu, \nu \in \R} g(\mu, \nu)
 \end{aligned}
-$$
+$$\label{eq:had_sub}
 
 Therefore, the auxiliary optimization function is
-$$\label{eq:had_reparam}
-\min_{\mu, \nu \in \R} g(\mu, \nu) := h(\mu \circ \nu) + \frac{\lambda}{2} \big ( \| \mu\|_2^2 + \|\nu\|_2^2 \big )
 $$
+\min_{\mu, \nu \in \R} g(\mu, \nu) := h(\mu \circ \nu) + \frac{\lambda}{2} \big ( \| \mu\|_2^2 + \|\nu\|_2^2 \big )
+$$\label{eq:had_reparam}
 
 The above function is constructed rather purposefully to satisfy the following  properties.
 1. The over-parameterized function $g(\mu, \nu)$ is an upper bound to  our optimization function $f(\theta)$, *i.e.* $g(\mu,\nu) \geq f(\mu \circ \nu), \forall \mu,\nu \in \R$. The equality occurs where $|\mu| = |\nu|$ as can be observed from equation \eqref{eq:had_sub}.

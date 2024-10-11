@@ -99,12 +99,12 @@ Furthermore, we can also leverage PyTorch's amazing CUDA support to run the abov
 Granted that we can't possibly assume that we have the complete data at all times. Even if we do, it is always a good idea to process in batches for scalability and performance. So can we incorporate our vectorized solution into a streaming data framework?
 
 From the definition of sample covariance, we have
-$$\label{eq:seq_cov}
+$$
 \begin{aligned}
 S_i  &= \frac{1}{N-1} \sum_{i=1}^N (\vx_i - \hat{\vmu})(\vx_i - \hat{\vmu})^T \\
  &= \frac{1}{N-1} \sum_{i=1}^N \vx_i \vx_i^T - \frac{N}{N-1}\hat{\vmu}\hat{\vmu}^T \\
 \end{aligned}
-$$
+$$\label{eq:seq_cov}
 
 So, we have to keep track of the sum of products of the incoming $\vx_i$ and the mean $\hat{\vmu}$. We can efficiently do both the operations in-place using PyTorch's `add_` and `baddbmm_`. The implementation is given below.
 

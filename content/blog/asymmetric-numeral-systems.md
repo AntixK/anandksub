@@ -35,15 +35,18 @@ In the recent years, there has been much development in newer entropy coding tec
 
 
 Assume that we start tracking the bit at time step $i$ (represented as $b_i$) with an initial symbol $x_i$. When the next bit $b_{i+1}$ comes in, we must update our symbol to $x_{i+1}$. One simple way to update this is start with $x_0 = 2^0 = 1$ and at each time step, update $x_i$ as 
-$$ \label{eq:ac}
+$$ 
 x_{i+1} = C_1(x_i, b_{i+1}) = x_i + b_{i+1} \times 2^{i+1}
-$$
+$$\label{eq:ac}
+
 This essentially results in the decimal representation of $b_{i+1}b_{i}...b_2b_1$. This method, apart from being lossless and fast (powers of 2 can be computed using bit-shifts), has an interesting property - the range of values is being altered at every time step. Note that in the above equation, the incoming bit $b_{i+1}$ is being added to the most significant-bit (MSB) of $x_{i}$. Therefore, each such update increases the range.
 
 Alternatively, the incoming bit can be added to the least significant-bit (LSB) such that the range is kept the same but the number alternates between odd and even (even number if $b_{i+1}$ is 0 and odd if 1). This can be written as
-$$\label{eq:ans}
-x_{i+1} = C_2(x_i, b_{i+1}) = 2x_i + b_{i+1}
+
 $$
+x_{i+1} = C_2(x_i, b_{i+1}) = 2x_i + b_{i+1}
+$$\label{eq:ans}
+
 In other words, $b_{i+1}$ determines whether $x_{i+1}$ will be even or odd. In entropy coding, equation \eqref{eq:ac} is  used in the well-known Arithmetic Coding (AC) technique while equation \eqref{eq:ans} is used in Asymmetric Numeral Systems(ANS). AC requires that the bits come in from LSB to MSB, while ANS requires from MSB to LSB. This fundamental difference lies in they way they are implemented. By default, all streaming data comes from MSB to LSB - AC implements like a queue (first-in-first-out) while ANS implements like a stack (last-in-first-out). Note that both methods are equally fast - both $2^{i+1}$ and $2x_{i}$ can be computed through bit-shift operations.
 
 !!!
@@ -51,12 +54,14 @@ In other words, $b_{i+1}$ determines whether $x_{i+1}$ will be even or odd. In e
 !!!
 
 The fundamental idea behind both is that, given a symbol $x_i$, if one needs to add an incoming bit $b_{i+1}$ without any loss in information, any coding method should increase the information content should increase no more than the information content in the incoming bit.
+
 $$
-\begin{aligned} \label{eq:comp_cond}
+\begin{aligned} 
 \log_2(x_{i+1}) &= \log_2(x_i) - \log_2(p(b)) \\
  &= \log_2 \bigg ( \frac{x_i}{p(b)} \bigg )
 \end{aligned}
-$$
+$$\label{eq:comp_cond}
+
 Where $p(b)$ is the probability distribution of the bits. This means that any encoding function $C$ must be of the form 
 $$C \approx x_i/p(b)
 $$ 
@@ -64,9 +69,9 @@ If the bits are equally probable, *i.e.* $p(b = 1) = p(b=0) = 1/2$, then the equ
 
 The decoding function $D_2(x_{i+1})$ for $C_2$ can be constructed as
 
-$$\label{eq:decode_ans}
-D_2(x_{i+1}) = (x_i, b_{i+1}) = \bigg ( \bigg \lfloor \frac{x_{i+1}}{2} \bigg \rfloor, \bmod( x_{i+1}, 2) \bigg )
 $$
+D_2(x_{i+1}) = (x_i, b_{i+1}) = \bigg ( \bigg \lfloor \frac{x_{i+1}}{2} \bigg \rfloor, \bmod( x_{i+1}, 2) \bigg )
+$$\label{eq:decode_ans}
 
 A point to note here is that neither of the above two encodings are optimal as they are at least 1 bit larger than the shannon entropy. This is because we start with $x_0=1$. This is to differentiate '0' from '00' etc. 
 
@@ -119,23 +124,26 @@ Consider equation \eqref{eq:ans} again. As discussed earlier, it is optimal only
 !!!
 
 Extending this intuition to unequal probabilities, $x_{i+1}$ is the $x_{i}^{th}$ number in the subset defined by $b_{i+1}$. For this, the range of $x$ must be split into two subsets whose size reflects the probability of thier respective state. If the probability of 1 is $p(b = 1) = \lambda < p(b= 0) = (1 - \lambda)$ and let the range of $x$ be the set $\fF = [0, N]$, then we want $ \lceil N\lambda \rceil$ odd numbers in $\fF$. The $\lceil \cdot \rceil$ operator accounts for the fractional components as we shall stick to natural numbers. We want a generalized coding method such that the following equality is satisfied.
-$$\label{eq:cond}
-\lceil (x_{i+1} + 1)  \lambda \rceil - \lceil x_{i+1} \lambda \rceil = b_{i+1}
+
 $$
+\lceil (x_{i+1} + 1)  \lambda \rceil - \lceil x_{i+1} \lambda \rceil = b_{i+1}
+$$\label{eq:cond}
 
 Say we updated $x_i \to x_{i+1}$ using some encoding. Now, the proportion of odds is $\lceil x_{i+1} \lambda \rceil$. However, the coding must be robust to the ceil operation. For example, for $b_{i+1} = 0, \lambda = 0.3$ say we compute $x_{i+1} = 6$, then we have $\lceil 6 * 0.3 \rceil = 2$ odd values in the range (0,6]. Now $\lceil (6 + 1) * 0.3 \rceil = 3 $ which means $\lceil (6 + 1) * 0.3 \rceil - \lceil 6 * 0.3 \rceil = 1 \neq 0$. Therefore, $x_{i+1} = 6$ cannot be a correct code for $b_{i+1} = 0, \lambda = 0.3$. On the other hand, $x_{i+1} = 9$ is a valid code and can be verified similarly. The idea behind equation \eqref{eq:cond} is that by doing ceil operation (we will use more of those below), we are essentially rounding the computation results; and when done sequentially, the error may blow up resulting in incorrect code that may not be uniquely reversible _i.e._ loss of information.
 
 We can now come up with a coding scheme that accounts for any arbitrary binary distribution $p$, satisfying equation \eqref{eq:cond}. If the probability of 1 is $p(b = 1) = \lambda < p(b = 0) = (1 - \lambda)$, then
-$$\label{eq:ubsencode}
+
+$$
 x_{i+1} = C_2(x_i, b_{i+1}) = \begin{cases}
  \big \lceil \frac{x_i + 1}{1 - \lambda} \big \rceil -1  &; b_{i+1} = 0 \\
  \big \lfloor \frac{x_i}{\lambda} \big \rfloor  &; b_{i+1} = 1 \\
 \end{cases}
-$$
+$$\label{eq:ubsencode}
+
 It is easy to verify the above equation with equation \eqref{eq:ans} for $\lambda=1/2$. The decoding function $D_2$ can be derived as
 
 $$
-\begin{aligned} \label{eq:ubsdecode}
+\begin{aligned} 
  D_2(x_{i+1}) &= (x_i, b_{i+1}) \\
  x_i &= \begin{cases}
 \lceil x_{i+1}  \lambda \rceil &; b_{i+1} = 1 \\
@@ -143,12 +151,13 @@ $$
  \end{cases} \\
  b_{i+1} &= \lceil (x_{i+1} + 1)  \lambda \rceil - \lceil x_{i+1} \lambda \rceil
  \end{aligned}
-$$
+$$\label{eq:ubsdecode}
+
 Observe that decoding $b_{i+1}$ is essentially through equation \eqref{eq:cond}. The above encoding scheme is called as _uniform Asymmetric Binary Systems_ (uABS) as we exploit the asymmetry in the probabilities of the bits to get compression, while the subsets segmented by those probabilities are themselves uniformly distributed.
 
 Let us take an illustrative example - Consider the bitstream `1, 0, 0, 1, 0` with $p(b =1) = \lambda = 0.3$. This can be encoded using equation \eqref{eq:ubsencode} as follows (note that we encode in the reverse order)
 
-$$\label{eq:example}
+$$
 \begin{aligned}
 x_0 & &&= 1 \\
 x_1 &= \bigg \lceil \frac{x_0 + 1}{0.7} \bigg \rceil -1 &&= 2 &&& (b_1 = 0) \\
@@ -157,11 +166,11 @@ x_3 &= \bigg \lceil \frac{x_2 + 1}{0.7} \bigg \rceil -1 &&= 9 &&& (b_3 = 0) \\
 x_4 &= \bigg \lceil \frac{x_3 + 1}{0.7} \bigg \rceil -1 &&= 14 &&& (b_4 = 0) \\
 x_5 &= \bigg\lceil \frac{x_{4}}{0.3} \bigg \rceil &&= 46 &&& (b_5 = 1) \\
 \end{aligned}
-$$
+$$\label{eq:example}
 
 Similarly decoding can be done as
 
-$$\label{eq:example}
+$$
 \begin{aligned}
 & &&x_5 &&&= 46 \\
 b_5 &= \lceil (x_5 + 1) \x 0.3 \rceil - \lceil x_5 \x 0.3 \rceil = 1; &&x_4 = x_5 - \lceil x_5 \x 0.3 \rceil &&&=14 \\ 
@@ -170,7 +179,7 @@ b_3 &= \lceil (x_2 + 1) \x 0.3 \rceil - \lceil x_2 \x 0.3 \rceil = 0; &&x_2= \lc
 b_2 &= \lceil (x_2 + 1) \x 0.3 \rceil - \lceil x_2 \x 0.3 \rceil = 1; &&x_1 = x_2 - \lceil x_2 \x 0.3 \rceil &&&=2 \\ 
 b_1 &= \lceil (x_1 + 1) \x 0.3 \rceil - \lceil x_1 \x 0.3 \rceil = 0; &&x_0= \lceil x_1 \x 0.3 \rceil &&&=1\\ 
 \end{aligned}
-$$
+$$\label{eq:example}
 
 And we get back our code in its original order.
 
@@ -241,13 +250,15 @@ $$
 The precise location within the $k^{th}$ subset is calculated by $\bmod(x_i, f_k)$. This is because $k^{th}$ subset has a fixed size and using modulus helps us recycle the values within the subset. This step is essential to avoid a massive value for $M$. However, this recycling destroys the uniqueness of the encoding. We must therefore, repeat the range of size $M$ over the natural number range $\mathbb{N}$ (Refer the above figure). We can then  uniquely identify the range of size $M$ within the natural number range by $ M\bigg \lfloor \frac{x_i}{f_k} \bigg \rfloor $.  
 
 The subset selection part is pretty straightforward. Each symbol in the alphabet $\fA$ that occurs before $a_k$ occupies $f_1, f_2, .. f_{k-1}$ points on $(0,M]$ respectively. If we wish to select the $k^{th}$ subset, then its starting point is simply
-$$\label{eq:ans_subselect}
+
+$$
 \sum_{j=1}^{k-1} f_j = CDF(a_k)
-$$
+$$\label{eq:ans_subselect}
+
 This is essentially the CDF of the symbol $a_k$ as $f_1, ... f_K$ are now viewed as scaled probabilities. Putting everything together, we get the final ANS coding scheme.
-$$ \label{eq:ans_final}
+$$ 
 x_{i+1} = C_{ANS}(x_i, s_{i+1})=  M\bigg \lfloor \frac{x_i}{f_k} \bigg \rfloor  +\bmod (x_i, f_k) +\sum_{j=1}^{k-1} f_j  
-$$
+$$\label{eq:ans_final}
 
 :::important
 **Another way to think about ANS:**
