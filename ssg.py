@@ -8,7 +8,7 @@ from typing import List, Tuple
 from copy import deepcopy
 from jinja2 import Environment, FileSystemLoader
 from watchdog.observers import Observer
-from watchdog.events import LoggingEventHandler, FileSystemEventHandler
+from watchdog.events import  FileSystemEventHandler
 from time import perf_counter
 import os
 from pprint import pformat
@@ -27,6 +27,7 @@ from ext import MyHtmlRenderer
 from loguru import logger
 from htmlmin import Minifier
 import itertools
+from collections import Counter
 
 
 def parse_config(CONFIG_FILE : str):
@@ -104,6 +105,23 @@ def render(clean: bool = False):
 # =============================================
 ## HELPER FUNCTIONS
 
+def tag_list() -> dict:
+    posts = gather_md_files(CONTENT_DIR)
+
+    all_tags = []
+    for post in posts:
+        # Get the header information
+        header_info, _ = get_header_info(post)
+        # Convert tags to list of strings
+        if "tags" in header_info:
+            header_info["tags"] = list(map(str.strip, header_info["tags"].strip('][').replace('"', '').split(',')))
+
+        all_tags += header_info["tags"]
+
+    tags = Counter(all_tags)
+    
+    return tags
+
 def current_year() -> int:
     return datetime.now().year
 
@@ -118,7 +136,7 @@ def posts_by_tag(tag:str) -> dict:
         # Get the header information
         header_info, _ = get_header_info(post)
         if tag in header_info["tags"]:
-            result[header_info["published"]] = post.relative_to(CONTENT_DIR)
+            result[header_info["published"]] = post.relative_to(CONTENT_DIR).stem
     
     return result
 
@@ -138,7 +156,7 @@ def posts_by_dir(directory:Path) -> dict:
         pub_date = pub_date.strftime('%d %b %Y')
 
         result[pub_date] = {
-            "url": f"{post.relative_to(directory).stem}.html",
+            "url": f"{post.relative_to(directory).stem}",
             "title": header_info["title"],
             "tags": header_info["tags"],
         }
@@ -150,6 +168,16 @@ def posts_by_dir(directory:Path) -> dict:
     result = dict(sorted(result.items(), key=lambda x: datetime.strptime(x[0], '%d %b %Y'), reverse=True))
     
     return result
+
+def create_tag_cloud(tags: dict) -> str:
+    # Create a tag cloud
+    tag_cloud = """<ul class="cloud">"""
+
+    for tag, count in tags.items():
+        tag_cloud += f"""<li><span class="pound">#</span><span class="tags"><a href="/tag/{tag}/" data-weight={count}>{tag}</a>[{count}]</span></li>"""
+    
+    tag_cloud += """</ul>"""
+    return tag_cloud
 
 
 def dict_to_html_table(data: dict) -> str:
@@ -200,13 +228,14 @@ def dict_to_html_table(data: dict) -> str:
 def insert_hfun(file: Path, config: dict):
     default_header = config["site"]
     default_header["current_year"] = current_year()
-
+    tag_list()
     index_data = {
         **default_header,
         "all_articles": dict_to_html_table(posts_by_dir(CONTENT_DIR / "blog")),
         "all_notes": dict_to_html_table(posts_by_dir(CONTENT_DIR / "notes")),
-
         "recent_posts": dict_to_html_table(recent_posts(5)),
+        "tag_cloud": create_tag_cloud(tag_list()),
+        # "tag_list": dict_to_html_table(tag_list()),
     }
 
 
@@ -461,6 +490,7 @@ class ContentMonitor(FileSystemEventHandler):
 # ============================ Server =========================== #
 class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
     SUFFIXES = [".html", "/index.html", "/", ""]
+    MEDIA_EXTENSIONS = (".webp", ".svg", ".pdf", ".mp4")
 
     def translate_path(self, path):
         path = server.SimpleHTTPRequestHandler.translate_path(self, path)
@@ -469,6 +499,13 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
         return fullpath
 
     def do_GET(self):
+        if self.path not in self.SUFFIXES:
+            # self.path = self.path.lstrip("/")
+            if (not self.path.endswith(".html") and 
+                not self.path.endswith("/") and 
+                not self.path.endswith(self.MEDIA_EXTENSIONS)):
+                self.path += ".html"
+
         server.SimpleHTTPRequestHandler.do_GET(self)
     
     def send_error(self, code, message=None):

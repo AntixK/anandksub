@@ -17,7 +17,7 @@ For illustration, let us consider a simple 2D linear fitting. The figure shows a
 
 !!!
 
-<img  style="width:80%;min-width:300px;" src="/media/post_images/ransac_input.svg " alt="Data with outliers and LS fit">
+<img  style="width:80%;min-width:300px;" src="/media/post_images/ransac_input.webp " alt="Data with outliers and LS fit">
 !!!
 
 
@@ -145,7 +145,7 @@ def ransac(data: Tuple,
 
 
 
-!["RANSAC result"](/media/post_images/ransac_result.svg "RANSAC result")
+!["RANSAC result"](/media/post_images/ransac_result.webp "RANSAC result")
 
 ## MAGSAC : Marginalizing over the σ threshold
 

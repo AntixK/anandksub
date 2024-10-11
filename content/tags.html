@@ -1,4 +1,5 @@
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -7,7 +8,7 @@
     <!-- Link Style Sheets -->
     <link rel="stylesheet" href="/_css/ak.css">
 
-    <title>404: File not found</title>
+    <title>Tags</title>
 </head>
 
 <body>
@@ -23,21 +24,19 @@
         <span><a href="/CV">CV</a> <span class="vl"></span></span>
         <span><a href="/tags">Tags</a>
     </nav>
-    </br>
-    </br>
 
-    <h1>404: Page Not Found</h1>
-    <p>The requested page was not found 🐧</p>
-    <p><a href="/">Click here</a> to go back to the home page.</p>
+    <main>
+        <br>
+        <br>
+        <h1>Tags</h1>
 
-    <div style="font-size: 1.2rem; 
-               font-family: 'Overpass'; 
-               color: var(--c-4); 
-               text-align: center; 
-               margin-top: 6em; 
-               border-top: 1px solid var(--c-4); 
-               padding-top: 2em; 
-               margin-bottom: 4em;">
+        {{tag_cloud}}
+
+    </main>
+
+    <!-- Footer -->
+    <div
+        style="font-size: 1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;">
         &copy; {{current_year}} {{author}} <span class="vl"></span>
         <a href="/license">License</a> <span class="vl"></span>
         <a href="/design">Design</a> <span class="vl"></span>

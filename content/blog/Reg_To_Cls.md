@@ -17,9 +17,9 @@ But surely, it is an interesting problem to convert discrete classification labe
 
 
 Now, any given discrete class label can be mapped onto a simplex. A simplex is just an $N$-dimensional triangle. So, a class label of 1 in a three class label system of $\{1,2, 3\}$ can be mapped to a simplex as $[1,0, 0]$ and the label 2 as $[0, 1, 0]$ - as in 3D, a unit equilateral triangle is the simplex. Similarly we can extend this idea to $N$ dimensions, where given $N$ classes $\{1, 2, \ldots, N\}$, the $i^{th}$ label will be represented on the simplex as a $N$-d vector with 1 at the $(N-i+1)^{th}$ position. But why a simplex? Well, simplex is the smallest possible form (polytope) where each label is uniquely identifiable. You may recall this simplex-mapping in ML as one-hot encoding.
-~~~
-<img  style="width:50%;min-width:400px;"  src="/assets/post_images/one-hot.svg" alt="One-Hot Encoding">
-~~~
+!!!
+<img  style="width:50%;min-width:400px;"  src="/media/post_images/one-hot.svg" alt="One-Hot Encoding">
+!!!
 
 The above encoding can be thought as each label existing on the non-origin vertex of the $N$-d unit-simplex. Which implies that the sum of the coordinates sum up to 1. We can then re-imagine them as a probability vector for the $i^{th}$ class. In other words, the simplex can be recast as logits. 
 
@@ -32,9 +32,9 @@ $$
 where $\delta_i$ is the one-hot vector of the $i^{th}$ class, $\epsilon \sim \fU$ is a uniform noise distribution over the $N$ classes, and $\gamma$ is the coefficient that controls the relaxation. Basically, given a uniform prior distribution over all classes, each label is jittered away from the vertex. This relaxed one-hot vector is now a point on the *probability simplex*. 
 
 
-~~~
-<img  style="width:30%;min-width:300px;"  src="/assets/post_images/label-smooth.svg" alt="Label Smoothing">
-~~~
+!!!
+<img  style="width:30%;min-width:300px;"  src="/media/post_images/label-smooth.svg" alt="Label Smoothing">
+!!!
 
 So, that's it? We have now a real-valued vector from the discrete class labels. Note that these vectors, although continuous, exists on the simplex. In other words, they are constrained to be within the simplex. Even if we use a regression loss, the optimizer needs account for this constraint. This is not so straight-forward[^3]. 
 

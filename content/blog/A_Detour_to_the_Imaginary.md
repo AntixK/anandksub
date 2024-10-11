@@ -61,9 +61,9 @@ $$
 
 We have now obtained a numerical differentiation formula for a real function that does not suffer from subtractive cancellation, and has a significantly low truncation error. Owing to this, the above formula admits extremely low values of $h$, even to the machine precision $\epsilon$.
 
-~~~
-<img  style="width:100%;min-width:300px;" src="/assets/post_images/cdiff.svg" alt="Complex step numerical differentiation comparison.">
-~~~
+!!!
+<img  style="width:100%;min-width:300px;" src="/media/post_images/cdiff.svg" alt="Complex step numerical differentiation comparison.">
+!!!
 
 Implementing complex-step differentiation is extremely simple too.
 
@@ -110,10 +110,10 @@ The question is - can we improve the gradient descent algorithm (or any first-or
 
 It's been known empirically (at least since 2015[^rad]) that momentum actually hinders the stability of training GANs. Some have even suggested to use negative momentum[^negmom] for a stable training. 
 
-~~~
+!!!
 <img style="width:100%;min-width:300px;" src="/assets/post_images/dirac_gan.webp" alt="Comparison of various values for momentum in SGD for GANs">
 <p class = "caption-text ">Behold, the eye!</p>
-~~~
+!!!
 
  -->
 
@@ -137,10 +137,10 @@ $$\label{eq:gan_loss}
 Where $V$ is the objective function that captures the dueling dynamic. In its general form, it is written as $
 V(G, D) = \E[f(D(\vx))] + \E[f(-D(G(\vz)))]$[^nag], where $f$ is some function.
 
-~~~
-<img style="width:100%;min-width:300px;" src="/assets/post_images/dirac_gan.webp" alt="Comparison of various values for momentum in SGD for GANs">
+!!!
+<img style="width:100%;min-width:300px;" src="/media/post_images/dirac_gan.webp" alt="Comparison of various values for momentum in SGD for GANs">
 <p class = "caption-text ">Behold, the eye!</p>
-~~~
+!!!
 
 The above figure shows the training trajectories of Dirac GAN[^dirac] with learning rate $\alpha = 0.01$ across various momentum values - no momentum($\nu=0$), positive, negative, and even complex momentum. Intuitively, if positive momentum is akin to a heavy ball that accelerates the gradient descent, negative momentum is like friction that slows it down[^negmom]. From the above figure, the training converges for all momentum values *except* for a positive-valued momentum ($\nu = 0.9$).
 
@@ -155,12 +155,12 @@ w_{t+1} &= w_t + \Re \{\alpha\, \upsilon_{t+1}\}
 $$\label{eq:complex-sgd}
 
 Where $\Re$ and $\Im$ are the real and imaginary parts respectively.
-~~~
+!!!
 <video autoplay muted loop>
-  <source src="/assets/post_images/gan_opt.mp4" type='video/mp4;'>>
+  <source src="/media/post_images/gan_opt.mp4" type='video/mp4;'>>
 </video>
 <p class = "caption-text ">2D GAN on Toy data with complex-momentum</p>
-~~~
+!!!
 
 In practice, complex-momentum SGD requires 2 momentum buffers (for the real and imaginary parts) and is quite easy to implement. 
 

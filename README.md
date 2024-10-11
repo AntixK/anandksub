@@ -32,6 +32,11 @@ TODO
   - [ ] Pre-render code highlighting (pygments)
   - [x] Minify HTML
   - [ ] RSS Feed
+- [ ] Add Art section
+- [ ] Add CV
+- [ ] Add tags
+  - [x] Create tag cloud
+  - [ ] Create page for each tag with the list of posts
 
 Goals
 - Minimal dependencies
@@ -74,12 +79,15 @@ antixk.dev
   ├── config.toml     # Default website configuration
   ├── content         # Put all your site content here
   │   ├── 403.md
-  │   ├── 404.md
+  │   ├── 404.html
   │   ├── blog
+  │   │   ├── index.html # Front page of blog section
   │   │   └── article.md
   │   ├── index.md    # Front page
-  │   ├── media       # Put your site media here
-  │   └── notes       # You can also include notes to be published
+  │   ├── media       # Put your site media here     
+  │   └── notes  # You can also include notes to be published
+  │       ├── index.html # Front page of blog section
+  │       └── article.md
   ├── _css            # Put your style sheets here
   │   └── minimal.css
   ├── _libs           # Put all your js libraries here
