@@ -5,7 +5,6 @@
 @def has_math = true
 @def is_draft = false
 @def show_info = true
-@def is_index = false
 @def has_code = true
 @def has_chart = false
 

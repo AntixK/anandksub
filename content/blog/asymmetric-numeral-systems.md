@@ -7,7 +7,6 @@
 @def has_code = true
 @def show_info = true
 @def is_draft = false
-@def is_index = false
 
 
 &emsp; Lossless compression is a family of techniques to compress or encode a given random data or source. It is sometimes called as _source coding_ or _entropy coding_ in literature. The term "entropy coding" stems from Shannon's source coding theorem, informally stated as follows.

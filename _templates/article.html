@@ -213,15 +213,22 @@
     {{html_content}}
   </main>
 
-
-
-  <!-- Footer -->
-  <div class="pagefoot">
+  <!-- Footer
+  <div class="myfooter">
     &copy; 2024 {{author}} <span class=" vl"></span>
     License <span class="vl"></span>
     Design<span class="vl"></span>
     Built with SSG
     <span style="color: #e25555; font-size: 1.3rem;">&hearts;</span>
+  </div> -->
+
+  <div
+    style="font-size:1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;">
+    &copy; {{current_year}} {{author}} <span class="vl"></span>
+    <a href="/license">License</a> <span class="vl"></span>
+    <a href="/design">Design</a> <span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 24px;">&hearts;</span>
   </div>
 
   {% if has_code %}

@@ -219,14 +219,9 @@ td {
 /* Page Footer */
 
 .pagefoot {
-    font-size: 1.4em;
-    font-family: var(--header-font);
-    color: var(--c-4);
-    text-align: center;
-    margin-top: 6em;
     border-top: 1px solid var(--c-1);
-    padding-top: 2em;
-    margin-bottom: 4em;
+    color: var(--c-2);
+    /* text-align: center; */
 }
 
 /* Labels */
@@ -693,7 +688,6 @@ hr {
     font-size: 1.4rem;
     padding-right: 5px;
 }
-
 
 
 /* ================================================================ */

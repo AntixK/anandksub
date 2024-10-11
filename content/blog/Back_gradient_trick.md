@@ -7,7 +7,6 @@
 @def has_code = true
 @def show_info = true
 @def is_draft = false
-@def is_index = false
 
 
 &emsp; The *back-gradient* trick is a method for gradient-based optimization applied to bi-level problems. A common example of such a problem is the hyperparameter optimization of neural networks. Given a neural network $f: \R^N \to \R^M$, with parameters $\vtheta$ and hyperparameters $\vlambda$, the problem is to find the optimal set of hyperparameters that maximizes the given objective.

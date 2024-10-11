@@ -62,7 +62,7 @@ def gather_md_files(dir, only_modified:bool = False) -> List:
     return sorted(list(dir.glob("**/*.md")))
 
 def gather_html_files(dir, only_modified:bool = False) -> List:
-    return sorted(list(dir.glob("**/index.html")))
+    return sorted(list(dir.glob("**/*.html")))
 
 def render(clean: bool = False):
     t1_start = perf_counter() 
@@ -103,6 +103,9 @@ def render(clean: bool = False):
     logger.success(f"Rendering complete. Elapsed time: {(t1_stop - t1_start)*100:.4f}ms")
 # =============================================
 ## HELPER FUNCTIONS
+
+def current_year() -> int:
+    return datetime.now().year
 
 def recent_posts(N:int = 5) -> dict:
     return dict(itertools.islice(posts_by_dir(CONTENT_DIR / "blog").items(), N)) 
@@ -175,12 +178,14 @@ def dict_to_html_table(data: dict) -> str:
 # =============================================
 def insert_hfun(file: Path, config: dict):
     default_header = config["site"]
+    default_header["current_year"] = current_year()
 
     index_data = {
         **default_header,
         "all_articles": dict_to_html_table(posts_by_dir(CONTENT_DIR / "blog")),
         "recent_posts": dict_to_html_table(recent_posts(5)),
     }
+
 
     _env = Environment(loader=FileSystemLoader(str(file.parent)))
     template = _env.get_template(str(file.relative_to(file.parent)))
@@ -274,6 +279,7 @@ def get_meta_info(file, config: dict):
 def render_html(file: Path, config: dict) -> None:
     # Get the general info about the website
     site_data = config['site']
+    site_data["current_year"] = current_year()
 
     header_data, md_content = get_meta_info(file, config)
     # if header_data["is_index"]:
@@ -429,7 +435,6 @@ class ContentMonitor(FileSystemEventHandler):
             logger.info(f"Reloading server due to file change: {event.src_path}")
             render(clean=True)
 
-
 # ============================ Server =========================== #
 class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
     SUFFIXES = [".html", "/index.html", "/", ""]
@@ -442,6 +447,14 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         server.SimpleHTTPRequestHandler.do_GET(self)
+    
+    def send_error(self, code, message=None):
+        if code == 404:
+            with open(BUILD_DIR / "404.html", "r") as f:
+                msg_404 = f.read()
+            self.error_message_format = f"""{msg_404}"""
+
+        server.SimpleHTTPRequestHandler.send_error(self, code, message)
 
 
 class SSGHTTPServer(server.HTTPServer):

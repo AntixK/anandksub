@@ -7,7 +7,6 @@
 @def has_code = true
 @def show_info = true
 @def is_draft = false
-@def is_index = false
 
 
 &emsp; நேதிக்கு Past Lives (2023) படம் பாதுண்டு இருகும்பொழுது அஃசாபுதைல ஐசுலான்டு கலைஞர் Olafur Eliassonனின் ஒரு கலை கன்காட்சி நடக்கிரதுனு நியாபகம் வந்துது. அடுத்த 2 நிமிஷதுல டிகெட்ட onlineல வாங்கினேன்.

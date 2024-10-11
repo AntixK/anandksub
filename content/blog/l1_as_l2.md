@@ -7,7 +7,6 @@
 @def has_code = false
 @def show_info = true
 @def is_draft = false
-@def is_index = false
 
 
 &emsp; The $l_1$ regularized optimization problems are quite common in machine learning. They lead to a sparse solution to the modelling problem. Consider the following optimization problem with $l_1$ penalty[^lnot]. 

@@ -6,8 +6,6 @@
 @def has_code = false
 @def is_draft = false
 @def show_info = true
-@def is_index = false
-@def has_chart = false
 
 
 &emsp;  The famous *reparametrization trick* has been employed in estimating the gradients of samples from probability distributions by replacing an equivalent estimator that is *deterministic* and a *differential transformation* of a simple distribution.  

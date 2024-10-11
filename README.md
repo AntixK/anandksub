@@ -23,6 +23,8 @@ TODO
   - [x] logging
   - [x] Convert fonts to woff2 (atleast set warning)
   - [x] Katex macros
+  - [ ] Proper HTML Error Pages
+    - [ ] 404
 - [ ] Advanced Features
   - [ ] Resize Images
   - [x] Auto convert images to webp (atleast set warning)
@@ -57,7 +59,8 @@ Bugs
 - [x] Watchdogs for changes in files
 - [x] Clean up parse config
 - [x] Clean up footnote labels
-- [ ] Equation numbering
+- [x] Equation numbering
+- [x] Footer design
  
 ## Usage
 

@@ -180,7 +180,6 @@ class FootNote(BlockToken):
 
                 return (fn_tag[2:], children)
 
-
     def __init__(self, match):
         self.tag = match[0]
         self.children = match[1]

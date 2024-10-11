@@ -7,7 +7,6 @@
 @def has_code = true
 @def show_info = true
 @def is_draft = false
-@def is_index = false
 
 &emsp; *Parallel scan* or the *Associative scan* algorithm is a popular parallel computing technique that is used to parallelize sequential algorithms using the associative property of that algorithm. This technique is a generalization of the earlier and much more popular *prefix sum* algorithm (summing operation is associative). 
 

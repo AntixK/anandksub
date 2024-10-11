@@ -7,7 +7,6 @@
 @def has_code = false
 @def show_info = true
 @def is_draft = false
-@def is_index = false
 
 &emsp; What makes a good profiler for scientific computing tasks?
 

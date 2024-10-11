@@ -7,7 +7,6 @@
 @def has_code = true
 @def show_info = true
 @def is_draft = false
-@def is_index = false
 
 &emsp; RANSAC (RANdom SAmple Consensus) is a popular method for model estimation from a data with a large number of outliers. This belongs to a family of methods called robust estimation methods. Another example in this family is the *least-median squares estimation*. In this note, we shall discuss the RANSAC algorithm and a recently proposed improvement to it.
 
