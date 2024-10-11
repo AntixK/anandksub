@@ -50,13 +50,14 @@ Note:
 Bugs
 - [x] Replace @ defs with ::
 - [x] Handle images
-- [ ] Eqrefs
+- [x] Eqrefs
 - [x] Divs
 - [x] clipboard
 - [x] chart.js
-- [ ] Watchdogs for changes in files
+- [x] Watchdogs for changes in files
 - [x] Clean up parse config
-- [ ] Clean up footnote labels
+- [x] Clean up footnote labels
+- [ ] Equation numbering
  
 ## Usage
 

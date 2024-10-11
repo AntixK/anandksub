@@ -21,6 +21,7 @@ class MyHtmlRenderer(HtmlRenderer, LaTeXRenderer):
                          HTMLInMD, 
                          process_html_tokens=True)
         self.fn_counter = 0
+        self.fn_map = {}
 
         self.eq_counter = 0
         self.eq_map = {}
@@ -45,25 +46,33 @@ class MyHtmlRenderer(HtmlRenderer, LaTeXRenderer):
     
     def render_span_foot_note(self, token) -> str:
         self.fn_counter += 1
-        return f'<sup id="{token.label}"><a class="fnref" href="#{token.label}">[{token.label}]</a></sup>'
-
+        self.fn_map[token.label] = self.fn_counter
+        return f'<sup id="fnref:{token.label}"><a class="fnref" href="#fndef:{token.label}">[{self.fn_map[token.label]}]</a></sup>'
+    
     def render_eq_label(self, token) -> str:
-        # print(token.eqtag)
-        self.eq_counter += 1
+        # Render the equation label.
+        # Creates an anchor tag with the equation label as the id.
 
+        self.eq_counter += 1
         self.eq_map[token.eqtag] = self.eq_counter
         
         return f"<a id={token.eqtag} class='anchor'></a>"
     
     def render_eqref_label(self, token) -> str:
-        return f"<span class='eqref'>(<a href='#{token.eqtag}'>{token.eqtag}</a>)</span>"
+        # Links to the equation label with the given tag.
+
+        eq_label = self.eq_map[token.eqtag]
+        return f"<span class='eqref'>(<a href='#{token.eqtag}'>{eq_label}</a>)</span>"
 
     def render_foot_note(self, token) -> str:
         inner = self.render_inner(token)
+        
+        print(self.fn_map)
+        print(token.tag)
         return f"""
-        <p><table class="fndef" id="{token.tag}">
+        <p><table class="fndef" id="fndef:{token.tag}">
             <tr>
-                <td class="fndef-backref"><a href="#{token.tag}">[{token.tag}]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:{token.tag}">[{self.fn_map[token.tag]}]</a></td> 
                 <td class="fndef-content">{inner.lstrip("<p>").rstrip("</p>")}</td>
             </tr>
         </table></p>
@@ -135,7 +144,7 @@ class SpanFootNote(SpanToken):
         self.label = match.group(1)
 
 class EqLabel(SpanToken):
-    pattern = re.compile(r'\\label\{(.*)\}')
+    pattern = re.compile(r'\\label\{(.*?)\}')
     parse_inner = False
 
     def __init__(self, match):
@@ -144,8 +153,9 @@ class EqLabel(SpanToken):
         self.eqtag = match.group(1)
 
 class EqrefLabel(SpanToken):
-    pattern = re.compile(r'\\eqref\{(.*)\}')
+    pattern = re.compile(r'\\eqref\{(.*?)\}')
     parse_inner = False
+    precedence = 10
     # parse_group = 2
 
     def __init__(self, match):
@@ -154,6 +164,8 @@ class EqrefLabel(SpanToken):
 
 
 class FootNote(BlockToken):
+    precedence = 11
+
     @staticmethod
     def start(line):
         return line.startswith("[^")

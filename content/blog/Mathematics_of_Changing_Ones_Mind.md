@@ -346,7 +346,6 @@ Funnily, enough, the above equation follows Jeffrey's notion of uncertainty.
 
 [^c2]: Example taken from - Halpern, J. (2003). Reasoning about Uncertainty. MIT Press, Cambridge, MA.
 
-[^3]: This [video](https://www.youtube.com/watch?v=lG4VkPoG3ko) by 3Blue1Brown provides great introduction to Bayes factor. 
 
 [^4]: Jacobs, B., & Stein, D. (2023). Pearl's and Jeffrey's Update as Modes of Learning in Probabilistic Programming. Electronic Notes in Theoretical Informatics and Computer Science.
 
