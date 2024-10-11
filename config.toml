@@ -46,3 +46,8 @@ read_time = 0
 show_info = true
 is_draft = true
 is_index = false
+
+# Infor regarding the server
+[server]
+port = 8188
+host = "localhost"

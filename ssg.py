@@ -7,11 +7,12 @@ from pathlib import Path
 from typing import List, Tuple
 from copy import deepcopy
 from jinja2 import Environment, FileSystemLoader
-# from watchdog.observers import Observer
-# from watchdog.events import LoggingEventHandler
+from watchdog.observers import Observer
+from watchdog.events import LoggingEventHandler, FileSystemEventHandler
 from time import perf_counter
 import os
 from pprint import pformat
+from http import server
 # from ext import MyExtension
 
 # from markdown import markdown
@@ -54,8 +55,8 @@ def parse_config(CONFIG_FILE : str):
 
 
 # Precompile regex patterns
-header_pattern = re.compile(r'^\s*@.*$', re.MULTILINE)
-content_pattern = re.compile(r'@def.*$', re.MULTILINE)
+HEADER_PATTERN = re.compile(r'^\s*@.*$', re.MULTILINE)
+CONTENT_PATTERN = re.compile(r'@def.*$', re.MULTILINE)
 
 def gather_md_files(dir, only_modified:bool = False) -> List:
     return sorted(list(dir.glob("**/*.md")))
@@ -64,6 +65,7 @@ def gather_html_files(dir, only_modified:bool = False) -> List:
     return sorted(list(dir.glob("**/index.html")))
 
 def render(clean: bool = False):
+    t1_start = perf_counter() 
     if clean:
         shutil.rmtree(BUILD_DIR)
     
@@ -94,10 +96,11 @@ def render(clean: bool = False):
     for html_file in html_files:
         logger.info(f"Copying {html_file}")
 
-        #TODO: insert the html content into the template
+        #Insert the html content into the template
         insert_hfun(html_file, config)
 
-
+    t1_stop = perf_counter()
+    logger.success(f"Rendering complete. Elapsed time: {(t1_stop - t1_start)*100:.4f}ms")
 # =============================================
 ## HELPER FUNCTIONS
 
@@ -191,8 +194,8 @@ def get_header_info(file: Path) -> Tuple[dict, str]:
         content = f.read()
 
     # Parse header information
-    md_headers= header_pattern.findall(content[:500])
-    md_content = content_pattern.sub('', content).strip()
+    md_headers= HEADER_PATTERN.findall(content[:500])
+    md_content = CONTENT_PATTERN.sub('', content).strip()
 
     _header_data = {}
     header_extraction_pattern = r'(\w+)\s*=\s*(.*?)(?=\s*$)'
@@ -391,7 +394,7 @@ def check_for_optimized_font_files():
     
     if len(font_files['otf']) == 0 and len(font_files['ttf']) == 0:
         logger.info(f"All font assets are optimized.")
-    # pass
+
 
 def check_for_optimized_image_formats():
     media_dir = CONTENT_DIR / "media"
@@ -415,12 +418,41 @@ html_minifier = Minifier(
 
 def minify_html(html_str: str) -> str:
     return html_minifier.minify(html_str)
-    
-# Check for 
+
+# ============================ Watchdogs =========================== #
+
+class ContentMonitor(FileSystemEventHandler):
+    def on_any_event(self, event):
+        if event.is_directory:
+            return
+        elif event.event_type in ["created", "modified"]:
+            logger.info(f"Reloading server due to file change: {event.src_path}")
+            render(clean=True)
+
+
+# ============================ Server =========================== #
+class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
+    SUFFIXES = [".html", "/index.html", "/", ""]
+
+    def translate_path(self, path):
+        path = server.SimpleHTTPRequestHandler.translate_path(self, path)
+        relpath = os.path.relpath(path, os.getcwd())
+        fullpath = os.path.join(self.server.base_path, relpath)
+        return fullpath
+
+    def do_GET(self):
+        server.SimpleHTTPRequestHandler.do_GET(self)
+
+
+class SSGHTTPServer(server.HTTPServer):
+    def __init__(self, base_path, *args, **kwargs):
+        self.allow_reuse_address = True
+        server.HTTPServer.__init__(self, *args, **kwargs)
+        self.base_path = base_path
 
 
 if __name__ == "__main__":
-    t1_start = perf_counter() 
+    
 
     CONFIG_FILE: Path = Path("config.toml")
 
@@ -441,5 +473,20 @@ if __name__ == "__main__":
     render(clean=True)
     check_for_optimized_image_formats()
     check_for_optimized_font_files()
-    t1_stop = perf_counter()
-    logger.info(f"Elapsed time: {(t1_stop - t1_start)*100:.4f}ms") 
+
+
+    # Setup the watcdog observer
+    event_handler = ContentMonitor()
+    observer = Observer()
+    observer.schedule(event_handler, CONTENT_DIR, recursive=True)
+    observer.start()
+
+    try:
+        with SSGHTTPServer(str(BUILD_DIR),(config["server"]["host"], config["server"]["port"]), SSGHTTPRequestHandler) as httpd:
+            logger.info(f"Starting server at http://{config['server']['host']}:{config['server']['port']}")
+            httpd.serve_forever()
+
+    except KeyboardInterrupt:
+            observer.stop()
+
+    observer.join()

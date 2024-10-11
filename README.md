@@ -16,7 +16,7 @@ TODO
     - [x] recent posts
     - [x] sorted posts list
     - [x] read time
-  - [ ] Live updates
+  - [x] Live updates
   - [ ] Shortcodes
   - [x] Metrics (web-page sizes)
   - [x] Build-time
