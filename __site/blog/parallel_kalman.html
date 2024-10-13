@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        throwOnError: false,
+        // output: "html",
+        // customised options
+        // • auto-render specific keys, e.g.:
+        delimiters: [
+          { left: '$$', right: '$$', display: true }, // block
+          { left: '$', right: '$', display: false }, // Inline
+          { left: "\begin{align}", right: "\end{align}", display: true }, // block
+          { left: "\begin{aligned}", right: "\end{aligned}", display: true }, // block
+        ],
+        ignoredTags: [
+          "pre",
+          "code",
+          "script",
+          "style",
+        ],
+        macros: {
+          "\\A": "\\mathbb{A}",
+          "\\B": "\\mathbb{B}",
+          "\\C": "\\mathbb{C}",
+          "\\D": "\\mathbb{D}",
+          "\\E": "\\mathbb{E}",
+          "\\F": "\\mathbb{F}",
+          "\\G": "\\mathbb{G}",
+          "\\H": "\\mathbb{H}",
+          "\\I": "\\mathbb{I}",
+          "\\J": "\\mathbb{J}",
+          "\\K": "\\mathbb{K}",
+          "\\L": "\\mathbb{L}",
+          "\\M": "\\mathbb{M}",
+          "\\N": "\\mathbb{N}",
+          "\\O": "\\mathbb{O}",
+          "\\P": "\\mathbb{P}",
+          "\\Q": "\\mathbb{Q}",
+          "\\R": "\\mathbb{R}",
+          "\\S": "\\mathbb{S}",
+          "\\T": "\\mathbb{T}",
+          "\\U": "\\mathbb{U}",
+          "\\V": "\\mathbb{V}",
+          "\\W": "\\mathbb{W}",
+          "\\X": "\\mathbb{X}",
+          "\\Y": "\\mathbb{Y}",
+          "\\Z": "\\mathbb{Z}",
+
+          "\\fA": "\\mathcal{A}",
+          "\\fB": "\\mathcal{B}",
+          "\\fC": "\\mathcal{C}",
+          "\\fD": "\\mathcal{D}",
+          "\\fE": "\\mathcal{E}",
+          "\\fF": "\\mathcal{F}",
+          "\\fG": "\\mathcal{G}",
+          "\\fH": "\\mathcal{H}",
+          "\\fI": "\\mathcal{I}",
+          "\\fJ": "\\mathcal{J}",
+          "\\fK": "\\mathcal{K}",
+          "\\fL": "\\mathcal{L}",
+          "\\fM": "\\mathcal{M}",
+          "\\fN": "\\mathcal{N}",
+          "\\fO": "\\mathcal{O}",
+          "\\fP": "\\mathcal{P}",
+          "\\fQ": "\\mathcal{Q}",
+          "\\fR": "\\mathcal{R}",
+          "\\fS": "\\mathcal{S}",
+          "\\fT": "\\mathcal{T}",
+          "\\fU": "\\mathcal{U}",
+          "\\fV": "\\mathcal{V}",
+          "\\fW": "\\mathcal{W}",
+          "\\fX": "\\mathcal{X}",
+          "\\fY": "\\mathcal{Y}",
+          "\\fZ": "\\mathcal{Z}",
+
+          "\\x": "\\times",
+          "\\vA": "\\mathbf{A}",
+          "\\vB": "\\mathbf{B}",
+          "\\vC": "\\mathbf{C}",
+          "\\vD": "\\mathbf{D}",
+          "\\vE": "\\mathbf{E}",
+          "\\vF": "\\mathbf{F}",
+          "\\vG": "\\mathbf{G}",
+          "\\vH": "\\mathbf{H}",
+          "\\vI": "\\mathbf{I}",
+          "\\vJ": "\\mathbf{J}",
+          "\\vK": "\\mathbf{K}",
+          "\\vL": "\\mathbf{L}",
+          "\\vM": "\\mathbf{M}",
+          "\\vN": "\\mathbf{N}",
+          "\\vO": "\\mathbf{O}",
+          "\\vP": "\\mathbf{P}",
+          "\\vQ": "\\mathbf{Q}",
+          "\\vR": "\\mathbf{R}",
+          "\\vS": "\\mathbf{S}",
+          "\\vT": "\\mathbf{T}",
+          "\\vU": "\\mathbf{U}",
+          "\\vV": "\\mathbf{V}",
+          "\\vW": "\\mathbf{W}",
+          "\\vX": "\\mathbf{X}",
+          "\\vY": "\\mathbf{Y}",
+          "\\vZ": "\\mathbf{Z}",
+
+          "\\va": "\\mathbf{a}",
+          "\\vb": "\\mathbf{b}",
+          "\\vc": "\\mathbf{c}",
+          "\\vd": "\\mathbf{d}",
+          "\\ve": "\\mathbf{e}",
+          "\\vf": "\\mathbf{f}",
+          "\\vg": "\\mathbf{g}",
+          "\\vh": "\\mathbf{h}",
+          "\\vi": "\\mathbf{i}",
+          "\\vj": "\\mathbf{j}",
+          "\\vk": "\\mathbf{k}",
+          "\\vl": "\\mathbf{l}",
+          "\\vl": "\\mathbf{l}",
+          "\\vm": "\\mathbf{m}",
+          "\\vn": "\\mathbf{n}",
+          "\\vo": "\\mathbf{o}",
+          "\\vp": "\\mathbf{p}",
+          "\\vq": "\\mathbf{q}",
+          "\\vr": "\\mathbf{r}",
+          "\\vs": "\\mathbf{s}",
+          "\\vt": "\\mathbf{t}",
+          "\\vu": "\\mathbf{u}",
+          "\\vv": "\\mathbf{v}",
+          "\\vw": "\\mathbf{w}",
+          "\\vx": "\\mathbf{x}",
+          "\\vy": "\\mathbf{y}",
+          "\\vz": "\\mathbf{z}",
+
+          "\\vmu": "\\boldsymbol \\mu",
+          "\\vnu": "\\boldsymbol \\nu",
+          "\\veps": "\\boldsymbol \\epsilon",
+          "\\vtheta": "\\boldsymbol \\theta",
+          "\\vomega": "\\boldsymbol \\omega",
+          "\\vlambda": "\\boldsymbol \\lambda",
+          "\\vzero": "\\mathbf{0}",
+          "\\vone": "\\mathbf{1}",
+          "\argmin": "\mathop{\mathrm{argmin}} \;",
+          "\argmax": "\mathop{\mathrm{argmax}} \;",
+
+        },
+        globalGroup: true,
+      });
+    });
+  </script>
+
+  <link rel="stylesheet" href="/_libs/katex/katex.min.css">
+
+  <script defer src="/_libs/katex/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="/_libs/katex/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+  <!-- TEMML Instead of KATEX -->
+  <!-- <link rel="stylesheet" href="/_libs/temml/Temml-Latin-Modern.css"> -->
+  <!-- <script src="/_libs/temml/temml.min.js"></script> -->
+  <!-- <script src="/_libs/temml/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script> -->
+
+  
+
+  <!-- Link Style Sheets -->
+  <link rel="stylesheet" href="/_css/ak.css">
+
+  
+
+  <title>Parallelizing Kalman Filters</title>
+</head>
+
+<body>
+  <!-- Site Header -->
+  <header>
+    <h1><a href="/">Anand K Subramanian</a><br><br></h1>
+  </header>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <span><a href="/blog">Blog</a><span class="vl"></span></span>
+    <span><a href="/notes">Notes</a> <span class="vl"></span></span>
+    <span><a href="/art/">Art</a> <span class="vl"></span></span>
+    <span><a href="/CV">CV</a> <span class="vl"></span></span>
+    <span><a href="/tags">Tags</a>
+  </nav>
+
+  <!-- Article Info -->
+  
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/bookmark.svg" alt="clock-icon">&ensp;<span
+      class="pound">#</span>math <span
+      class="pound">#</span>ml <span
+      class="pound">#</span>parallel <span
+      class="pound">#</span>code <span
+      class="pound">#</span>jax 
+  </p>
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/calendar.svg" alt="clock-icon">&ensp;31 May 2022
+  </p>
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/timer.svg" alt="clock-icon">&ensp;15 mins
+  </p>
+  
+
+  <!-- Article Title -->
+  <h1>Parallelizing Kalman Filters</h1>
+  <!-- Insert TLDR -->
+
+  
+  <p class="tldr">The associative property of Kalman (Bayesian) filters can yield a parallel algorithm in O(log N). </p>
+  
+
+  <main>
+    <p>  <em>Parallel scan</em> or the <em>Associative scan</em> algorithm is a popular parallel computing technique that is used to parallelize sequential algorithms using the associative property of that algorithm. This technique is a generalization of the earlier and much more popular <em>prefix sum</em> algorithm (summing operation is associative).</p>
+<p>Consider a sequential algorithm $\fA$ that runs in $\fO(N)$. By definition, at each step $t$, the computation $a_t$ depends on the previous result $a_{t-1}$ through some associative operation $\otimes$. The set of all the prefix-sums for $N$ steps is therefore</p>
+<p>$$
+(a_1, a_1 \otimes a_2, \ldots ,a_1 \otimes \cdots \otimes a_N )
+$$</p>
+<p>Many common operations are associative like addition, subtraction, maximum, minimum, and so on. The parallel computation of the above generalized prefix-sum is called the <em>scan</em> operation <sup id="fnref:1"><a class="fnref" href="#fndef:1">[1]</a></sup>. A prefix-scan algorithm taken in an array $a_1,a_2, \ldots, a_N$ and computes the array $a_1, (a_1 \otimes a_2), \ldots ,(a_1 \otimes \cdots \otimes a_N) $</p>
+<pre><code class="language-python">def prefix_scan(op, A: np.ndarray):
+    """
+    Pseudocode for the inplace parallel prefix scan.
+    reference: GPU Gems 3 Chapter 39
+
+    Args:
+    op  = Associative binary operator
+    A   = Sequence of elements
+
+    Usage:
+    prefix_scan(np.add, np.array([1,2,3,4,5,6,7]))
+    """
+
+    N = A.shape[0]
+    res = A.copy()  # Inplace
+    log_n = np.log2(N).astype(int)
+
+    def _up_sweep(res, i, j):
+        l = j + 2 ** i - 1
+        r = j + 2 ** (i + 1) - 1
+        res[r] = op(res[l], res[r]) 
+        # Order matters, as the operator 
+        # need not be commutative
+
+    def _down_sweep(res, i, j):
+        l = j + 2 ** i - 1
+        r = j + 2 ** (i + 1) - 1
+        res[l], res[r] = res[r], op(res[r], res[l])
+
+    # Up sweep
+    for i in range(log_n):
+        # Do in parallel (O(log N))
+        for j in range(0, N, 2 ** (i + 1)):
+            _up_sweep(res, i, j)
+
+    res[-1] = 0
+
+    # Down sweep
+    for i in range(log_n - 1, -1, -1):
+        # Do in parallel (O(log N))
+        for j in range(0, N, 2 ** (i + 1)):
+            _down_sweep(res, i, j)
+    
+    # Do in parallel (O(log N))
+    res = op(res, A)
+    return res
+</code></pre>
+<p>For our purposes, by parallelization we really mean a SIMD implementation - where the same operation is carried over different data points in parallel. This is also called <em>vectorization</em> in practice. The parallel prefix-sum is, thus, a vectorized cumulative sum algorithm.</p>
+<h2>Parallelizing Kalman Filter</h2>
+<p>The logic flow of parallelizing the Kalman filter involves the following steps - Kalman filtering is sequential <em>i.e.</em> it is $\fO(N)$;  Kalman filtering is associative; therefore, Kalman filter can be parallelized using the associative scan algorithm<sup id="fnref:2"><a class="fnref" href="#fndef:2">[2]</a></sup>.</p>
+<h3>Sequential Kalman Filter</h3>
+<img  style="width:60%;min-width:300px;" src="/media/post_images/Kalman_filter.svg" alt="Kalman Filter illustration.">
+
+<p>Kalman filtering is a special (Gaussian) case of more general class of <em>Bayesian filters</em>. Given a system with its internal(hidden) state as a set of variables $\vx_k$ and set of variables $\vy_k$ that can be observed/measured at time step $k$, we are interested in the following<sup id="fnref:3"><a class="fnref" href="#fndef:3">[3]</a></sup></p>
+<ul>
+<li>Marginal distribution $p(\vx_{k}|\vy_{1:k-1})$ of a future state given the observations $\vy_k$ until the current time step $k$. This is called as the <em>prediction distribution</em>.</li>
+<li>Marginal distribution $p(\vx_k | \vy_{1:k})$ of the current state $\vx_k$ given the measurements $\vy_k$ till the time step $k$. This is called as the <em>filtering distribution</em>.</li>
+</ul>
+<p>The Kalman filter assumes the following model for the system
+$$
+\begin{aligned}
+\vx_k &amp;\sim p(\vx_k | \vx_{k-1}) &amp;&amp;= \fN(\vx_k; \vA_{k-1}\vx_{k-1}, \vQ_k) &amp;&amp;= \vA_{k-1}\vx_{k-1} + q_{k-1} &amp;&amp;&amp; \color{OrangeRed} \text{State transition}\\
+\vy_k &amp;\sim p(\vy_k | \vx_k) &amp;&amp;= \fN(\vy_k; \vH_{k}\vx_k, \vR_k)  &amp;&amp;= \vH_{k}\vx_k + r_k &amp;&amp;&amp; \color{Teal} \text{Measurement model}
+\end{aligned}
+$$
+Where $\vA_k, \vH_k$ are the state transition and measurement model matrices respectively, and $q_k \sim \fN(\vzero, \vQ_k), r_k \sim \fN(\vzero, \vR_k)$ are the process noise and measurement noise respectively. For a sequential computation, Kalman filter assumes the <em>Markov property</em> where $\vx_k$ is independent of past $\vy_{1:k-1}$ given $\vy_k$. The Kalman filter then computes the above two distributions alternatively - called <em>predict</em> and <em>update</em> in practice. Since the assumed model is completely Gaussian, the marginal distributions are also Gaussians can be computed in closed form<sup id="fnref:4"><a class="fnref" href="#fndef:4">[4]</a></sup>.</p>
+<p>Consider at time step $k$, we measure $\vy_k$. The corresponding filtering and predictive distributions at $k$ are $p(\vx_k | \vy_{1:k})$ and $p(\vx_k | \vy_{1:k-1})$. From Bayes' rule,</p>
+<p>$$
+\begin{aligned}
+p(\vx_k|\vy_{1:k}) &amp;= \frac{p(\vy_k | \vx_k, \vy_{1:k-1})p(\vx_k | \vy_{1:k-1})}{p(\vy_{1:k})} = \frac{p(\vy_k | \vx_k)p(\vx_k | \vy_{1:k-1})}{p(\vy_{1:k})} \\
+p(\vx_k | \vy_{1:k-1}) &amp;= \int p(\vx_k | \vx_{k-1}) p(\vx_{k-1} | \vy_{1:k-1}) d \vx_{k-1}
+\end{aligned}
+$$</p>
+<p>From the above equations, it is clear that the predict and update steps can be done iteratively as they are dependent upon each other. Starting from a prior distribution $\vx_0 \sim \fN(\vm_0, \vP_0)$, predict step can be computed as</p>
+<p>$$
+\begin{aligned}
+\vm'_k &amp;= \vA_{k-1}\vm_{k-1} \\
+\vP'_k &amp;= \vA_{k-1}\vP_{k-1}\vA_{k-1}^T + \vQ_{k-1}
+\end{aligned}
+$$</p>
+<p>where $p(\vx_k|\vy_{1:k-1}) = \fN(\vx_k ; \vm'_k, \vP'_k)$, and the update step</p>
+<p>$$
+\begin{aligned}
+\vv_k &amp;= \vy_k - \vH_k \vm'_k \\
+\vS_k &amp;= \vH_k \vP'_k \vH_k^T + \vR_k \\
+\vK_k &amp;= \vP'_k \vH^T_k \vS_k^{-1}\\
+\vm_k &amp;= \vm'_k + \vK_k \vv_k\\
+\vP_k &amp;= \vP'_k - \vK_k \vS_k \vK_k^T
+\end{aligned}
+$$
+where $p(\vx_k|\vy_{1:k}) = \fN(\vx_k ; \vm_k, \vP_k)$. The above equations can be computed in closed form as all the distributions are Gaussian.</p>
+<p>If there are $N$ observations, we need $\fO(N)$ steps of the predict-update procedure to get the final filtering distribution $p(\vx_N | \vy_{1:N})$. In case of batched data, the computational complexity can be amortized to $\fO(B)$ where $B$ is the batch size.</p>
+<h3>Bayesian Update as an Associative Operation</h3>
+<p>Consider the filtering distribution $p(\vx_2|\vy_{1:2})$ at $k=2$. It can be rewritten as</p>
+<p>$$
+\begin{aligned}
+p(\vx_2 | \vy_{1:2}) &amp;= p(\vx_2 | \vy_1, \vy_2)\frac{p(\vy_2 | \vy_1)}{p(\vy_2 | \vy_1)} \<br />
+&amp;= \frac{p(\vx_2, \vy_2 | \vy_{1})}{p(\vy_2 | \vy_1)}\<br />
+&amp;= \frac{\int p(\vx_2, \vy_2 | \vx_1, \vy_{1}) p(\vx_1 | \vy_1) d\vx_1}{\int p(\vy_2 | \vx_1, \vy_1) p(\vx_1 | \vy_1) d\vx_1} &amp;&amp;&amp; \color{OrangeRed} \text{(marginalization)}\<br />
+&amp;= \frac{\int p(\vx_2 | \vy_2, \vy_1, \vx_1) p( \vy_2 | \vx_1, \vy_1)  p(\vx_1 | \vy_1) d\vx_1}{\int p(\vy_2 | \vx_1, \vy_1) p(\vx_1 | \vy_1) d\vx_1} \<br />
+&amp;= \frac{\int p(\vx_2 | \vy_2, \vx_1) p( \vy_2 | \vx_1)  p(\vx_1 | \vy_1) d\vx_1}{\int p(\vy_2 | \vx_1) p(\vx_1 | \vy_1) d\vx_1} &amp;&amp;&amp; \color{OrangeRed} \text{(due to Markov property)} \</p>
+<p>&amp;= \frac{\int  p( \vy_2 | \vx_1) p(\vx_2 | \vy_2, \vx_1) p(\vx_1 | \vy_1, \vx_0) d\vx_1}{\int p(\vy_2 | \vx_1) p(\vx_1 | \vy_1, \vx_0) d\vx_1} &amp;&amp;&amp; \big (p(\vx_1 | \vy_1, \vx_0) = p(\vx_1 | \vy_1) \big )
+\end{aligned}
+$$<a id=eq:filter-decomp class='anchor'></a></p>
+<p>The above equation can be expressed as the following by grouping terms
+$$
+p(\vx_2 | \vy_{1:2}) = \frac{\int \lambda_2 \phi_2 \phi_1 }{\int \lambda_2 \phi_1 }
+$$
+Where $\lambda_k = p(\vy_k | \vx_{k-1})$ and $\phi_k = p(\vx_k | \vy_k, \vx_{k-1})$. The marginal $p(\vy_{1:2})$ can be expressed as a marginalization over $\vx_1$ as
+$$
+\begin{aligned}
+p(\vy_{1:2}) &amp;= p(\vy_1, \vy_2) \\
+&amp;= \int p(\vy_1, \vy_2 | \vx_1) d \vx_1 \\
+&amp;= p(\vy_1) \int p(\vy_2 | \vx_1) p(\vx_1 | \vy_1) d \vx_1 \\
+&amp;= p(\vy_1 | \vx_0) \int p(\vy_2 | \vx_1) p(\vx_1 | \vy_1, \vx_0) d \vx_1 &amp;&amp;&amp; \bigg (p(\vy_1) = p(\vy_1 | \vx_0); p(\vx_1 | \vy_1) = p(\vx_1 | \vy_1, \vx_0) \bigg )\\
+&amp;= \lambda_1 \int \lambda_2 \phi_1
+\end{aligned}
+$$<a id=eq:marginal-decomp class='anchor'></a></p>
+<p>Equations <span class='eqref'>(<a href='#eq:filter-decomp'>1</a>)</span> and <span class='eqref'>(<a href='#eq:marginal-decomp'>2</a>)</span> can be combined to result
+$$
+\begin{pmatrix} \phi_1 \\ \lambda_1 \end{pmatrix} \otimes \begin{pmatrix} \phi_2 \\ \lambda_2 \end{pmatrix} = \begin{pmatrix} p(\vx_2 | \vy_{1:2}) \\ p(\vy_{1:2}) \end{pmatrix}
+$$<a id=eq:operator-k2 class='anchor'></a></p>
+<p>The point of equations <span class='eqref'>(<a href='#eq:filter-decomp'>1</a>)</span> to <span class='eqref'>(<a href='#eq:operator-k2'>3</a>)</span> is to sever the dependence of the filtering update on the previous hidden state $\vx$ as they depend only upon $\vx_1$. For instance,
+$$
+\begin{aligned}
+p(\vx_2 | \vy_{1:k}) &amp;= \frac{\int  p( \vy_{2:k} | \vx_1) p(\vx_k | \vy_{2:k}, \vx_1) p(\vx_1 | \vy_1) d\vx_1}{\int p(\vy_{2:k} | \vx_1) p(\vx_1 | \vy_1) d\vx_1} \\
+p(\vy_{1:k}) &amp;= p(\vy_1) \int p(\vy_{2:k} | \vx_1) p(\vx_1 | \vy_1) d\vx_1
+\end{aligned}
+$$</p>
+<p>In fact, this can be generalized to dependence upon any of the previous states $\vx_{k-l}$ for filtering at state $\vx_k$ <sup id="fnref:5"><a class="fnref" href="#fndef:5">[5]</a></sup>. By induction, we can generalize equation <span class='eqref'>(<a href='#eq:operator-k2'>3</a>)</span> to</p>
+<p>$$
+\begin{pmatrix} \phi_1 \\ \lambda_1 \end{pmatrix} \otimes \begin{pmatrix} \phi_2 \\ \lambda_2 \end{pmatrix} \otimes \cdots \otimes \begin{pmatrix} \phi_k \\ \lambda_k \end{pmatrix} = \begin{pmatrix} p(\vx_k | \vy_{1:k}) \\ p(\vy_{1:k}) \end{pmatrix}
+$$</p>
+<p>We now have an operator that can compute the filtering distribution from any given previous state and the set of observations. The $\otimes$ operator defined above can be shown to be associative <sup id="fnref:6"><a class="fnref" href="#fndef:6">[6]</a></sup>. The associativity of the above Bayesian update (the filtering distribution is simply the posterior) shows that the order of the update does not matter. Note that, however, it is not commutative <em>i.e.</em> the conditionals cannot be swapped.</p>
+<img  style="width:90%;min-width:300px;" src="/media/post_images/kalman_associative.svg" alt="Associativity of Kalman filter.">
+
+<p>One interesting aspect of this technique is that it computes the marginal $p(\vy_{1:k})$, which can be used for parameter estimation.</p>
+<h3>Parallel Scan Kalman Filtering</h3>
+<p>Parallelizing the Kalman filter now boils down to computing operands (the parameters for the  expressions for $\lambda_k$ and $\phi_k$) and the associative operator itself. The operands $(\phi_k, \lambda_k)$ can be expressed as the following Gaussians respectively.
+$$
+\begin{aligned}
+\phi_k &amp;= p(\vx_k | \vy_k, \vx_{k-1}) &amp;&amp;= \fN (\vx_k; \vF_k \vx_{k-1},\vC_k) \\
+\lambda_k &amp;= p(\vy_k | \vx_{k-1}) &amp;&amp;= \fN_I(\vx_{k-1}; \eta_k, \vJ_k)
+\end{aligned}
+$$
+Where $\eta_k = \vP_k^{-1}\vm_k$ and $\vJ_k = \vP_k^{-1}$. $\fN_I$ is the <em>information form</em> of the Gaussian distribution where it is parameterized based on the inverse covariance matrix $\vP^{-1}$ for ease of computation - not requiring to invert matrices back and forth.</p>
+<p>The equations for $\phi_k$ are
+For $k &gt; 1$
+$$
+\begin{aligned}
+\vS_k &amp;= \vH_k \vQ_{k-1} \vH_k^T + \vR_k \\
+\vK_k &amp;= \vQ_{k-1} \vH_k^T \vS_k^{-1} \\
+\vF_k &amp;= \big (\vI - \vK_k \vH_k \big )\vA_{k-1}\\
+\vb_k &amp;= \vK_k\vy_k \\
+\vC_k &amp;= \big (\vI - \vK_k \vH_k \big ) \vQ_{k-1} 
+\end{aligned}
+$$
+with initial state $k=1$ as
+$$
+\begin{aligned}
+\vm_1^- &amp;= \vA_0 \vm_0 \<br />
+\vP_1^- &amp;= \vA_0 \vP_0 \vA_0^T + \vQ_0 \<br />
+\vS_1 &amp;= \vH_1\vP_1^-\vH_1^T + \vR_1 \<br />
+\vK_1 &amp;= \vP_1^- \vH_1^T \vS_1^{-1} \<br />
+\vF_1 &amp;= \vzero \<br />
+\vb_1 &amp;= \vm_1^- + \vK_1 \big (\vy_1 - \vH_1 \vm_1^- \big ) \<br />
+\vC_1 &amp;= \vP_1^- - \vK_1 \vS_1 \vK_1^T</p>
+<p>\end{aligned}
+$$
+And the equations for $\lambda_k$ are
+$$
+\begin{aligned}
+\eta_k &amp;= \vA_{k-1}^T \vH_k^T \vS_k^{-1} \vy_k \\
+\vJ_k &amp;= \vA_{k-1}^T \vH_k^T \vS_k^{-1} \vH_k \vA_{k-1}
+\end{aligned}
+$$</p>
+<p>In practice, operand for the associative operator $\otimes$ is the tuple $\va_k = \big ( \vF_k, \vb_k, \vC_k, \eta_k, \vJ_k \big )$, also called the filtering element.</p>
+<p>The operator $\otimes$ can be computed as
+$$
+\begin{pmatrix} \phi_i \\ \lambda_i \end{pmatrix} \otimes \begin{pmatrix} \phi_j \\ \lambda_j \end{pmatrix} = \va_i \otimes \va_j = \va_{ij}
+$$
+Where
+$$
+\begin{aligned}
+\vF_{ij} &amp;= \vF_j \big (\vI + \vC_i \vJ_j \big )^{-1} \vF_i \\
+\vb_{ij} &amp;= \vF_j \big (\vI + \vC_i \vJ_j \big )^{-1} \big ( \vb_i + \vC_i \eta_j \big ) + \vb_j \\
+\vC_{ij} &amp;= \vF_j (\vI + \vC_i \vJ_j \big )^{-1} \vC_j \vF_j^T + \vC_j \\
+\eta_{ij} &amp;= \vF_i^T (\vI +  \vJ_j \vC_i \big )^{-1} \big (\eta_j -  \vJ_j \vb_i \big) +  \eta_i \\
+\vJ_{ij} &amp;= \vF_i^T (\vI +\vJ_j  \vC_i  \big )^{-1} \vJ_j \vF_i + \vJ_i
+\end{aligned}
+$$</p>
+<!-- At the end of $k$  steps, $\vF_k$  -->
+<h3>Implementation</h3>
+<p>The JAX implementation is given below for both sequential and parallel Kalman filters using JAX's <code>associative_scan</code>. JAX has first class support for SIMD and SPMD programming through its <code>vmap</code> and <code>pmap</code> primitive respectively. The <code>associative_scan</code> is the primitive for the execution of any associative operation, and when used along with <code>vmap</code>, it yields the required parallelization.</p>
+<pre><code class="language-python">from jax import vmap, jit
+import jax.numpy as jnp
+import jax.scipy as jsc
+from jax.lax import associative_scan, scan
+
+from collections import namedtuple
+from typing import NamedTuple, Tuple
+
+
+# Reference -
+# https://github.com/EEA-sensors/sequential-parallelization-examples
+
+StateSpaceModel = namedtuple("StateSpaceModel", [
+                             'A','H','Q','R',,'m0','P0','x_dim', 'y_dim'])
+
+@jit
+def sequential_kalman(model: NamedTuple, 
+                      observations: jnp.array) -&gt; Tuple:
+    """
+    Implements sequential Kalman filter in O(N).
+    """
+
+    def predict_update(carry, y) -&gt; Tuple:
+        m, P = carry
+
+        # Predict - Equation (4)
+        m = model.A @ m
+        P = model.A @ P @ model.A.T + model.Q
+
+        obs_mean = model.H @ m
+
+        # Update - Equation (5)
+        S = model.H @ P @ model.H.T + model.R
+        # More efficient than jsc.lingalg.inv(S)
+        K = jsc.linalg.solve(S, model.H @ P, sym_pos=True).T  
+        m = m + K @ (y - model.H @ m)
+        P = P - K @ S @ K.T
+
+        return (m, P), (m, P)   # carry is basically the previous state
+    
+    # Perform predict and update alternatively from
+    # the initial state (prior) and the observations.
+    _, (fms, fPs) = scan(predict_update, 
+                         (model.m0, model.P0), 
+                         observations)
+    return fms, fPs
+    
+@jit
+def parallel_kalman(model: NamedTuple, y: jnp.array) -&gt; Tuple:
+    """
+    Implements the parallel Kalman filter in O(log N).
+    """
+    # Filtering elements for k=1
+    def first_filtering_element(model: NamedTuple, 
+                                y_0: jnp.array) -&gt; Tuple:
+        """
+        Computes the first filtering element (k = 1).
+        """
+        # Equation (14)
+        m1 = model.A @ model.m0
+        P1 = model.A @ model.P0 @ model.A.T + model.Q
+        S1 = model.H @ model.P @ model.H.T + model.R
+        K1 = jsc.linalg.solve(S1, model.H @ P1, sym_pos=True).T
+
+        F = jnp.zeros_like(model.A)
+        b = m1 + K1 @ (y - model.H @ m1)
+        C = P1 - K1 @ S1 @ K1.T
+
+        # Equation (15)
+        S = model.H @ model.Q @ model.H.T + model.R
+        CF, low = jsc.linalg.cho_factor(S)
+        eta = model.A.T @ model.H.T @ jsc.linalg.cho_solve((CF, low), 
+                                                            y_0)
+        J = model.A.T @ model.H.T @ jsc.linalg.cho_solve((CF, low), 
+                                                          model.H @ model.A)
+
+        return (F, b, C, eta, J)
+
+    def filter_elements(model: NamedTuple, y: jnp.array) -&gt; Tuple:
+        """
+        Computes the generic filtering element
+        for k &gt; 1.
+        """
+
+        # Equation (13)
+        S = model.H @ model.Q @ model.H.T + model.R
+        CF, low = jsc.linalg.cho_factor(S)
+        K = jsc.linalg.cho_solve((CF, low), model.H @ model.Q).T
+        F = model.A - K @ model.H @ model.A
+        b = K @ y
+        C = model.Q - K @ model.H @ model.Q
+
+        # Equation (15)
+        eta = model.A.T @ model.H.T @ jsc.linalg.cho_solve((CF, low), y)
+        J = model.A.T @ model.H.T @ jsc.linalg.cho_solve((CF, low), 
+                                                         model.H @ model.A)
+
+        return (F, b, C, eta, J)
+
+    @vmap  # SIMD parallelization
+    def operator(a_1: Tuple, a_2: Tuple) -&gt; Tuple:
+        """
+        Associative operator that computes a_1 ⊗ a_2
+        """
+        # Equation (17)
+        F1, b1, C1, eta1, J1 = a_1
+        F2, b2, C2, eta2, J2 = a_2
+
+        I = jnp.eye(F1.shape[0])
+
+        I_C1J2 = I + C1 @ J2
+        tmp = jsc.linalg.solve(I_C1J2.T, F2.T, sym_pos=True).T
+        F = tmp @ F1
+        b = tmp @ (b1 + C1 @ eta2) + b2
+        C = tmp @ C1 @ F2.T + C2
+
+        I_J2C1 = I + J2 @ C1
+        tmp = jsc.linalg.solve(I_J2C1.T, F1, sym_pos=True).T
+
+        eta = tmp @ (eta2 - J2 @ b1) + eta1
+        J = tmp @ J2 @ F1 + J1
+
+        return (F, b, C, eta, J)
+
+    # ==================================
+    a_1 = first_filtering_element(model, y[0])
+
+    # Compute all the filtering elements in parallel
+    a_k = vmap(lambda x: filter_elements(model, x))(y[1:])
+
+    initial_elements = tuple(
+        jnp.concatenate([jnp.expand_dims(a_i, 0), a_j]) for a_i, a_j in zip(a_1, a_k)
+    )
+
+    # Compute a_1 ⊗ a_2 ⊗ ... ⊗ a_k in parallel
+    filtered_elements = associative_scan(operator, initial_elements)
+
+    return filtered_elements[1], filter_elements[2]  # We only need b, C
+
+</code></pre>
+<p>The above parallelizing technique is applicable in a range of problems - wherever the Bayesian update is done over a sequence of measurements. The Gaussian version of the Bayesian smoother (Kalman filter being the Gaussian version of the Bayesian filter), called as the Rauch-Tung-Stribel (RTS) smoother, can similarly be parallelized.</p>
+<p><strong>Note:</strong> A question needs to be addressed here - <em>Should you parallelize Kalman filter as discussed?</em> The honest answer is NO. There are some practical concerns with this method. The filtering operator and the computation of the elements themselves are computationally more intensive than the original Kalman filter. In parallel-programming parlance, it is not <em>work-efficient</em>. So, this computational overhead (a constant factor) needs to be considered. The above vectorization may not be suitable for all computer architectures and actual parallelization should depend on the architecture. Finally, the JAX's JIT compilation (or any other JIT compilation) poses a considerable overhead, although this is only a one-time overhead. The sequential implementation in $\fO(N)$ is already fast enough for most practical purposes.</p>
+<p>That being said, the implications of this parallelization are quite significant. For problems of high computational complexity, this parallelization may be of great help. An example of such an application is to <a href="https://arxiv.org/abs/2102.09964">speed up temporal Gaussian processes</a>  (they can be shown to be directly related to Kalman filters).</p>
+<hr />
+
+        <p><table class="fndef" id="fndef:1">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td> 
+                <td class="fndef-content">A detailed discussion of the parallel prefix-sum algorithm can be found  <a href="https://www.cs.cmu.edu/~guyb/papers/Ble93.pdf">here</a>.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:2">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-content">The technique discussed here was originally proposed in <a href="https://arxiv.org/abs/1905.13002">this paper</a>.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:3">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:3">[3]</a></td> 
+                <td class="fndef-content">The two distributions are actually a simplification. The more general solution would be the join posterior $p(\vx_{0:T}|\vy_{1:T})$ over a period of measurements $1, \cdots,T$. However, this is practically intractable and not scalable. So, the problem is reduced to computing only the marginals - filtering, prediction, and smoothing distributions. Kalman filter addresses the former two, while the Rauch-Tung-Striebel smoother addresses the latter.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:4">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:4">[4]</a></td> 
+                <td class="fndef-content">Highly recommend Simo Särkkä's book <em>Bayesian Filtering and Smoothing</em> for a detailed discussion of Kalman filter and other Bayesian filtering techniques. The book can be freely accessed <a href="https://users.aalto.fi/~ssarkka/#publications">here</a>. The derivation for the equations provided here can be found in the book in Chapter 4, section 4.3.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:5">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:5">[5]</a></td> 
+                <td class="fndef-content">This is possible mainly due to the Markov property.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:6">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:6">[6]</a></td> 
+                <td class="fndef-content">The proof of the associativity can be found in the appendix of <a href="https://arxiv.org/abs/1905.13002">this paper</a>.</td>
+            </tr>
+        </table></p>
+        
+
+  </main>
+
+  <!-- Footer
+  <div class="myfooter">
+    &copy; 2024 Anand K Subramanian <span class=" vl"></span>
+    License <span class="vl"></span>
+    Design<span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 1.3rem;">&hearts;</span>
+  </div> -->
+
+  <div
+    style="font-size:1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;">
+    &copy; 2024 Anand K Subramanian <span class="vl"></span>
+    <a href="/license">License</a> <span class="vl"></span>
+    <a href="/design">Design</a> <span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 24px;">&hearts;</span>
+  </div>
+
+  
+  <script src="/_libs/highlight/highlight.min.js"></script>
+  <script>hljs.highlightAll(); hljs.configure({ tabReplace: '    ' });</script>
+  <link rel="stylesheet" href="/_libs/highlight/decaf.css">
+
+  <script src="/_libs/clipboard/clipboard.min.js"></script>
+  <script>
+    (function () {
+
+      // Get the elements.
+      // - the 'pre' element.
+      // - the 'div' with the 'paste-content' id.
+
+      var pre = document.getElementsByTagName('pre');
+
+      // Add a copy button in the 'pre' element.
+      // which only has the className of 'language-'.
+
+      for (var i = 0; i < pre.length; i++) {
+        var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+        if (isLanguage === 0) {
+          var button = document.createElement('button');
+          button.className = 'copy-button';
+          button.textContent = 'Copy';
+
+          pre[i].appendChild(button);
+        }
+      };
+
+      // Run Clipboard
+
+      var copyCode = new Clipboard('.copy-button', {
+        target: function (trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+
+      // On success:
+      // - Change the "Copy" text to "Copied".
+      // - Swap it to "Copy" in 2s.
+      // - Lead user to the "contenteditable" area with Velocity scroll.
+
+      copyCode.on('success', function (event) {
+        event.clearSelection();
+        event.trigger.textContent = 'Copied';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 2000);
+
+      });
+
+      // On error (Safari):
+      // - Change the  "Press Ctrl+C to copy"
+      // - Swap it to "Copy" in 2s.
+
+      copyCode.on('error', function (event) {
+        event.trigger.textContent = 'Press "Ctrl + C" to copy';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 5000);
+      });
+
+    })();
+  </script>
+  
+</body>
+
+</html>

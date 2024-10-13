@@ -1,7 +1,7 @@
 [build]
 # Some sane defaults
 content_dir = "content"
-build_dir = "build"
+build_dir = "__site"
 assets_dir = "assets"
 libs_dir = "_libs"
 templates_dir = "_templates"

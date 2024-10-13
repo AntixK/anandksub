@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        throwOnError: false,
+        // output: "html",
+        // customised options
+        // • auto-render specific keys, e.g.:
+        delimiters: [
+          { left: '$$', right: '$$', display: true }, // block
+          { left: '$', right: '$', display: false }, // Inline
+          { left: "\begin{align}", right: "\end{align}", display: true }, // block
+          { left: "\begin{aligned}", right: "\end{aligned}", display: true }, // block
+        ],
+        ignoredTags: [
+          "pre",
+          "code",
+          "script",
+          "style",
+        ],
+        macros: {
+          "\\A": "\\mathbb{A}",
+          "\\B": "\\mathbb{B}",
+          "\\C": "\\mathbb{C}",
+          "\\D": "\\mathbb{D}",
+          "\\E": "\\mathbb{E}",
+          "\\F": "\\mathbb{F}",
+          "\\G": "\\mathbb{G}",
+          "\\H": "\\mathbb{H}",
+          "\\I": "\\mathbb{I}",
+          "\\J": "\\mathbb{J}",
+          "\\K": "\\mathbb{K}",
+          "\\L": "\\mathbb{L}",
+          "\\M": "\\mathbb{M}",
+          "\\N": "\\mathbb{N}",
+          "\\O": "\\mathbb{O}",
+          "\\P": "\\mathbb{P}",
+          "\\Q": "\\mathbb{Q}",
+          "\\R": "\\mathbb{R}",
+          "\\S": "\\mathbb{S}",
+          "\\T": "\\mathbb{T}",
+          "\\U": "\\mathbb{U}",
+          "\\V": "\\mathbb{V}",
+          "\\W": "\\mathbb{W}",
+          "\\X": "\\mathbb{X}",
+          "\\Y": "\\mathbb{Y}",
+          "\\Z": "\\mathbb{Z}",
+
+          "\\fA": "\\mathcal{A}",
+          "\\fB": "\\mathcal{B}",
+          "\\fC": "\\mathcal{C}",
+          "\\fD": "\\mathcal{D}",
+          "\\fE": "\\mathcal{E}",
+          "\\fF": "\\mathcal{F}",
+          "\\fG": "\\mathcal{G}",
+          "\\fH": "\\mathcal{H}",
+          "\\fI": "\\mathcal{I}",
+          "\\fJ": "\\mathcal{J}",
+          "\\fK": "\\mathcal{K}",
+          "\\fL": "\\mathcal{L}",
+          "\\fM": "\\mathcal{M}",
+          "\\fN": "\\mathcal{N}",
+          "\\fO": "\\mathcal{O}",
+          "\\fP": "\\mathcal{P}",
+          "\\fQ": "\\mathcal{Q}",
+          "\\fR": "\\mathcal{R}",
+          "\\fS": "\\mathcal{S}",
+          "\\fT": "\\mathcal{T}",
+          "\\fU": "\\mathcal{U}",
+          "\\fV": "\\mathcal{V}",
+          "\\fW": "\\mathcal{W}",
+          "\\fX": "\\mathcal{X}",
+          "\\fY": "\\mathcal{Y}",
+          "\\fZ": "\\mathcal{Z}",
+
+          "\\x": "\\times",
+          "\\vA": "\\mathbf{A}",
+          "\\vB": "\\mathbf{B}",
+          "\\vC": "\\mathbf{C}",
+          "\\vD": "\\mathbf{D}",
+          "\\vE": "\\mathbf{E}",
+          "\\vF": "\\mathbf{F}",
+          "\\vG": "\\mathbf{G}",
+          "\\vH": "\\mathbf{H}",
+          "\\vI": "\\mathbf{I}",
+          "\\vJ": "\\mathbf{J}",
+          "\\vK": "\\mathbf{K}",
+          "\\vL": "\\mathbf{L}",
+          "\\vM": "\\mathbf{M}",
+          "\\vN": "\\mathbf{N}",
+          "\\vO": "\\mathbf{O}",
+          "\\vP": "\\mathbf{P}",
+          "\\vQ": "\\mathbf{Q}",
+          "\\vR": "\\mathbf{R}",
+          "\\vS": "\\mathbf{S}",
+          "\\vT": "\\mathbf{T}",
+          "\\vU": "\\mathbf{U}",
+          "\\vV": "\\mathbf{V}",
+          "\\vW": "\\mathbf{W}",
+          "\\vX": "\\mathbf{X}",
+          "\\vY": "\\mathbf{Y}",
+          "\\vZ": "\\mathbf{Z}",
+
+          "\\va": "\\mathbf{a}",
+          "\\vb": "\\mathbf{b}",
+          "\\vc": "\\mathbf{c}",
+          "\\vd": "\\mathbf{d}",
+          "\\ve": "\\mathbf{e}",
+          "\\vf": "\\mathbf{f}",
+          "\\vg": "\\mathbf{g}",
+          "\\vh": "\\mathbf{h}",
+          "\\vi": "\\mathbf{i}",
+          "\\vj": "\\mathbf{j}",
+          "\\vk": "\\mathbf{k}",
+          "\\vl": "\\mathbf{l}",
+          "\\vl": "\\mathbf{l}",
+          "\\vm": "\\mathbf{m}",
+          "\\vn": "\\mathbf{n}",
+          "\\vo": "\\mathbf{o}",
+          "\\vp": "\\mathbf{p}",
+          "\\vq": "\\mathbf{q}",
+          "\\vr": "\\mathbf{r}",
+          "\\vs": "\\mathbf{s}",
+          "\\vt": "\\mathbf{t}",
+          "\\vu": "\\mathbf{u}",
+          "\\vv": "\\mathbf{v}",
+          "\\vw": "\\mathbf{w}",
+          "\\vx": "\\mathbf{x}",
+          "\\vy": "\\mathbf{y}",
+          "\\vz": "\\mathbf{z}",
+
+          "\\vmu": "\\boldsymbol \\mu",
+          "\\vnu": "\\boldsymbol \\nu",
+          "\\veps": "\\boldsymbol \\epsilon",
+          "\\vtheta": "\\boldsymbol \\theta",
+          "\\vomega": "\\boldsymbol \\omega",
+          "\\vlambda": "\\boldsymbol \\lambda",
+          "\\vzero": "\\mathbf{0}",
+          "\\vone": "\\mathbf{1}",
+          "\argmin": "\mathop{\mathrm{argmin}} \;",
+          "\argmax": "\mathop{\mathrm{argmax}} \;",
+
+        },
+        globalGroup: true,
+      });
+    });
+  </script>
+
+  <link rel="stylesheet" href="/_libs/katex/katex.min.css">
+
+  <script defer src="/_libs/katex/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="/_libs/katex/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+  <!-- TEMML Instead of KATEX -->
+  <!-- <link rel="stylesheet" href="/_libs/temml/Temml-Latin-Modern.css"> -->
+  <!-- <script src="/_libs/temml/temml.min.js"></script> -->
+  <!-- <script src="/_libs/temml/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script> -->
+
+  
+
+  <!-- Link Style Sheets -->
+  <link rel="stylesheet" href="/_css/ak.css">
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  
+
+  <title>Mathematics of Changing One's Mind</title>
+</head>
+
+<body>
+  <!-- Site Header -->
+  <header>
+    <h1><a href="/">Anand K Subramanian</a><br><br></h1>
+  </header>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <span><a href="/blog">Blog</a><span class="vl"></span></span>
+    <span><a href="/notes">Notes</a> <span class="vl"></span></span>
+    <span><a href="/art/">Art</a> <span class="vl"></span></span>
+    <span><a href="/CV">CV</a> <span class="vl"></span></span>
+    <span><a href="/tags">Tags</a>
+  </nav>
+
+  <!-- Article Info -->
+  
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/bookmark.svg" alt="clock-icon">&ensp;<span
+      class="pound">#</span>math <span
+      class="pound">#</span>ml <span
+      class="pound">#</span>probability 
+  </p>
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/calendar.svg" alt="clock-icon">&ensp;4 August 2023
+  </p>
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/timer.svg" alt="clock-icon">&ensp;13 mins
+  </p>
+  
+
+  <!-- Article Title -->
+  <h1>Mathematics of Changing One's Mind</h1>
+  <!-- Insert TLDR -->
+
+  
+  <p class="tldr">A guide to updating probabilistic beliefs using Jeffrey's rule and Pearl's method.</p>
+  
+
+  <main>
+    <p>  Bayes' rule, despite its far-reaching influence, has a fundamental problem. Say we have an initial belief about some event $A$. This belief can be represented as a probability that <em>we</em> have about that event. This is called the <em>prior</em> probability $p(A)$. Now, we observe another $E$, whose probability of occurring is $p(E)$. If the two events are unrelated, <em>i.e.</em> independent, then there is no need to <em>update</em> our belief regarding the event $A$. However, if they are related, in any way, then the Bayes' rule provides a general to update our belief about $A$.</p>
+<p>$$
+p(A|E) = \frac{p(A, E)}{p(E)} = \frac{p(E|A)p(A)}{p(E)} = \frac{\text{Likelihood} \times \text{Prior}}{\text{Evidence}}
+$$</p>
+<p>The resulting update to our prior belief is called as the <em>posterior</em>, represented by $p(A|E)$. The relation between the two events $E$ and $A$ is represented by $p(E|A)$, called the <em>likelihood</em>.
+Note that the above rule combines our initial belief $p(A)$, which may or may not be supported by hard evidence, with the hard evidence $p(E)$. Now, what if we have some uncertainty about the occurrence of $E$, say that we are only 70% sure that $E$ has occurred?. This is called the <em>soft evidence problem</em>. The Bayes' rule is straightforward to apply in the light of hard evidence, but not so much for soft evidence. This point is oft missed when learning about Bayes' rule. The problem is still under scrutiny as we still do not have one standard way to interpret and reason with soft evidence.</p>
+<p>  We shall discuss two common ways of dealing with such uncertainty in our evidence. It is worth noting that $p(E)$ is not the same as the uncertainty in the <em>occurrence</em> of $E$. $p(E)$ is the probability that $E$ can occur indisputably among all other events, while the uncertainty lies in <em>our</em> observation that $E$ has indeed occurred. The title has been borrowed from a paper by Bart Jacobs<sup id="fnref:1"><a class="fnref" href="#fndef:1">[1]</a></sup>, who in turn borrowed it from a 1983 paper by Diaconis &amp; Zabell<sup id="fnref:2"><a class="fnref" href="#fndef:2">[2]</a></sup>.</p>
+<p>  The two common ways of dealing with such uncertainties are <strong>Jeffrey's rule</strong> (due to Richard Jeffrey and not the better-known Harold Jeffrys) and <strong>Pearl's method of virtual evidence</strong> (due to Judea Pearl). The point is to understand the perspectives from which these two methods come and the way they ought to be employed based on those perspectives.</p>
+<p>Before discussing the two belief updates, let's extend the above Bayes' rule to a set of possible states or events $\fE = \{e_1, e_2, ... e_k\}$ and $\fA = \{a_1, a_2,...a_n\}$. This set can be discrete, as shown, or continuous, but the following discussion applies to both. The Bayes' rule states that</p>
+<p>$$ 
+\begin{aligned}
+p(\fA = a_i|\fE = e_j) = p(a_i|e_j) &amp;=  \frac{p(\fE = e_j|\fA= a_i)p(\fA=a_i)}{p(\fE = e_j)} \\
+&amp;= \frac{p(e_j|a_i)p(a_i)}{\sum_{i=1}^np(e_j|a_i)p(a_i)}
+\end{aligned}
+$$<a id=eq:bayes class='anchor'></a></p>
+<p>Now, the soft evidence problem can be understood as the way of updating the above posterior $p(a_i|e_j)$ when $p(e_j)$ is uncertain. Depending on the way the uncertainty is injected into the above equation, the update method changes correspondingly.</p>
+<h3>Jeffrey's Rule</h3>
+<p>Say we have another belief $q(e_j)$ over $p(e_j)$ which specifies the degree of uncertainty in the occurrence of the event $e_j$. Then, Jeffrey's rule states that the <em>posterior</em> should be updated as</p>
+<p>$$ 
+\begin{aligned} 
+p_{\text{JR}}(a_i | q_j) &amp;= \sum_{j=1}^k p(a_i|e_j) q(e_j) &amp;&amp; {\color{OrangeRed} \text{(Jeffrey's Rule})}\\
+&amp;= \sum_{j=1}^k \frac{p(e_j|a_i)p(a_i)}{p(e_j)} q(e_j) \\
+&amp;= \sum_{j=1}^k \frac{q(e_j)}{p(e_j)} p(a_i, e_j), \quad \forall e_j \in \fE \\
+\end{aligned}
+$$<a id=eq:jeffrys class='anchor'></a></p>
+<p>The following can be observed from the above equation -</p>
+<ul>
+<li>Jeffrey's rule considers the uncertainty $q(e_j)$ as a distribution over that event unrelated to the evidence $p(e_j)$.</li>
+<li>Jeffrey's rule operates directly on the posterior. Therefore, it assumes that the belief $q(e_j)$ is obtained <em>after</em> the posterior has been calculated. In other words, the posterior is marginalized over the uncertainty distribution. This can be interpreted as the <em>surprise factor</em> in updating our beliefs. The $q(e_j)$ can be interpreted as the effect on both the evidence strength and the likelihood belief.</li>
+<li>In the new posterior $p(a_i | q)$, the additional information from $q(e_j)$ is directly reflected in the posterior in a <em>linear</em> fashion (as marginalization is a linear operation).</li>
+</ul>
+<h3>Pearl's Method</h3>
+<p>Pearl's method considers the uncertain information as a conditional belief over the initial evidence $p(e_j)$,  <em>i.e.</em> $p(e_j | q_j)$. So, the initial posterior must be <em>marginalized</em> over this conditional distribution. In other words, the posterior must be corrected such that the initial evidence was infact conditional upon the certainty of that evidence.</p>
+<p>The new posterior, according to Pearl, is given by</p>
+<p>$$
+\begin{aligned} 
+p_{\text{PM}}(a_i | q_j) &amp;= \sum_{j=1}^k p(a_i|e_j) p(e_j | q_j) &amp;&amp; {\color{OrangeRed} \text{(Pearl's Method})}\\
+&amp;= \sum_{j=1}^k \frac{p(a_i|e_j) p(q_j | e_j)p(e_j)}{p(q_j)} \\
+&amp;= \sum_{j=1}^k \frac{ p(q_j | e_j)}{p(q_j)}p(a_i, e_j), \quad \forall e_j \in \fE \\
+\end{aligned}
+$$<a id=eq:pearl class='anchor'></a></p>
+<ul>
+<li>Pearl's method recasts the soft evidence (uncertainty over the evidence) as a new evidence (virtual evidence) that is conditioned upon the uncertainty. There is no "surprise element" to the uncertainty.</li>
+<li>In case of multiple uncertain evidence $q_j, r_j, ...$, Pearl's method produces the same final result irrespective of their order of updates to the posterior, while Jeffrey's rule does not. In other words, Pearl's method is linear across virtual events. This is a crucial difference between the two, that affects the applicability of the two methods.</li>
+</ul>
+<h3>Comparing Jeffrey's Rule and Pearl's Method</h3>
+<p>  Patently the two methods give very different results in general as the final belief update, although they both marginalize the posterior. According to Jeffrey's rule, the uncertainty originates from our observation of the event. Pearl's method states that, in the light (gloom?) of uncertainty, you have to consider not the original event, but a similar event that is uncertain by nature. However, both the methods for updating the posterior are valid within the Bayesian framework - in fact, both are seen as a generalization of the Bayes' rule. Jacobs notes,</p>
+<blockquote>
+<p>Jeffrey's rule is for <em>correction</em> while Pearl's rule is for <em>improvement</em>.</p>
+</blockquote>
+<p>Pearl's method can be thought as a two-step procedure where the Bayes rule is applied twice. First in computing the initial posterior $p(a|e)$ and then computing the virtual evidence $p(e|q)$. Whereas in Jeffrey's rule, Bayes' rule is applied just once.</p>
+<img src="/media/post_images/jeff-pearl.svg" alt="Comparison between Pearl and Jeffrey's rules">
+
+<p>When we have multiple evidence, Pearl's method considers uncertainties associated with each evidence. Once the uncertainty is accounted for <em>i.e.</em> $p(e|q)$ is computed, the order of computation does not affect the posterior. On the other hand, Jeffrey's rule considered the uncertainty to be exterior to the evidence - therefore, in the case of multiple evidence, the order of application matters.</p>
+<p>Now, let's take a look at how we can understand uncertainty.</p>
+<ul>
+<li><strong>Case 1:</strong> <sup id="fnref:1"><a class="fnref" href="#fndef:1">[3]</a></sup> Say, a medical test (a very typical example for this topic) for a disease has a <em>sensitivity</em> of 90% <em>i.e.</em> if a person has the disease, then the test detects it 90% of the time. On the other hand, the <em>specificity</em> is 95% <em>i.e.</em> if the person does <em>not</em> have the disease, the test returns negative 95% of the time. If a person takes the test consecutively 3 times and observes two positives and a negative. Now, what is the probability that the person has the disease given that he is 95% sure that he doesn't have it?</li>
+<li><strong>Case 2:</strong><sup id="fnref:c2"><a class="fnref" href="#fndef:c2">[4]</a></sup> Kotaro (Japanese) has a job interview with Terence (Irish). He is confident that he is well-equipped for the role and will get selected. A Few days later, Kotaro receives a phone call from Terence. Kotaro gets the impression that he is selected for the job but could not make out entirely due to Terence's thick Irish accent. How should Kotaro update his initial belief about his selection?</li>
+</ul>
+<p>The two examples, obviously tailored to suit Pearl and Jeffrey's notions respectively, illustrate the different ways one can come across uncertainty. In case 1, it seems more appropriate to view the event as not the result of the medical test but as a new (virtual) event where the test has the stated specificity and sensitivity but also <em>precision</em>. So, the posterior should be calculated for this imprecise medical test.
+In case 2, it is the poor communication that happens between two people with different English accents, that causes the uncertainty. Thus, Jeffrey's rule may seem more appropriate.</p>
+<div >
+    <canvas class="chart" id="PM-JR-Chart"></canvas>
+</div>
+<div class="slider-container">
+<label for="sen">Sensitivity:</label>
+<input oninput="updateSen(this.value)" type="range", id="sen", min="0.1", max="0.99" value="0.9" step="0.01"/>
+
+<br>
+
+<label for="spec">Specificity</label>
+<input oninput="updateSpec(this.value)" type="range", id="spec", min="0.1", max="0.99" value="0.95" step="0.01"/>
+
+<br>
+
+
+<label for="prior">Disease Prevalence:</label>
+<input oninput="updatePrior(this.value)" type="range", id="prior", min="0.01", max="0.2" value="0.05" step="0.01"/>
+</div>
+
+<script>
+
+    function bayes(prior, likelihood, evidence) {
+        return prior * likelihood / evidence;
+    }
+
+    function pearl(prior, likelihood, evidence, uncertainty){
+        // p(Test is Positive | Test is Certain) p(T|C)
+        let p_t_c = uncertainty * evidence / (uncertainty * evidence + (1-uncertainty)*(1-evidence));
+
+        // P(D|T) = P(T|D)P(D) / P(T)
+        let res_pos = bayes(prior, likelihood, evidence)
+
+        // P(D|T') = P(T'|D)P(D) / P(T')
+        let res_neg = bayes(prior, (1-likelihood), (1-evidence))
+
+        // P(T'|C) = 1-p(T|C)
+        let pearl_res = res_pos * p_t_c + res_neg * (1-p_t_c)
+
+        return pearl_res
+    }
+
+    function jeffrey(prior, likelihood, evidence, uncertainty){
+        let res_pos = bayes(prior, likelihood, evidence);
+
+        let res_neg = bayes(prior, (1-likelihood), (1-evidence))
+
+        let jeff_res = res_pos * uncertainty + res_neg * (1 - uncertainty);
+        return jeff_res;
+    }
+
+    let sen = 0.9;
+    let spec = 0.95; 
+    let prior = 0.05; 
+    let uncerts = [0.        , 0.11111111, 0.22222222, 0.33333333, 0.44444444,
+        0.55555556, 0.66666667, 0.77777778, 0.88888889, 1.        ];
+
+
+    function compute_results(spec, sen, prior){
+        var pearl_res_ = [];
+        var jeff_res_ = [];
+        var init_belief = [];
+        var bayes_ = [];
+
+        let evidence = (sen * prior + (1-spec) * (1- prior));
+        let r3 = bayes(prior, sen, evidence);    
+
+        for(i in uncerts){
+            let r1 = jeffrey(prior, sen, evidence, uncerts[i]);
+            let r2 = pearl(prior, sen, evidence, uncerts[i]);
+
+            pearl_res_.push(r2);
+            jeff_res_.push(r1);
+            init_belief.push(prior);
+            bayes_.push(r3);
+
+        }
+
+        return {
+            "pearl_res":pearl_res_,
+            "jeff_res":jeff_res_,
+            "init_belief":init_belief,
+            "bayes_res":bayes_,
+        };
+    }
+    var results = compute_results(spec, sen, prior);
+
+    function get_data(results){
+        data = {
+            labels: uncerts,
+            datasets: [
+                {
+                    label: "Pearl's Result",
+                    data: results["pearl_res"],
+                    borderWidth: 2,
+                    tension:0.3,
+                    
+                },
+                {
+                    label: "Jeffrey's Result",
+                    data: results["jeff_res"],
+                    borderWidth: 2,
+                },
+                {
+                    label: 'Initial Belief',
+                    data: results["init_belief"],
+                    borderWidth: 2,
+                },
+                {
+                    label: "Bayes' Result",
+                    data: results["bayes_res"],
+                    borderWidth: 2,
+                },
+                {
+                    label: "Certainty",
+                    data: uncerts,
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                },
+            ]
+        };
+        return data;
+
+    }
+    function updateSen(value){
+        
+        sen = value;
+        results = compute_results(spec, sen, prior);
+        
+        mychart.data =get_data(results);
+        mychart.update("none");
+        output.innerHTML = value;
+    }
+
+    function updateSpec(value){
+        spec= value;
+        results = compute_results(spec, sen, prior);
+        
+        mychart.data =get_data(results);
+        mychart.update("none");
+    }
+    function updatePrior(value){
+        prior = value;
+        results = compute_results(spec, sen, prior);
+        
+        mychart.data =get_data(results);
+        mychart.update("none");
+    }
+
+    const ctx = document.getElementById('PM-JR-Chart');
+    var options = {
+        maintainAspectRatio: false,
+        devicePixelRatio: window.devicePixelRatio,
+        responsive: true,
+        layout: {
+            padding:{
+                left : 20,
+                right: 10,
+            }
+        },
+        scales: {
+            x:{
+                type: 'linear',
+                min:0.0,
+                max:1.0,
+                title: {
+                    display: true,
+                    text: 'Certainty of a Positive Test Result',
+                    font:{
+                        size:15,
+                    },
+                }
+            },
+            y: {
+                type: 'linear',
+                min:0.0,
+                max:1.0,
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Belief',
+                    font:{
+                        size:15,
+                    },
+                }
+            },
+        },
+        plugins: {
+            legend: {
+                position: 'top',
+                labels:{
+                    font:{
+                        size:15,
+                    },
+                },
+            },
+            title: {
+                display: true,
+                text: "Comparison Between Jeffrey's and Pearl's Rules (Case 1)",
+                font:{
+                    size:17,
+                }
+            },
+            interaction: {
+                mode: 'index',
+            },
+        },
+    };
+
+    <!-- Chart.defaults.font.size = 9; -->
+    Chart.defaults.font.family = "Overpass";
+
+    const mychart = new Chart(ctx, {
+    type: 'line',
+    data: get_data(results),
+    options: options,
+        
+    });
+
+</script>
+
+<p>  Consider the plot as shown above for the case 1. Play around with the sliders to see how the predictions of Pearl's and Jeffrey's rules change. Irrespective of the values, they both converge to the true Bayes's result for 100% certainty in the test. Moreover, they converge to the same value for 100% certainty of a negative test. As mentioned before, Jeffrey's rule scales linearly with the certainty of the test, while Pearl's method does not. As expected, as the test's certainty of producing a negative result increases, both results suggest that the probability of having the disease is less than the disease prevalence.</p>
+<p>From the above plot, one can observe that Pearl's rule is more biased towards the prior (initial belief) than Jeffrey's, especially around the high-uncertainty region ($\sim$ 0.5). Pearl's method implies, that unless there is a high certainty of a positive test or a negative test, it is better to be biased towards the initial belief.</p>
+<p>Jeffrey's method is biased towards the uncertainty distribution (indicated by the dashed line, for reference) as shown in the above plot.  This has an interesting interpretation - Jeffrey's rule considered the uncertainty as a target distribution, rather than the evidence. How can the posterior be updated to suit the observation that repeated tests give two positives and a negative? As such Jeffry's rule minimizes this discrepancy between the result based on the original evidence and actual (uncertain) observations. In fact, this was mathematically proven by Jacobs and Stein<sup id="fnref:4"><a class="fnref" href="#fndef:4">[5]</a></sup>. In this view, Pearl's method is <em>pessimistic</em> towards the uncertainties, while Jeffrey's is <em>optimistic</em>, but both align with each other in case of high certainties.</p>
+<!-- For no certainty in the result, Pearl's method may seem to smoothly converge to the prior belief about the disease prevalence, unlike Jeffrey's rule that linearly scales with the certainty. However, for low Sensitivities, (very inaccurate tests), Pearl's method also seem to update the belief -->
+<!-- Then there is the question of *should uncertainties commute?* -->
+<!-- The likelihood ratios shed light on the reconciliation between the two techniques - through _Bayes' factor_[^3]. -->
+<h3>Afterword</h3>
+<p>  Pearl's and Jeffrey's methods mirror the classic difference between lazy and eager techniques in statistical inference. Should you directly fit the mode of a distribution (like Maximum Likelihood Estimation (MLE), Variational inference (VI)) or should you be careful in modelling the entire data (like in Gaussian Process (GP), Belief Propagation (BP), or Expectation Propagation (EP))?<sup id="fnref:5"><a class="fnref" href="#fndef:5">[6]</a></sup> While the former can be easy to compute and often works well enough in practice, the latter does have its use cases and and more rigour. There is no definitive answer to which technique is the "best". It comes down to how would you view the uncertainty. In fact Jacobs<sup id="fnref:1"><a class="fnref" href="#fndef:1">[7]</a></sup> argues that both can be used in the same scenario as a linear combination - weighted by our confidence $\gamma$ on the uncertainty.
+$$
+\gamma \; p_{\text{JR}}(a_i |  q_j) + (1 - \gamma) \; p_{\text{PM}}(a_i |  q_j)
+$$</p>
+<p>Funnily, enough, the above equation follows Jeffrey's notion of uncertainty.</p>
+<hr />
+
+        <p><table class="fndef" id="fndef:1">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:1">[7]</a></td> 
+                <td class="fndef-content">Jacobs, B. (2019). The Mathematics of Changing one’s Mind, via Jeffrey’s or via Pearl’s update rule. Journal of Artificial Intelligence Research, 65, 783-806.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:2">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-content">Diaconis, P., &amp; Zabell, S. (1983). Some alternatives to Bayes’ rule. Tech. rep. 339, Stanford Univ., Dept. of Statistics.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:c2">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:c2">[4]</a></td> 
+                <td class="fndef-content">Example taken from - Halpern, J. (2003). Reasoning about Uncertainty. MIT Press, Cambridge, MA.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:4">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:4">[5]</a></td> 
+                <td class="fndef-content">Jacobs, B., &amp; Stein, D. (2023). Pearl's and Jeffrey's Update as Modes of Learning in Probabilistic Programming. Electronic Notes in Theoretical Informatics and Computer Science.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:5">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:5">[6]</a></td> 
+                <td class="fndef-content">In fact, we can view that Pearl's method performs forward KL (via Belief Propagation), while Jeffrey's method performs reverse KL (Variational Inference) as shown by Jacobs and Stein.</td>
+            </tr>
+        </table></p>
+        
+
+  </main>
+
+  <!-- Footer
+  <div class="myfooter">
+    &copy; 2024 Anand K Subramanian <span class=" vl"></span>
+    License <span class="vl"></span>
+    Design<span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 1.3rem;">&hearts;</span>
+  </div> -->
+
+  <div
+    style="font-size:1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;">
+    &copy; 2024 Anand K Subramanian <span class="vl"></span>
+    <a href="/license">License</a> <span class="vl"></span>
+    <a href="/design">Design</a> <span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 24px;">&hearts;</span>
+  </div>
+
+  
+  <script src="/_libs/highlight/highlight.min.js"></script>
+  <script>hljs.highlightAll(); hljs.configure({ tabReplace: '    ' });</script>
+  <link rel="stylesheet" href="/_libs/highlight/decaf.css">
+
+  <script src="/_libs/clipboard/clipboard.min.js"></script>
+  <script>
+    (function () {
+
+      // Get the elements.
+      // - the 'pre' element.
+      // - the 'div' with the 'paste-content' id.
+
+      var pre = document.getElementsByTagName('pre');
+
+      // Add a copy button in the 'pre' element.
+      // which only has the className of 'language-'.
+
+      for (var i = 0; i < pre.length; i++) {
+        var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+        if (isLanguage === 0) {
+          var button = document.createElement('button');
+          button.className = 'copy-button';
+          button.textContent = 'Copy';
+
+          pre[i].appendChild(button);
+        }
+      };
+
+      // Run Clipboard
+
+      var copyCode = new Clipboard('.copy-button', {
+        target: function (trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+
+      // On success:
+      // - Change the "Copy" text to "Copied".
+      // - Swap it to "Copy" in 2s.
+      // - Lead user to the "contenteditable" area with Velocity scroll.
+
+      copyCode.on('success', function (event) {
+        event.clearSelection();
+        event.trigger.textContent = 'Copied';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 2000);
+
+      });
+
+      // On error (Safari):
+      // - Change the  "Press Ctrl+C to copy"
+      // - Swap it to "Copy" in 2s.
+
+      copyCode.on('error', function (event) {
+        event.trigger.textContent = 'Press "Ctrl + C" to copy';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 5000);
+      });
+
+    })();
+  </script>
+  
+</body>
+
+</html>

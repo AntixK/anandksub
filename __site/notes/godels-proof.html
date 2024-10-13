@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  
+
+  <!-- Link Style Sheets -->
+  <link rel="stylesheet" href="/_css/ak.css">
+
+  
+
+  <title>Gödel's Proof - Ernest Nagel & James Newman</title>
+</head>
+
+<body>
+  <!-- Site Header -->
+  <header>
+    <h1><a href="/">Anand K Subramanian</a><br><br></h1>
+  </header>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <span><a href="/blog">Blog</a><span class="vl"></span></span>
+    <span><a href="/notes">Notes</a> <span class="vl"></span></span>
+    <span><a href="/art/">Art</a> <span class="vl"></span></span>
+    <span><a href="/CV">CV</a> <span class="vl"></span></span>
+    <span><a href="/tags">Tags</a>
+  </nav>
+
+  <!-- Article Info -->
+  
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/bookmark.svg" alt="clock-icon">&ensp;<span
+      class="pound">#</span>math <span
+      class="pound">#</span>philosophy <span
+      class="pound">#</span>self-referential 
+  </p>
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/calendar.svg" alt="clock-icon">&ensp;28 July 2021
+  </p>
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/timer.svg" alt="clock-icon">&ensp;16 mins
+  </p>
+  
+
+  <!-- Article Title -->
+  <h1>Gödel's Proof - Ernest Nagel & James Newman</h1>
+  <!-- Insert TLDR -->
+
+  
+  <p class="tldr">this is an empty post</p>
+  
+
+  <main>
+    <p>  In this book, Nagel and Newman labours to explain the famous incompleteness theorems of Kurt Gödel and their mathematical and philosophical implications. They elaborate  the list of developments leading up to <em>Principia Mathematica</em>, which formed the colossal sculpture that Gödel destroyed.</p>
+<h3>Axiomatic systems and their consistency</h3>
+<p>  The earliest framework for a mathematical <em>proof</em>, in contrast to experimental science, is that of the <em>axiomatic method</em> where a proposition is logically deduced based on a set of commonly accepted statements (axioms / postulates). The Greeks developed geometry based on this system - recall Euclid's <em>Elements</em>.</p>
+<p>The axiomatic method gained popularity as the axioms were reduced to a set of "undeniable truths" about our world, and the logical deduction guaranteed truth and mutual consistency of all the derived propositions or theorems. Gradually, the axiomatic method began to consume all of the standard scientific method. Increasing amount of effort was spent on developing adequate sets of axioms to incorporate physics, and new and old subfields within mathematics to formulate a sound axiomatic basis.</p>
+<div class="multilinequote"><p>A climate of option was thus generated in which it was tacitly assumed ths each sector of mathematical thought can be supplied with a set of axioms sufficient for developing systematically the endless totality of true propositions about the given area of inquiry.</p></div>
+<p>Gradually, the proper business of mathematics became to derive propositions from a given set of axioms and their fundamental truth or validity became irrelevant. Imagine a world where a given set of axioms were true and mathematicians were involved in completing that world - trying to deduce every things that can logically happen in that world. We we live in flat world, Euclid's axioms are valid and all its deducible propositions are true. If we live in a non-flat world or a curved space, then a different set of axioms are valid and again, its deducible propositions are true. Therefore, postulates lost any special meaning or even a necessity that they must reflect the self-evident basics of our reality.</p>
+<p>The first major breakthrough came with the works of Gauss, Bolyai, Lobachevsky, and Riemann, when they proved impossibility of deducing or proving a proposition within a axiomatic system. This form of a looping structure - a proof that talks about proving other theorems - was quite new and shed new light on the logical deduction mechanism of mathematics itself. They did not say that certain statements are false under a given axiomatic system, rather they cannot be proven within that system. More importantly, this also meant that theorems are nor absolutely true, rather hinge upon meanings assigned to them by their axiomatic gods.</p>
+<div class="multilinequote"><p>This is the point of Russel's famous epigram: pure mathematics is the subject in which we do not know what we are talking about, or whether what we are saying is true.</p></div>
+<p>This conversion of mathematics to a high degree of abstraction - audaciously called <em>formalization</em> - gave much freedom to explore new vistas and emphasized less on intuition. Intuitions can always be discovered or get accustomed to later, they said. Formalization abstracted away so much that aspects of axiomatic systems that were taken for granted were beginning to be questioned. The point in case - <em>consistency</em>.</p>
+<p>When the axioms have been stripped of any connection to reality, do we have any guarantee that the propositions, though derived logically, cannot contradict each other? For more than a thousand years, Euclidean geometry was confidently presumed to be consistent based on the fact that its axioms were founded on reality as perceived by us <sup id="fnref:1"><a class="fnref" href="#fndef:1">[1]</a></sup>. Now newer, more abstract, geometries were invented whose axioms lost connections to reality. Can these systems be consistent?</p>
+<p>The first simple method was to <em>convert</em> propositions of these abstract axiomatic systems into theorems of Euclid. Thus, they hinged on the confident presumption that Euclidean geometry was consistent. This solution simply transferred the problem of consistency to Euclidean geometry. Now the earlier presumption about its consistency came in serious concern.</p>
+<p>Hilbert's conversion of geometry into algebra, based on the work of Descartes, transferred the consistency problem to algebra. Now, algebra at this point (19th century) was founded on the axioms of set theory. Georg Cantor and Bertrand Russel, much to their frustration, had then discovered perfectly logical contradictions within set theory. So, the entire foundation of mathematics was put to scrutiny. Most fields of mathematics relied on algebra, whose foundation was now shaky owing to these contradictions. The remaining fields too had to tackle the problem of consistency.</p>
+<h3>Hilbert's Formalization Program</h3>
+<p>  Hilbert started his <em>formalization</em> program to address the problem of consistency. The formalization program essentially stripped mathematics of any meaning and adhered to a complete abstraction of a set of symbols and rules and operations. Hilbert <em>mechanized</em> mathematics. Theorems and postulates are mere strings of some symbols and are combined according to standardized rules. He tried to distinguish such mechanical manipulation of symbols from statements relating to intuition and understanding as <em>meta-mathematics</em> <em>i.e.</em> statements about mathematics rather than mathematics itself.</p>
+<!-- He tried to resolve the paradoxes posed by Bertrand Russel as _meta-mathematics_ *i.e.* statements about mathematics rather than mathematics itself.  -->
+<p>With this naked view of mathematics, hilbert began to pose challenges of coming up with <em>absolute</em> proofs of consistency that deals only with strings of symbols and well-defined rules. He also realized the risk of dealing with infinities as done by Georg Cantor and strictly prohibited proofs from making reference to "infinite structural properties of formulas or to an infinite number of operations with formulas".
+An absolute proof of consistency should have finite steps, finite number of operations. Such proofs are meta-mathematical in nature. Hilbert separated solely to avoid intuition and preconceptions from muddying the waters of pure mathematics. Meta-mathematical statements can only be made based on the set of operations and rules <em>i.e</em> they ought to be inferred. Hilbert termed them as a <em>theory of proof</em>. Meta-mathematics is the analysis of mathematics itself - proving propositions from postulates. He conjectured that using only finite steps of analysis, one can be able to prove whether a given axiomatic system is consistent.</p>
+<p>Bertrand Russell and Whitehead took up the challenge of formalizing mathematics as posed by Hilbert. They identified formal logic as the most fundamental of all mathematics and began to formalize it in an attempt to prove its consistency. After Hilbert, algebra itself was converted to arithmetic, whose axioms were shown to be deducible from a small number of basic propositions as logical truths. Therefore, Russel and Whitehead decided to tackle formal logic and build up foundations of mathematics, while pursuing its absolute proof of consistency in their famous <em>Principia Mathematica</em>.</p>
+<h3><em>Principia Mathematica</em> &amp; Absolute Consistency</h3>
+<div class="multilinequote"><p><em>Principia</em>, in sum, created the essential instrument for investigating the entire system of arithmetic as an uninterrupted calculus - that is, a a system of meaningless marks, whose formulas (or "strings") are combined and transformed in accordance with stated rules of operation.</p></div>
+<p>  In <em>Principia</em>, a set of symbols consisting of variables and operators (logical connectives like $\neg, \land, \vee, \to$) along with their formation rules were specified. Any string formed in accordance with the formation rules using those symbols is considered a valid formula. Furthermore as a point of illustration, lets consider two main transformation rules - the <em>Rule of Substitution</em> where a formula (String) can be substituted in place of a variable, and the <em>Rule of Detachment</em> (<em>modus ponens</em>) where if a formula $S_1$ is derivable, and if $S_1$ is true then $S_2$ is also true (represented as $S_1 \to S_2$), then $S_2$ is also derivable. Certain finite set of formulas can be considered to be primitive and be assigned as axioms. Thus, any meaning associated with any of the symbols, operations or axioms are stripped clean <sup id="fnref:2"><a class="fnref" href="#fndef:2">[2]</a></sup>.</p>
+<p>Based on this framework, the method for the absolute proof of consistency is to find out what constitutes as <em>absolute consistency</em> within the given framework and then employ meta-mathematical reasoning to show that a property of the axioms (a statement about the axioms) exists such that the abstract notion of absolute consistency is satisfied.</p>
+<p>With the axioms framed by the <em>Principia</em> and two rules stated, for absolute consistency, it can be shown that if every manipulated formula $q$ is provable using the axioms and other theorems, then there must be at least one theorem $S$ whose contradiction $\neg S$ must also be provable<sup id="fnref:3"><a class="fnref" href="#fndef:3">[3]</a></sup>. As for the meta-mathematical reasoning, we take the property of "being true" or a <em>tautology</em>. The task is to show that at least a formula $q$ exists such that it is not a tautology and thus, it cannot be proven. Through this reasoning,  it can be showed this small framework is absolutely consistent.</p>
+<p>A converse of the above idea is "whether every tautology can be proved?" <em>i.e.</em> can every logically true statement can be derived using the axioms? If yes, then the system is <em>complete</em>. A remarkable thing about this converse is that it separates tautology from provability. Till now, we had assumed provability as the definition of tautology. <em>Principia</em>, which defined the framework for the whole of arithmetic, could not be proved to absolutely consistent - even after many attempts. Gödel was to make things only much  worse.</p>
+<h3>Gödel's Theorems</h3>
+<p>  Gödel extended many of the ideas the presented in the <em>Principia</em>. The first is the idea of representing propositions and formulas as mere strings. Since they are strings, they can be encoded, mapped to other strings, counted and so on. The second idea that he majorly extended, that had dire consequences, is the ida of <em>mapping</em>.</p>
+<p>Hilbert and his contemporaries had essentially mapped geometry and algebra to arithmetic in search for the consistency of the axiomatic system. The <em>Principia</em> had then mapped arithmetic to logic. Gödel identified that mapping inherently transfers the problem from one domain to another unabating the fundamental issue. But could there be any field more fundamental than logic? The meta-mathematical arguments themselves require logical reasoning. So, what if we can map the meta-mathematical statements about a sufficiently formal system (a system that is sufficient to characterize arithmetic and hence, all of geometry and algebra)  back to the system itself? This need not necessarily be logic (Frege-Russel thesis) or set theory (ZFC axioms), but sufficient formal system. This <em>self-referential</em> mapping is the crux of Gödel's theorems <sup id="fnref:4"><a class="fnref" href="#fndef:4">[4]</a></sup>.</p>
+<p>Gödel's focus was on studying the absolute consistency and completeness of any formal system powerful enough to characterize arithmetic. Absolute consistency can be proved for smaller systems as shown before.</p>
+<p>Gödel constructed a formal system for arithmetic and a mapping strategy where each symbol, variable, and formula were assigned unique numbers. This is called as the <em>Gödel numbering</em>. For instance, each of the symbols were assigned numbers from 1; then variables and predicates were assigned prime numbers and their powers. Based on this, the formulas were assigned unique numbers by raising consecutive prime numbers to the value indicated by that symbol and then multiplying them for form a new unique number specific to that formula<sup id="fnref:5"><a class="fnref" href="#fndef:5">[5]</a></sup>.For example, consider the formula</p>
+<p>$$
+(\exists x)(x = sy)
+$$
+Which says there exists a numerical variable $x$ that is a successor to another numerical variable $y$. The numbers for these symbols (as they are merely strings) are $8, 4, 11, 9, 8, 11,5,7,13, 9$. The Gödel number for the above formula is</p>
+<p>$$
+2^{8} \x 3^{4} \x 5^{11} \x 7^{9} \x 11^{8} \x 13^{11} \x 17^{5} \x 19^{7} \x 23^{13} \x 29^{9} 
+$$</p>
+<p>Similarly, a sequence of formulas with corresponding Gödel numbers $n_1, n_2, ... n_m$ can be combined to give a single godel number as $p_1^{n_1} \x p_2^{n_2} \x ... \x p_m^{n_m}$ where $p_i$ is the $i^{th}$ prime number.</p>
+<p>This <em>arithmetization</em> of formal calculus also yields the ability to verify whether a given number is a Gödel number <em>i.e.</em> a valid formula within the formal calculus. This can be done through prime factorization where a given number can be checked if it is composed of powers of successive primes or simply just the symbol numbers.</p>
+<p>Any meta-mathematical statement about the expressions in the formal calculus can be considered as a statement about their Gödel numbers and their arithmetic relations. Recall that the formal system of arithmetic is essentially describing the same. Therefore,  all of the meta-mathematical statements is can be adequately mapped back to the calculus itself.</p>
+<p>It is not difficult to anticipate Gödel's next set of arguments.</p>
+<ol>
+<li>An arithmetic formula $G$ can be constructed that represents the meta-mathematical statement that "The formula G is not demonstrable" <em>i.e.</em> provable. This can be done in a way such as a Gödel number $h$ represents "the formula associated with $h$ is not demonstrable".</li>
+<li>This, by definition, leads to a contradiction that $G$ is demonstrable if, and only if, $\neg G$ is demonstrable. This means that arithmetic is inconsistent.</li>
+<li>However, Gödel did not stop there. He proceeded to show that $G$ is not only undecidable, it is also <em>true</em>. The meta-mathematical statement "G is not demonstrable" is indeed true since both $G$ and $\neg G$ are demonstrable. Thus, the system is <em>incomplete</em>. In other words, we cannot deduce all arithmetic truths from the given set of axioms. Even if a system is augmented with additional axioms, other true but undecidable arithmetic statements will still exist.</li>
+<li>Lastly, "the coda of Gödel's amazing intellectual symphony", he constructed the statement $A$ that represents "Arithmetic is consistent" and showed that it is not demonstrable. Therefore, any and every formal system characterizing arithmetic is always inconsistent and incomplete. A true statement but undecidable statement is one that can be arrived at only using meta-mathematical statements and not by deducing formally from the axioms. The true statement exists external to the formal axiomatic space and hence, is undecidable.</li>
+</ol>
+<h3>Caveats &amp; Takeaways</h3>
+<ul>
+<li>
+<p>Gödel's theorems do not say that no <em>finitistic absolute proof of consistency</em> can be constructed for a given formal system. In fact it can be done as shown previously. For a simple enough system, its consistency can be proved.</p>
+</li>
+<li>
+<p>Gödel's showed that no <em>finitistic absolute proof of consistency</em> can be constructed <em>within</em> arithmetic. However, it does not exclude the possibility of constructing a finitistic absolute proof of consistency <em>for</em> arithmetic using another axiomatic system. This means an axiomatic system may exist in which a finitistic proof of consistency of arithmetic can be constructed provided, the proof is <em>not</em> capable of formulation within arithmetic <sup id="fnref:6"><a class="fnref" href="#fndef:6">[6]</a></sup>.</p>
+</li>
+<li>
+<p>They show that there is an endless number of true arithmetic statements which cannot be formally deduced from any given set of axioms by a closed set of inference rules. This is an inherent inability of the axiomatic system pertaining to the arithmetic field (and by extension algebra, geometry and etc.).
+:::multilinequote
+..what we understand by the process of mathematical proof does not coincide with the exploitation of a formalized axiomatic method.
+:::
+Even within a more sophisticated formal system where the consistency of arithmetic can be proved, there must be infinite number of true statements which cannot be proved within that system. In short, no axiomatic system can be both consistent and complete. Any consistent axiomatic system is incomplete. This is Gödel's first incompleteness theorem.</p>
+</li>
+<li>
+<p>Based on the self-referential statement, No consistent system can prove its own consistency. Proving a system's consistency lies outside of its axiomatic system and can only be proved using meta-mathematical reasoning. This is Gödel's second incompleteness theorem.</p>
+</li>
+<li>
+<p>There is a lot of confusion between what is a <em>true</em> statement and a <em>demonstrable</em>(provable) statement. It is understandable to think that they are equivalent. From Gödel's theorems, they are clearly distinct. All demonstrable statements are indeed true, but all true statements are not necessarily demonstrable within a formal system. Provability/ demonstrability is the property of the formal system, while truth is outcome of meta-mathematical reasoning. A true but unprovable statement is one which has rigorous meta-mathematical reasoning, while being total un-representable within the formal system.</p>
+</li>
+</ul>
+<p>These undecidability theorems employing self-referentials would again come back to haunt a different but related field - Computer Science. This would have deeper and immediately recognizable repercussions on computation and even the extent of our cognitive abilities.</p>
+<hr />
+
+        <p><table class="fndef" id="fndef:1">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td> 
+                <td class="fndef-content">Euclid's parallel line axiom was widely questioned, as the ancients did know of asymptotes - curves that meet only at infinity - while parallel lines are those that do not meet even at infinity. So, this wasn't quite obvious to assume as an axiom. This lead to interesting developments like the curved space of Riemannian geometry.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:2">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-content">This is essentially a subset of the framework described in the <em>Principia</em>.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:3">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:3">[3]</a></td> 
+                <td class="fndef-content">Assume $S$ and $\neg S$ are provable. Based on the theorem $p \to (\neg p \to q)$, we can replace $p$ by the formula $S$ (Rule of substitution) as $S \to (\neg S \to q)$ and from the rule of detachment, we get $\neg S \to q$. Since $\neg S$ is provable then, again by rule of detachment, the (any) formula $q$ can be proven. Therefore, there must be at least one formula $q$ that is not derivable by the axioms.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:4">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:4">[4]</a></td> 
+                <td class="fndef-content">The inspiration for the self-referential may have come from Russel's paradox or similar such paradoxes that existed.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:5">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:5">[5]</a></td> 
+                <td class="fndef-content">This is based on the prime factorization theorem.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:6">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:6">[6]</a></td> 
+                <td class="fndef-content">Gerhard Gentzen presented a proof of consistency for arithmetic but it cannot be mapped into the formalism of arithmetic and does not constitute as finitistic (as it used the <em>principle of transfinite induction</em>).</td>
+            </tr>
+        </table></p>
+        
+<hr />
+<p>All the above excerpts are attributed to their original author(s). Book info -</p>
+<blockquote>
+<p>Ernest Nagel; James Newman, <em>Gödel's Proof</em>, 2008. Little, NYU Press. ISBN-13: 9780814758373 ISBN-10: 0814758371</p>
+</blockquote>
+
+  </main>
+
+  <!-- Footer
+  <div class="myfooter">
+    &copy; 2024 Anand K Subramanian <span class=" vl"></span>
+    License <span class="vl"></span>
+    Design<span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 1.3rem;">&hearts;</span>
+  </div> -->
+
+  <div
+    style="font-size:1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;">
+    &copy; 2024 Anand K Subramanian <span class="vl"></span>
+    <a href="/license">License</a> <span class="vl"></span>
+    <a href="/design">Design</a> <span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 24px;">&hearts;</span>
+  </div>
+
+  
+</body>
+
+</html>

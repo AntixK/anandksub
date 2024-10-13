@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        throwOnError: false,
+        // output: "html",
+        // customised options
+        // • auto-render specific keys, e.g.:
+        delimiters: [
+          { left: '$$', right: '$$', display: true }, // block
+          { left: '$', right: '$', display: false }, // Inline
+          { left: "\begin{align}", right: "\end{align}", display: true }, // block
+          { left: "\begin{aligned}", right: "\end{aligned}", display: true }, // block
+        ],
+        ignoredTags: [
+          "pre",
+          "code",
+          "script",
+          "style",
+        ],
+        macros: {
+          "\\A": "\\mathbb{A}",
+          "\\B": "\\mathbb{B}",
+          "\\C": "\\mathbb{C}",
+          "\\D": "\\mathbb{D}",
+          "\\E": "\\mathbb{E}",
+          "\\F": "\\mathbb{F}",
+          "\\G": "\\mathbb{G}",
+          "\\H": "\\mathbb{H}",
+          "\\I": "\\mathbb{I}",
+          "\\J": "\\mathbb{J}",
+          "\\K": "\\mathbb{K}",
+          "\\L": "\\mathbb{L}",
+          "\\M": "\\mathbb{M}",
+          "\\N": "\\mathbb{N}",
+          "\\O": "\\mathbb{O}",
+          "\\P": "\\mathbb{P}",
+          "\\Q": "\\mathbb{Q}",
+          "\\R": "\\mathbb{R}",
+          "\\S": "\\mathbb{S}",
+          "\\T": "\\mathbb{T}",
+          "\\U": "\\mathbb{U}",
+          "\\V": "\\mathbb{V}",
+          "\\W": "\\mathbb{W}",
+          "\\X": "\\mathbb{X}",
+          "\\Y": "\\mathbb{Y}",
+          "\\Z": "\\mathbb{Z}",
+
+          "\\fA": "\\mathcal{A}",
+          "\\fB": "\\mathcal{B}",
+          "\\fC": "\\mathcal{C}",
+          "\\fD": "\\mathcal{D}",
+          "\\fE": "\\mathcal{E}",
+          "\\fF": "\\mathcal{F}",
+          "\\fG": "\\mathcal{G}",
+          "\\fH": "\\mathcal{H}",
+          "\\fI": "\\mathcal{I}",
+          "\\fJ": "\\mathcal{J}",
+          "\\fK": "\\mathcal{K}",
+          "\\fL": "\\mathcal{L}",
+          "\\fM": "\\mathcal{M}",
+          "\\fN": "\\mathcal{N}",
+          "\\fO": "\\mathcal{O}",
+          "\\fP": "\\mathcal{P}",
+          "\\fQ": "\\mathcal{Q}",
+          "\\fR": "\\mathcal{R}",
+          "\\fS": "\\mathcal{S}",
+          "\\fT": "\\mathcal{T}",
+          "\\fU": "\\mathcal{U}",
+          "\\fV": "\\mathcal{V}",
+          "\\fW": "\\mathcal{W}",
+          "\\fX": "\\mathcal{X}",
+          "\\fY": "\\mathcal{Y}",
+          "\\fZ": "\\mathcal{Z}",
+
+          "\\x": "\\times",
+          "\\vA": "\\mathbf{A}",
+          "\\vB": "\\mathbf{B}",
+          "\\vC": "\\mathbf{C}",
+          "\\vD": "\\mathbf{D}",
+          "\\vE": "\\mathbf{E}",
+          "\\vF": "\\mathbf{F}",
+          "\\vG": "\\mathbf{G}",
+          "\\vH": "\\mathbf{H}",
+          "\\vI": "\\mathbf{I}",
+          "\\vJ": "\\mathbf{J}",
+          "\\vK": "\\mathbf{K}",
+          "\\vL": "\\mathbf{L}",
+          "\\vM": "\\mathbf{M}",
+          "\\vN": "\\mathbf{N}",
+          "\\vO": "\\mathbf{O}",
+          "\\vP": "\\mathbf{P}",
+          "\\vQ": "\\mathbf{Q}",
+          "\\vR": "\\mathbf{R}",
+          "\\vS": "\\mathbf{S}",
+          "\\vT": "\\mathbf{T}",
+          "\\vU": "\\mathbf{U}",
+          "\\vV": "\\mathbf{V}",
+          "\\vW": "\\mathbf{W}",
+          "\\vX": "\\mathbf{X}",
+          "\\vY": "\\mathbf{Y}",
+          "\\vZ": "\\mathbf{Z}",
+
+          "\\va": "\\mathbf{a}",
+          "\\vb": "\\mathbf{b}",
+          "\\vc": "\\mathbf{c}",
+          "\\vd": "\\mathbf{d}",
+          "\\ve": "\\mathbf{e}",
+          "\\vf": "\\mathbf{f}",
+          "\\vg": "\\mathbf{g}",
+          "\\vh": "\\mathbf{h}",
+          "\\vi": "\\mathbf{i}",
+          "\\vj": "\\mathbf{j}",
+          "\\vk": "\\mathbf{k}",
+          "\\vl": "\\mathbf{l}",
+          "\\vl": "\\mathbf{l}",
+          "\\vm": "\\mathbf{m}",
+          "\\vn": "\\mathbf{n}",
+          "\\vo": "\\mathbf{o}",
+          "\\vp": "\\mathbf{p}",
+          "\\vq": "\\mathbf{q}",
+          "\\vr": "\\mathbf{r}",
+          "\\vs": "\\mathbf{s}",
+          "\\vt": "\\mathbf{t}",
+          "\\vu": "\\mathbf{u}",
+          "\\vv": "\\mathbf{v}",
+          "\\vw": "\\mathbf{w}",
+          "\\vx": "\\mathbf{x}",
+          "\\vy": "\\mathbf{y}",
+          "\\vz": "\\mathbf{z}",
+
+          "\\vmu": "\\boldsymbol \\mu",
+          "\\vnu": "\\boldsymbol \\nu",
+          "\\veps": "\\boldsymbol \\epsilon",
+          "\\vtheta": "\\boldsymbol \\theta",
+          "\\vomega": "\\boldsymbol \\omega",
+          "\\vlambda": "\\boldsymbol \\lambda",
+          "\\vzero": "\\mathbf{0}",
+          "\\vone": "\\mathbf{1}",
+          "\argmin": "\mathop{\mathrm{argmin}} \;",
+          "\argmax": "\mathop{\mathrm{argmax}} \;",
+
+        },
+        globalGroup: true,
+      });
+    });
+  </script>
+
+  <link rel="stylesheet" href="/_libs/katex/katex.min.css">
+
+  <script defer src="/_libs/katex/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="/_libs/katex/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+  <!-- TEMML Instead of KATEX -->
+  <!-- <link rel="stylesheet" href="/_libs/temml/Temml-Latin-Modern.css"> -->
+  <!-- <script src="/_libs/temml/temml.min.js"></script> -->
+  <!-- <script src="/_libs/temml/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script> -->
+
+  
+
+  <!-- Link Style Sheets -->
+  <link rel="stylesheet" href="/_css/ak.css">
+
+  
+
+  <title>Fast Sample-Covariance Computation for Multidimensional Arrays</title>
+</head>
+
+<body>
+  <!-- Site Header -->
+  <header>
+    <h1><a href="/">Anand K Subramanian</a><br><br></h1>
+  </header>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <span><a href="/blog">Blog</a><span class="vl"></span></span>
+    <span><a href="/notes">Notes</a> <span class="vl"></span></span>
+    <span><a href="/art/">Art</a> <span class="vl"></span></span>
+    <span><a href="/CV">CV</a> <span class="vl"></span></span>
+    <span><a href="/tags">Tags</a>
+  </nav>
+
+  <!-- Article Info -->
+  
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/bookmark.svg" alt="clock-icon">&ensp;<span
+      class="pound">#</span>math <span
+      class="pound">#</span>ml <span
+      class="pound">#</span>code 
+  </p>
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/calendar.svg" alt="clock-icon">&ensp;23 September 2021
+  </p>
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/timer.svg" alt="clock-icon">&ensp;6 mins
+  </p>
+  
+
+  <!-- Article Title -->
+  <h1>Fast Sample-Covariance Computation for Multidimensional Arrays</h1>
+  <!-- Insert TLDR -->
+
+  
+  <p class="tldr">A quick discussion and a vectorized Python implementation for the computation of sample covariance matrices for multi-dimensional arrays.</p>
+  
+
+  <main>
+    <p>  Consider the following problem -</p>
+<blockquote>
+<p>Given a tensor (multi-dimensional array) $\vX$ of size $N \x L \x D$ where $N$ is the number of samples of some numerical object of size $L \x D$. How do you efficiently compute the sample covariance matrix of the tensor $\vX$.</p>
+</blockquote>
+<p>I have come across the above problem more often, under different contexts, than you might assume. For instance in Machine Learning, the tensor $\vX$ can be formed accumulating $L$ feature maps (say, from different layers of some neural network) each of dimension $D$ from $N$ input samples. Computing covariance can be crucial to understand how those features compare with each other across the layers. It can also be used to in feature selection. Learning to compute the sample covariance can also provide insights into computing other metrics for feature selection, finding independent features, comparing the features of two networks<sup id="fnref:1"><a class="fnref" href="#fndef:1">[1]</a></sup> and so on.</p>
+<p><strong>Note</strong>: I will be shuttling between Numpy and PyTorch for the implementations.</p>
+<p>Lets take a quick random tensor to work with.</p>
+<pre><code class="language-python">import numpy as np
+import torch
+
+N, L, D = 100, 10, 5
+X = 100*torch.rand(N, L, D) + 1
+X_np = X.numpy()
+</code></pre>
+<p>To compute the covariance matrix of size $L \x D \x D$, we can use Numpy's <code>cov</code>.</p>
+<pre><code class="language-python">def numpy_cov(x: np.array) -&gt; np.array:
+    """
+    Computes the unbiased sample covariance of the tensor x.
+        S(x) = 1/(N - 1) ∑ (x - μ)(x - μ)^T
+    """
+    npcov = np.zeros((L, D, D))
+    for i in range(L):
+        X = x[:, i, :]
+        npcov[i] = np.cov(X, rowvar=False, ddof=1) \
+                    + 0.01 * np.eye(D).astype(np.float32) # Diagonal jitter
+        # ddof = 1 for Bessel's correction
+    return npcov
+                
+</code></pre>
+<p>Unfortunately, we have to resort to manual computation in case of PyTorch as it still does not have <code>cov</code> function as of <code>1.9.0</code> version. Obviously we would like to have vectorized solution rather than looping over the data samples. Recall the definition of sample covariance.
+$$
+S(\vX)  = \frac{1}{N-1} \sum_{i=1}^N (\vx_i - \hat{\vmu})(\vx_i - \hat{\vmu})^T 
+$$
+Where $\hat{\vmu}$ is the current sample mean. The main obstacle in direct vectorized computation is the subtraction of the sample mean. Computing mean and subtracting it from the elements is a sequential operation. Can this be vectorized? By this I mean a matrix $\vJ$ which when multiplied by some other matrix $\vP$, subtracts the mean of that matrix across some dimension. We can construct $\vJ$ as follows -</p>
+<ol>
+<li>The sum of all elements of $\vP$ across some dimension can be computed by multiplying with a matrix of 1s.</li>
+</ol>
+<pre><code class="language-python">P = torch.randn(5,5)
+J = torch.ones(5,5)
+assert torch.allclose(J @ P , P.sum(0).expand(5,5))
+assert torch.allclose(P @ J , P.sum(1).expand(5,5).t_())
+</code></pre>
+<ol start="2">
+<li>The sample mean can be computed if we simply divide the result by $N$. But this can be incorporated within the matrix $\vJ$.</li>
+</ol>
+<pre><code class="language-python">P = torch.randn(5,5)
+J = (1/5)*torch.ones(5,5)
+assert torch.allclose(J @ P , P.mean(0).expand(5,5))
+assert torch.allclose(P @ J , P.mean(1).expand(5,5).t_())
+</code></pre>
+<ol start="3">
+<li>Now we can simply subtract the computed mean as <code>P - P @ J =&gt; P(I - J) =&gt; P @ J'</code>. This matrix is called as the <em>centering matrix</em> in literature and is commonly used in vectorized computation of covariances, HSIC metrics, and standardizing data. We can now directly compute our sample covariance in a vectorized form.</li>
+</ol>
+<pre><code class="language-python">X = x.transpose(0, 1) # To make our life easier
+
+J = (1.0/(N - 1))*(torch.eye(N) - (1.0/(N)*torch.ones(N,N))) # Centering matrix
+gtcov = X.transpose(1,2) @ J[None, :, :] @ X # Broadcast J over dimensions of X
+
+</code></pre>
+<p>A slight improvement to the above <code>gtcov</code> computation step is to use <code>unsqueeze()</code> rather than <code>None</code> for broadcasting $\vJ$ over the dimensions of $\vX$.</p>
+<p><strong>Note</strong>: As another slight optimization, we can add brackets to <code>gtcov</code> computation based on the actual values of $L$ and $D$. If $L &gt; D$, which it usually is, <code>gtcov = (X.transpose(1,2) @ J[None, :, :]) @ X</code> gives a small speed up.</p>
+<pre><code class="language-python">def torch_veccov(x: torch.Tensor) -&gt; torch.Tensor:
+    X = x.transpose(0, 1) # To make our life easier
+    J = (1.0/(N - 1))*(torch.eye(N) - (1.0/(N)*torch.ones(N,N))) # Centering matrix
+
+    gtcov = (X.transpose(1,2) @ J.unsqueeze(0)) @ X # More efficient
+
+    torch.einsum('ijj-&gt;ij', gtcov)[...] += 0.01 # Diagonal jitter
+    return gtcov
+</code></pre>
+<p>Furthermore, we can also leverage PyTorch's amazing CUDA support to run the above function on the GPU without any change. Lets now compare how fast these methods actually are. The following plot shows the results for $N = 500, D= 500$ on a machine with Intel Core i7-8750H CPU and NVIDIA RTX 2070 GPU.</p>
+<img  style="width:50%" src="/media/post_images/cov_comp.webp" alt="Speed Comparison of Covariance methods">
+
+<h3>But What about Streaming Data?</h3>
+<p>Granted that we can't possibly assume that we have the complete data at all times. Even if we do, it is always a good idea to process in batches for scalability and performance. So can we incorporate our vectorized solution into a streaming data framework?</p>
+<p>From the definition of sample covariance, we have
+$$
+\begin{aligned}
+S_i  &amp;= \frac{1}{N-1} \sum_{i=1}^N (\vx_i - \hat{\vmu})(\vx_i - \hat{\vmu})^T \\
+&amp;= \frac{1}{N-1} \sum_{i=1}^N \vx_i \vx_i^T - \frac{N}{N-1}\hat{\vmu}\hat{\vmu}^T \\
+\end{aligned}
+$$<a id=eq:seq_cov class='anchor'></a></p>
+<p>So, we have to keep track of the sum of products of the incoming $\vx_i$ and the mean $\hat{\vmu}$. We can efficiently do both the operations in-place using PyTorch's <code>add_</code> and <code>baddbmm_</code>. The implementation is given below.</p>
+<pre><code class="language-python">def torch_seqcov(x):
+    """
+    Computes the sequential unbiased sample covariance of the tensor x.
+        S(x) = 1/(N - 1) ∑ xx^2 - N / (N - 1) μμ^T
+    """
+
+    mean =  torch.zeros( L, D) # feature mapsize x num features
+    x2 = torch.zeros(L, D,D)
+
+    x =  x.transpose(1,0)
+    for i in range(N):
+        X = x[:, i, :][ :, None, :]
+        mean1.add_( X.squeeze() / (N)) # In case of minibatch, sum them
+
+        x2.baddbmm_(X.transpose(1, 2),  X)  # x2 &lt;- x2 + X.transpose(1, 2) @  X
+
+    cov = (x2 / (N-1)) - ((N / (N - 1)) * mean1.unsqueeze(-1) @ mean1.unsqueeze(-2))
+
+    torch.einsum('ijj-&gt;ij', cov)[...] += 0.01 
+    return cov
+</code></pre>
+<p>With such a simple procedure, we can compute the covariance of tensors even for very large datasets.</p>
+<p><strong>Note</strong>: There is another formula for sequential calculation of covariance matrices that is commonly given.
+$$
+S_i  = \frac{N - 2}{N-1} S_{i-1} + \frac{1}{N} (\vx_i - \hat{\vmu})(\vx_i - \hat{\vmu})^T
+$$
+The above formula is just a few steps away from equation <span class='eqref'>(<a href='#eq:seq_cov'>1</a>)</span> (full derivation is shown <a href="https://stats.stackexchange.com/a/310701">here</a>). However, in practice it does not work well due to the need for proper initialization and is often numerically unstable<sup id="fnref:2"><a class="fnref" href="#fndef:2">[2]</a></sup>.</p>
+<p>It is quite fascinating that an intermediate step in a mathematical procedure yields numerically efficient implementation rather than the final, supposedly more beautiful, result.</p>
+<hr />
+
+        <p><table class="fndef" id="fndef:1">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td> 
+                <td class="fndef-content">Looking at you, Hilbert-Schmidt Independence Criterion (HSIC) :smirk:</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:2">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-content">Although, this has been addressed by the Welford's online algorithm.</td>
+            </tr>
+        </table></p>
+        
+
+  </main>
+
+  <!-- Footer
+  <div class="myfooter">
+    &copy; 2024 Anand K Subramanian <span class=" vl"></span>
+    License <span class="vl"></span>
+    Design<span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 1.3rem;">&hearts;</span>
+  </div> -->
+
+  <div
+    style="font-size:1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;">
+    &copy; 2024 Anand K Subramanian <span class="vl"></span>
+    <a href="/license">License</a> <span class="vl"></span>
+    <a href="/design">Design</a> <span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 24px;">&hearts;</span>
+  </div>
+
+  
+  <script src="/_libs/highlight/highlight.min.js"></script>
+  <script>hljs.highlightAll(); hljs.configure({ tabReplace: '    ' });</script>
+  <link rel="stylesheet" href="/_libs/highlight/decaf.css">
+
+  <script src="/_libs/clipboard/clipboard.min.js"></script>
+  <script>
+    (function () {
+
+      // Get the elements.
+      // - the 'pre' element.
+      // - the 'div' with the 'paste-content' id.
+
+      var pre = document.getElementsByTagName('pre');
+
+      // Add a copy button in the 'pre' element.
+      // which only has the className of 'language-'.
+
+      for (var i = 0; i < pre.length; i++) {
+        var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+        if (isLanguage === 0) {
+          var button = document.createElement('button');
+          button.className = 'copy-button';
+          button.textContent = 'Copy';
+
+          pre[i].appendChild(button);
+        }
+      };
+
+      // Run Clipboard
+
+      var copyCode = new Clipboard('.copy-button', {
+        target: function (trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+
+      // On success:
+      // - Change the "Copy" text to "Copied".
+      // - Swap it to "Copy" in 2s.
+      // - Lead user to the "contenteditable" area with Velocity scroll.
+
+      copyCode.on('success', function (event) {
+        event.clearSelection();
+        event.trigger.textContent = 'Copied';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 2000);
+
+      });
+
+      // On error (Safari):
+      // - Change the  "Press Ctrl+C to copy"
+      // - Swap it to "Copy" in 2s.
+
+      copyCode.on('error', function (event) {
+        event.trigger.textContent = 'Press "Ctrl + C" to copy';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 5000);
+      });
+
+    })();
+  </script>
+  
+</body>
+
+</html>

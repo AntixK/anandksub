@@ -1,0 +1,693 @@
+/* ==================================================================
+    FONTS & TYPEFACES
+================================================================== */
+@charset "UTF-8";
+
+@font-face {
+    font-family: "et-book";
+    src: url("/assets/fonts/et-book-roman-line-figures.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Overpass';
+    font-style: normal;
+    font-weight: 200;
+    font-display: swap;
+    src: url(https://cdnjs.cloudflare.com/ajax/libs/overpass/3.0.4/overpass-webfont/overpass-extralight.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Code */
+@font-face {
+    font-family: 'Fira Mono';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url("/assets/fonts/FiraCode-Light.woff2") format('woff2');
+}
+
+
+/* latin */
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 200;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/nunito/v25/XRXI3I6Li01BKofiOc5wtlZ2di8HDDshdTQ3jw.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Tamil */
+@font-face {
+    font-family: "mukta";
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(" ../assets/fonts/Lohit-Tamil.woff2") format("woff2");
+    unicode-range: U+0B80-BFF;
+    /* Tamil Glyphs */
+
+}
+
+
+/* @font-face {
+    font-family: "JosefinSlab";
+    src: url("../../assets/JosefinSlab/josefin-slab-v20-latin-200.woff2") format("woff");
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+000-5FF;
+} */
+
+/* ==================================================================
+    VARIABLES
+================================================================== */
+
+:root {
+    /* Define Colours */
+    /*White*/
+    --c-0: #FFFFFD;
+    /* Body text (#100F0F, #111)*/
+    --c-1: #100F0F;
+    /* For quotes, important blocks (#CE5D97, #e691c5)*/
+    --c-2: #CE5D97;
+    /* tldr */
+    --c-3: #e4e2d1;
+    /* for subtitles, dates, tags (#6F6E69, #666666) */
+    --c-4: #6F6E69;
+    /* For links and hyperrefs (#CE5D97, #e2269a)*/
+    --c-5: #CE5D97;
+
+    /* Defining Fonts*/
+    --monospace-font: "Fira Mono", Menlo, Courier, monospace;
+    --serif-font: "et-book", "mukta",
+        Georgia,
+        Palatino, "Palatino Linotype", "Palatino LT STD",
+        "Book Antiqua", serif;
+    --sanserif-font: "Nunito", Verdana, Helvetica, sans-serif;
+    --header-font: "Overpass", Verdana, Helvetica, sans-serif;
+}
+
+/* ==================================================================
+    DEFAULT HTML ELEMENTS
+================================================================== */
+html {
+    font-size: clamp(0.8rem, 1.5vw, 1.0rem);
+    scrollbar-color: var(--scrollbar-thumb) var(--background-body);
+    scrollbar-width: thin;
+}
+
+body {
+    width: 80%;
+    max-width: 800px;
+    min-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: var(--serif-font);
+    color: var(--c-1);
+    counter-reset: ktexeqnum;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+pre {
+    position: relative;
+}
+
+/* Paragraph */
+p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-right: 0;
+    vertical-align: baseline;
+    line-height: 2;
+    font-size: 1.4rem;
+    word-break: break-word;
+    /* text-justify: inter-word; */
+    /* align: justify; */
+    /* justify-content: stretch; */
+    /* Pack flex items from the start */
+}
+
+p.subtitle {
+    margin-top: -0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+    display: block;
+    font-weight: 400;
+    color: var(--c-4);
+    font-family: var(--sanserif-font);
+}
+
+/* Headers */
+h1,
+h2,
+h3,
+h4 {
+    font-weight: 400;
+    font-family: var(--header-font);
+    text-decoration: none;
+}
+
+h1 {
+    /* margin-top: 4rem; */
+    font-size: 3.2rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+}
+
+h2 {
+    font-size: 2.2rem;
+}
+
+h3 {
+    font-size: 1.7rem;
+}
+
+h4 {
+    font-size: 1.4rem;
+}
+
+/* ================================================================ */
+/* Lists */
+ol,
+ul {
+    font-size: 1.4rem;
+    line-height: 2;
+}
+
+ol {
+    margin: 1px 0;
+}
+
+/* ================================================================ */
+/* Links*/
+a,
+a:link,
+a:hover,
+a:visited {
+    color: inherit;
+    text-decoration: none;
+    /* text-underline-offset: 10px; (Not available in all browsers) */
+}
+
+p a:link,
+p a:hover,
+p a:visited {
+    text-decoration: none;
+    color: var(--c-5);
+}
+
+/* ================================================================ */
+/* Table */
+table {
+    width: 100%;
+}
+
+th,
+td {
+    text-align: left;
+    vertical-align: top;
+}
+
+/*================================================================*/
+/* Page Footer */
+
+.pagefoot {
+    border-top: 1px solid var(--c-1);
+    color: var(--c-2);
+    /* text-align: center; */
+}
+
+/* Labels */
+label {
+    font-size: 1.1rem;
+    line-height: 2;
+    font-family: var(--monospace-font);
+}
+
+/* ==================================================================
+    QUOTES & BLOCKS & NAVBARs
+================================================================== */
+
+/* Useful for multiline quotes */
+.multilinequote,
+blockquote {
+    border-left: 2px solid var(--c-2);
+    padding: 0.1em 1.5rem;
+    margin-left: 10%;
+    font-size: 1.4rem;
+    /* font-family: var(--sanserif-font); */
+    line-height: 2;
+    width: 70%;
+
+}
+
+.navbar {
+    color: var(--c-4);
+    /* font-weight: 100; */
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: flex-start; */
+    /* row-gap: 10.5; */
+    /* row-gap: 2rem; */
+    font-family: var(--sanserif-font);
+    /* font-size: clamp(1.3rem, 3vw, 1.8rem); */
+    font-size: 1.7rem;
+    /* width: 100%; */
+    /* display: flex; */
+    float: right;
+    margin-bottom: 2rem;
+}
+
+/* tldr for posts */
+.tldr {
+    border-style: none;
+    background-color: var(--c-3);
+    text-align: center;
+    border-radius: 15px;
+    padding: 10px;
+    font-size: 1.1rem;
+    font-family: var(--monospace-font);
+}
+
+.important {
+    border: 2px solid var(--c-2);
+    /* background-color: var(--c-x); */
+    text-align: left;
+    border-radius: 15px;
+    padding: 1%;
+    /* padding-left: 30px;
+    padding-right: 30px; */
+}
+
+/* ==================================================================
+    CODE, COPY BUTTON, & HIGHLIGHTING STUFF
+================================================================== */
+
+.hljs,
+code {
+    font-family: var(--monospace-font);
+    font-size: 1.1rem;
+    line-height: 1.7em;
+    border-radius: 10px;
+    padding: 0.1em 0.2em;
+}
+
+/* .hljs-meta,
+.hljs-metas,
+.hljs-metap {
+    font-weight: bold;
+}
+
+.hljs-meta {
+    color: rgb(25, 179, 51);
+}
+
+.hljs-metas {
+    color: red;
+}
+
+.hljs-metap {
+    color: rgb(51, 131, 231);
+} */
+
+.copy-button {
+    cursor: pointer;
+    border: none;
+    font-size: 1.1rem;
+    font-family: var(--monospace-font);
+    /* font-weight: 500; */
+    padding: 6px 10px 10px;
+    color: var(--c-0);
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.copy-button:hover,
+.copy-button:focus,
+.copy-button:active {
+    /* outline: 0; */
+    background-color: transparent;
+    color: var(--c-2);
+}
+
+/* ==================================================================
+    MEDIA (FIGURES, IMAGES & VIDEOS)
+================================================================== */
+video,
+img {
+    /* width: 70%; */
+    text-align: center;
+    display: block;
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    height: auto;
+    min-width: 350px;
+}
+
+.icon-image {
+    /* max-width: 4%; */
+    display: inline;
+    width: 1.5rem;
+    height: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: -0.3em;
+    pointer-events: none;
+    min-width: 0;
+
+}
+
+.social-image {
+    /* max-width: 4%; */
+    display: inline;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: -0.3em;
+    pointer-events: none;
+    min-width: 0;
+
+}
+
+.genart-image {
+    /* To be used for displaying genart images*/
+    /* max-width: 4%; */
+    width: 80%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    pointer-events: none;
+    border: 2px solid var(--c-0);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.art-thumbnail {
+    /* To be used for thumbnail*/
+    /* max-width: 4%; */
+    width: 45%;
+    display: inline-block;
+    pointer-events: none;
+    border: 2px solid var(--c-0);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19);
+}
+
+.caption-text {
+    /* To be used for Captions*/
+    /* display: inline-flexbox; */
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    /* line-height: 1.5em; */
+    color: var(--c-4);
+    font-family: var(--monospace-font);
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+/* ==================================================================
+    HYPERREFS & FOOTNOTES
+================================================================== */
+sup {
+    font-size: 1.1rem;
+    font-family: var(--monospace-font);
+    vertical-align: super;
+    line-height: 0;
+    color: var(--c-5);
+}
+
+.fndef {
+    width: 75%;
+}
+
+.fndef tr,
+td {
+    padding-left: 10px;
+    border: 0;
+    font-size: 1.3rem;
+    line-height: 2rem;
+}
+
+.fndef td.fndef-backref {
+    /* width: 1%; */
+    color: var(--c-5);
+    text-align: left;
+    vertical-align: text-top;
+    white-space: normal;
+    font-size: 1.1rem;
+    font-family: var(--monospace-font);
+}
+
+/* Edit this for footnote line height */
+.fndef td.fndef-content {
+    width: 100%;
+}
+
+.fndef a {
+    text-decoration: none;
+    color: var(--c-5);
+}
+
+/* ==================================================================
+    KATEX & MATH STUFF
+================================================================== */
+
+.katex {
+    font-size: 1.4rem !important;
+    line-height: 1.5 !important;
+    text-indent: 0;
+    white-space: normal;
+    overflow: auto hidden;
+    margin: 0.5em 0;
+}
+
+.katex-display>.katex {
+    /* Overwrite KaTeX settings. */
+    display: inline-block;
+    /* width: 100%; */
+    max-width: 100%;
+    overflow: auto hidden;
+    /* Allow display equations to wrap on small screens. */
+    white-space: normal;
+    text-align: initial;
+    scroll-behavior: smooth;
+
+}
+
+.katex-display::after {
+    counter-increment: ktexeqnum;
+    content: "(" counter(ktexeqnum) ")";
+    position: relative;
+    float: right;
+    padding-right: 2px;
+    font-size: 1.4rem;
+}
+
+.eqref {
+    color: var(--c-5);
+}
+
+.eqref a {
+    text-decoration: none;
+}
+
+
+/* ==================================================================
+    VISUAL ELEMENTS (CANVAS, TAG CLOUD, VERTICAL LINES, & STUFF)
+================================================================== */
+/* Tag Cloud*/
+ul.cloud {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.5rem;
+}
+
+ul.cloud li {
+    margin: 0px;
+    padding: 13px;
+}
+
+canvas {
+    /* padding: 0; */
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    /* margin: 0 auto; */
+    border: 1px solid black;
+    border-radius: 20px;
+    min-width: 320px;
+    aspect-ratio: 1;
+    text-align: center;
+}
+
+/* .chart-container {
+    position: relative;
+    margin: auto;
+    height: 60vh;
+    width: 80vw;
+} */
+
+
+.chart {
+    padding: 0;
+    /* display: block; */
+    margin-left: auto;
+    margin-right: auto;
+    border: 0.5px solid rgb(110, 56, 56);
+    /* border-radius: 10px; */
+    width: 100%;
+    text-align: center;
+}
+
+.slider-container {
+    text-align: left;
+    margin: auto;
+    min-width: 300px;
+    width: 75%;
+}
+
+/* ================================================================ */
+/* Range Slider */
+/* Credit: https://codepen.io/marvink/pen/dGWmYX */
+input[type="range"] {
+    display: block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: var(--c-3);
+    border-radius: 5px;
+    width: 100%;
+    height: 5px;
+    outline: 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: var(--c-4);
+    width: 25px;
+    height: 25px;
+    border-radius: 40%;
+    cursor: pointer;
+    transition: .1s ease-in-out;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+    transform: scale(1.1);
+}
+
+/* ================================================================ */
+/* Cards */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-gap: 20px;
+
+}
+
+.card {
+    display: grid;
+    grid-template-rows: auto;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--c-3);
+}
+
+.card:hover,
+.card:active {
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* ================================================================ */
+/* Gen Art thumbnail stacking*/
+/* .tn-stack {
+    display: flex;
+}
+
+.tn-container {
+    flex: 1 1 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tn-container figure {
+    flex-grow: 1;
+    width: 30%;
+} */
+
+/* ================================================================ */
+
+/* Vertical Line */
+.vl {
+    border-left: 1.2px solid var(--c-4);
+    height: 3px;
+    padding-top: 5px;
+    margin: 0 10px 0 10px;
+    top: 0;
+}
+
+/* Horizontal Line */
+
+hr {
+    margin-top: 2.0rem;
+    margin-bottom: 1.0rem;
+    margin-left: 0;
+    justify-content: left;
+    max-width: 75%;
+    border-top: 1px solid var(--c-3);
+}
+
+/* ================================================================ */
+/* Text for date */
+.date {
+    color: var(--c-4);
+    font-family: var(--monospace-font);
+    font-size: 1.4rem;
+    padding-top: 0.5rem;
+    line-height: 1.5;
+}
+
+
+.tags {
+    display: inline-flexbox;
+    line-height: 2.0;
+    color: var(--c-4);
+    font-family: var(--monospace-font);
+    font-size: 1.1rem;
+
+    /* display: flex; */
+    justify-content: space-between;
+    width: 100%;
+    flex-flow: row wrap;
+    align-content: space-between;
+}
+
+/* Pound symbol for tags */
+.pound {
+    font-family: var(--serif-font);
+    color: var(--c-2);
+    font-size: 1.4rem;
+    padding-right: 5px;
+}
+
+
+/* ================================================================ */

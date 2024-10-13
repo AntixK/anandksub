@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- Link Style Sheets -->
+  <link rel="stylesheet" href="/_css/ak.css">
+
+  <title>Design</title>
+</head>
+
+<body>
+  <!-- Site Header -->
+  <header>
+    <h1><a href="/">Anand K Subramanian</a><br><br></h1>
+  </header>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <span><a href="/blog">Blog</a><span class="vl"></span></span>
+    <span><a href="/notes">Notes</a> <span class="vl"></span></span>
+    <span><a href="/art/">Art</a> <span class="vl"></span></span>
+    <span><a href="/CV">CV</a> <span class="vl"></span></span>
+    <span><a href="/tags">Tags</a>
+  </nav>
+
+  <main>
+    <br>
+    <br>
+
+    <h1>Design</h1>
+
+    <p>
+      This blog was designed by me, based on the <code>Tufte</code> theme of <code>Franklin.jl</code> with an ample dose
+      of inspiration from across the web. The icons were sourced from the open-source icon library <a
+        href="https://iconoir.com/" target="_blank">iconoir</a> (MIT License).
+    </p>
+
+    <p>No trackers. No visit counts. No analytics.</p>
+
+    <p>No embedded elements from the likes of YouTube, Twitter(X), etc.</p>
+
+    <p>As such, some hard choices have been made. All the supporting libraries are loaded locally - No CDNs or web
+      fonts. Javascript is used only sparingly - for math rendering (katex), interactive plots (chart.js) and creative
+      work (three.js and p5.js). All the images are loaded locally as well. These choices do have some effect of page
+      loading times. Though I have tried to make a trade-off between the improving the experience of the reader and the
+      performance, it may not always be "fast". Something tells me that people who visit this site do not really care
+      about it being snappy fast.</p>
+
+    <p>Nothing you see on this website was generated either fully or partially using any generative AI model.</p>
+    <img style="width:30%" src="/assets/images/not-by-ai.webp" alt="Not by AI.">
+
+    <h2>Typefaces</h2>
+
+    <ul>
+      <li>
+        <p><span style="font-family: et-book; font-size: 1.5rem;">ET Book</span> - Primary body typeface</p>
+      </li>
+      <li>
+        <p><span style="font-family: Overpass; font-size: 1.5rem;">Overpass Extra Light</span> - For the titles</p>
+      </li>
+      <li>
+        <p><span style="font-family: Nunito; font-size: 1.5rem;">Nunito Extra Light</span> - For subtitles</p>
+      </li>
+      <li>
+        <p><span style="font-family: Fira Mono; font-size: 1.5rem;">Fira Code Light</span> - For code and art</p>
+      </li>
+    </ul>
+
+    <h2> Colour Palette </h2>
+
+    <p>
+      The color palatte was designed by me, based on the open source color palette <a
+        href="https://github.com/kepano/flexoki" target="_blank">flexoki</a> by Steph Ango, specifically designed for <a
+        href="https://stephango.com/flexoki" target="_blank">prose</a>. I have also proofed it for colorblindness
+      (protanopia, deuteranopia, and tritanopia) based on <a
+        href="https://davidmathlogic.com/colorblind/#%23FFFFFD-%236F6E69-%23E4E2D1-%23CE5D97-%23100F0F"
+        target="_blank">David Nichols's tool.</a>
+    </p>
+
+    <img style="width:40%;" src="/assets/images/palette.webp" alt="Blog Colour Palette">
+
+
+    <!-- Coolors Palette Widget -->
+    <!-- <script src="https://coolors.co/palette-widget/widget.js"></script>
+      <script data-id="04846333739236468">new CoolorsPaletteWidget("04846333739236468", ["ffffff","e691c5","e4e2d1","666666","000000"]); </script> -->
+
+    <h2> Tools & Technologies </h2>
+    <p>
+      I use <a href="https://highlightjs.org/" target="_blank">highlight.js</a> (BSD 3-Clause License) for code
+      highlighting. The mathematical equations are typeset through <a href="https://katex.org/" target="_blank">
+        KateX</a> (MIT License). The interactive plots are done via <a href="https://www.chartjs.org/"
+        target="_blank">chart.js</a> (MIT License). I use <a href="https://threejs.org/" target="_blank">three.js</a>
+      (MIT License) and <a href="https://p5js.org/" target="_blank">p5.js</a> (LGPL v2.1) for artistic and 3D
+      visualizations.
+    </p>
+
+  </main>
+
+
+  <!-- Footer -->
+  <div
+    style="font-size: 1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;">
+    &copy; 2024 Anand K Subramanian <span class="vl"></span>
+    <a href="/license">License</a> <span class="vl"></span>
+    <a href="/design">Design</a> <span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 24px;">&hearts;</span>
+  </div>
+
+</body>
+
+</html>

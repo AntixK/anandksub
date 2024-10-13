@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        throwOnError: false,
+        // output: "html",
+        // customised options
+        // • auto-render specific keys, e.g.:
+        delimiters: [
+          { left: '$$', right: '$$', display: true }, // block
+          { left: '$', right: '$', display: false }, // Inline
+          { left: "\begin{align}", right: "\end{align}", display: true }, // block
+          { left: "\begin{aligned}", right: "\end{aligned}", display: true }, // block
+        ],
+        ignoredTags: [
+          "pre",
+          "code",
+          "script",
+          "style",
+        ],
+        macros: {
+          "\\A": "\\mathbb{A}",
+          "\\B": "\\mathbb{B}",
+          "\\C": "\\mathbb{C}",
+          "\\D": "\\mathbb{D}",
+          "\\E": "\\mathbb{E}",
+          "\\F": "\\mathbb{F}",
+          "\\G": "\\mathbb{G}",
+          "\\H": "\\mathbb{H}",
+          "\\I": "\\mathbb{I}",
+          "\\J": "\\mathbb{J}",
+          "\\K": "\\mathbb{K}",
+          "\\L": "\\mathbb{L}",
+          "\\M": "\\mathbb{M}",
+          "\\N": "\\mathbb{N}",
+          "\\O": "\\mathbb{O}",
+          "\\P": "\\mathbb{P}",
+          "\\Q": "\\mathbb{Q}",
+          "\\R": "\\mathbb{R}",
+          "\\S": "\\mathbb{S}",
+          "\\T": "\\mathbb{T}",
+          "\\U": "\\mathbb{U}",
+          "\\V": "\\mathbb{V}",
+          "\\W": "\\mathbb{W}",
+          "\\X": "\\mathbb{X}",
+          "\\Y": "\\mathbb{Y}",
+          "\\Z": "\\mathbb{Z}",
+
+          "\\fA": "\\mathcal{A}",
+          "\\fB": "\\mathcal{B}",
+          "\\fC": "\\mathcal{C}",
+          "\\fD": "\\mathcal{D}",
+          "\\fE": "\\mathcal{E}",
+          "\\fF": "\\mathcal{F}",
+          "\\fG": "\\mathcal{G}",
+          "\\fH": "\\mathcal{H}",
+          "\\fI": "\\mathcal{I}",
+          "\\fJ": "\\mathcal{J}",
+          "\\fK": "\\mathcal{K}",
+          "\\fL": "\\mathcal{L}",
+          "\\fM": "\\mathcal{M}",
+          "\\fN": "\\mathcal{N}",
+          "\\fO": "\\mathcal{O}",
+          "\\fP": "\\mathcal{P}",
+          "\\fQ": "\\mathcal{Q}",
+          "\\fR": "\\mathcal{R}",
+          "\\fS": "\\mathcal{S}",
+          "\\fT": "\\mathcal{T}",
+          "\\fU": "\\mathcal{U}",
+          "\\fV": "\\mathcal{V}",
+          "\\fW": "\\mathcal{W}",
+          "\\fX": "\\mathcal{X}",
+          "\\fY": "\\mathcal{Y}",
+          "\\fZ": "\\mathcal{Z}",
+
+          "\\x": "\\times",
+          "\\vA": "\\mathbf{A}",
+          "\\vB": "\\mathbf{B}",
+          "\\vC": "\\mathbf{C}",
+          "\\vD": "\\mathbf{D}",
+          "\\vE": "\\mathbf{E}",
+          "\\vF": "\\mathbf{F}",
+          "\\vG": "\\mathbf{G}",
+          "\\vH": "\\mathbf{H}",
+          "\\vI": "\\mathbf{I}",
+          "\\vJ": "\\mathbf{J}",
+          "\\vK": "\\mathbf{K}",
+          "\\vL": "\\mathbf{L}",
+          "\\vM": "\\mathbf{M}",
+          "\\vN": "\\mathbf{N}",
+          "\\vO": "\\mathbf{O}",
+          "\\vP": "\\mathbf{P}",
+          "\\vQ": "\\mathbf{Q}",
+          "\\vR": "\\mathbf{R}",
+          "\\vS": "\\mathbf{S}",
+          "\\vT": "\\mathbf{T}",
+          "\\vU": "\\mathbf{U}",
+          "\\vV": "\\mathbf{V}",
+          "\\vW": "\\mathbf{W}",
+          "\\vX": "\\mathbf{X}",
+          "\\vY": "\\mathbf{Y}",
+          "\\vZ": "\\mathbf{Z}",
+
+          "\\va": "\\mathbf{a}",
+          "\\vb": "\\mathbf{b}",
+          "\\vc": "\\mathbf{c}",
+          "\\vd": "\\mathbf{d}",
+          "\\ve": "\\mathbf{e}",
+          "\\vf": "\\mathbf{f}",
+          "\\vg": "\\mathbf{g}",
+          "\\vh": "\\mathbf{h}",
+          "\\vi": "\\mathbf{i}",
+          "\\vj": "\\mathbf{j}",
+          "\\vk": "\\mathbf{k}",
+          "\\vl": "\\mathbf{l}",
+          "\\vl": "\\mathbf{l}",
+          "\\vm": "\\mathbf{m}",
+          "\\vn": "\\mathbf{n}",
+          "\\vo": "\\mathbf{o}",
+          "\\vp": "\\mathbf{p}",
+          "\\vq": "\\mathbf{q}",
+          "\\vr": "\\mathbf{r}",
+          "\\vs": "\\mathbf{s}",
+          "\\vt": "\\mathbf{t}",
+          "\\vu": "\\mathbf{u}",
+          "\\vv": "\\mathbf{v}",
+          "\\vw": "\\mathbf{w}",
+          "\\vx": "\\mathbf{x}",
+          "\\vy": "\\mathbf{y}",
+          "\\vz": "\\mathbf{z}",
+
+          "\\vmu": "\\boldsymbol \\mu",
+          "\\vnu": "\\boldsymbol \\nu",
+          "\\veps": "\\boldsymbol \\epsilon",
+          "\\vtheta": "\\boldsymbol \\theta",
+          "\\vomega": "\\boldsymbol \\omega",
+          "\\vlambda": "\\boldsymbol \\lambda",
+          "\\vzero": "\\mathbf{0}",
+          "\\vone": "\\mathbf{1}",
+          "\argmin": "\mathop{\mathrm{argmin}} \;",
+          "\argmax": "\mathop{\mathrm{argmax}} \;",
+
+        },
+        globalGroup: true,
+      });
+    });
+  </script>
+
+  <link rel="stylesheet" href="/_libs/katex/katex.min.css">
+
+  <script defer src="/_libs/katex/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="/_libs/katex/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+  <!-- TEMML Instead of KATEX -->
+  <!-- <link rel="stylesheet" href="/_libs/temml/Temml-Latin-Modern.css"> -->
+  <!-- <script src="/_libs/temml/temml.min.js"></script> -->
+  <!-- <script src="/_libs/temml/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script> -->
+
+  
+
+  <!-- Link Style Sheets -->
+  <link rel="stylesheet" href="/_css/ak.css">
+
+  
+
+  <title>Asymmetric Numeral Systems</title>
+</head>
+
+<body>
+  <!-- Site Header -->
+  <header>
+    <h1><a href="/">Anand K Subramanian</a><br><br></h1>
+  </header>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <span><a href="/blog">Blog</a><span class="vl"></span></span>
+    <span><a href="/notes">Notes</a> <span class="vl"></span></span>
+    <span><a href="/art/">Art</a> <span class="vl"></span></span>
+    <span><a href="/CV">CV</a> <span class="vl"></span></span>
+    <span><a href="/tags">Tags</a>
+  </nav>
+
+  <!-- Article Info -->
+  
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/bookmark.svg" alt="clock-icon">&ensp;<span
+      class="pound">#</span>math <span
+      class="pound">#</span>ml <span
+      class="pound">#</span>information-theory <span
+      class="pound">#</span>code 
+  </p>
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/calendar.svg" alt="clock-icon">&ensp;30 August 2021
+  </p>
+  <p class="tags">
+    <img class="icon-image" src="/assets/icons/timer.svg" alt="clock-icon">&ensp;21 mins
+  </p>
+  
+
+  <!-- Article Title -->
+  <h1>Asymmetric Numeral Systems</h1>
+  <!-- Insert TLDR -->
+
+  
+  <p class="tldr">A tutorial on the lossless Asymmetric Numeral Systems (ANS) coding  commonly used in image compression. </p>
+  
+
+  <main>
+    <p>  Lossless compression is a family of techniques to compress or encode a given random data or source. It is sometimes called as <em>source coding</em> or <em>entropy coding</em> in literature. The term "entropy coding" stems from Shannon's source coding theorem, informally stated as follows.</p>
+<div class="important"><p><strong>Source Coding Theorem:</strong>
+Given $N$ discrete i.i.d random samples $x_n \sim p(x)$ each with a fixed set of $K$ possible outcomes $\{a_1, a_2, ..., a_K\}$, then they can be compressed without any loss in information in no less than $N\mathbb{H}[x]$ bits as $N \to \infty$.
+Here the entropy $\mathbb{H}[x]$ is given by
+$$
+\mathbb{H}[x] = \mathbb{E}[\mathbb{I}(x)] = -\sum_{k=1}^K p(x = a_k) \log_2 p(x = a_k)
+$$
+Here $\mathbb{I}(x)$ is the <em>information content</em> of each outcome.</p></div>
+<p>In other words, if $x$ is losslessly compressed to $m$, then entropy is preserved. <em>i.e.</em> $\mathbb{H}[x] = \mathbb{H}[m]$. The source coding theorem imposes a fundamental limit on a given data or <em>message</em> up to which it can be compressed without any loss in information. In literature the compressed mapping $m_k$ of each possible outcome $a_k$ is called as the <em>codeword</em>. The above limit specifies the smallest theoretical length of the codeword in bits. An example of a common entropy coding method is the <em>Huffman coding</em>.</p>
+<p>A Huffman coding is a simple method where the given outcomes are mapped directly to codewords uniquely. However, the crux of the method that makes it close in on the information limit is that it employs variable lengths for each codeword depending on its probability $p(x = a_k)$. More probable an outcome, smaller is its code length and vice versa. For a good explanation of the Huffman coding, refer to Chris Olah's <a href="https://colah.github.io/posts/2015-09-Visual-Information/">article</a>.</p>
+<p>In the recent years, there has been much development in newer entropy coding techniques that perform better than Huffman coding <sup id="fnref:1"><a class="fnref" href="#fndef:1">[1]</a></sup>. In this post, we shall take a practical approach to study one recent entropy coding method - the <em>Asymmetric Numeral Coding</em>.</p>
+<h3>Problem Setup</h3>
+<blockquote>
+<p><strong>Problem :</strong> Let us say you are keeping track of an incoming stream of bits on a small piece of paper. Obviously there is no room on the piece of paper to write down all the bits. How do you then keep track of it? By keeping track we mean that at any given moment, your log must reflect all of the past information.</p>
+</blockquote>
+<p>Assume that we start tracking the bit at time step $i$ (represented as $b_i$) with an initial symbol $x_i$. When the next bit $b_{i+1}$ comes in, we must update our symbol to $x_{i+1}$. One simple way to update this is start with $x_0 = 2^0 = 1$ and at each time step, update $x_i$ as
+$$ 
+x_{i+1} = C_1(x_i, b_{i+1}) = x_i + b_{i+1} \times 2^{i+1}
+$$<a id=eq:ac class='anchor'></a></p>
+<p>This essentially results in the decimal representation of $b_{i+1}b_{i}...b_2b_1$. This method, apart from being lossless and fast (powers of 2 can be computed using bit-shifts), has an interesting property - the range of values is being altered at every time step. Note that in the above equation, the incoming bit $b_{i+1}$ is being added to the most significant-bit (MSB) of $x_{i}$. Therefore, each such update increases the range.</p>
+<p>Alternatively, the incoming bit can be added to the least significant-bit (LSB) such that the range is kept the same but the number alternates between odd and even (even number if $b_{i+1}$ is 0 and odd if 1). This can be written as</p>
+<p>$$
+x_{i+1} = C_2(x_i, b_{i+1}) = 2x_i + b_{i+1}
+$$<a id=eq:ans class='anchor'></a></p>
+<p>In other words, $b_{i+1}$ determines whether $x_{i+1}$ will be even or odd. In entropy coding, equation <span class='eqref'>(<a href='#eq:ac'>1</a>)</span> is  used in the well-known Arithmetic Coding (AC) technique while equation <span class='eqref'>(<a href='#eq:ans'>2</a>)</span> is used in Asymmetric Numeral Systems(ANS). AC requires that the bits come in from LSB to MSB, while ANS requires from MSB to LSB. This fundamental difference lies in they way they are implemented. By default, all streaming data comes from MSB to LSB - AC implements like a queue (first-in-first-out) while ANS implements like a stack (last-in-first-out). Note that both methods are equally fast - both $2^{i+1}$ and $2x_{i}$ can be computed through bit-shift operations.</p>
+<img  src="/media/post_images/ent-code.png"  alt="Entropy Coding">
+
+<p>The fundamental idea behind both is that, given a symbol $x_i$, if one needs to add an incoming bit $b_{i+1}$ without any loss in information, any coding method should increase the information content should increase no more than the information content in the incoming bit.</p>
+<p>$$
+\begin{aligned} 
+\log_2(x_{i+1}) &amp;= \log_2(x_i) - \log_2(p(b)) \\
+&amp;= \log_2 \bigg ( \frac{x_i}{p(b)} \bigg )
+\end{aligned}
+$$<a id=eq:comp_cond class='anchor'></a></p>
+<p>Where $p(b)$ is the probability distribution of the bits. This means that any encoding function $C$ must be of the form
+$$C \approx x_i/p(b)
+$$
+If the bits are equally probable, <em>i.e.</em> $p(b = 1) = p(b=0) = 1/2$, then the equation <span class='eqref'>(<a href='#eq:ans'>2</a>)</span> is optimal in the sense that it satisfies the encoding condition $\big (C_1(x_i, b_{i+1}) \approx 2x_i \big )$.</p>
+<p>The decoding function $D_2(x_{i+1})$ for $C_2$ can be constructed as</p>
+<p>$$
+D_2(x_{i+1}) = (x_i, b_{i+1}) = \bigg ( \bigg \lfloor \frac{x_{i+1}}{2} \bigg \rfloor, \bmod( x_{i+1}, 2) \bigg )
+$$<a id=eq:decode_ans class='anchor'></a></p>
+<p>A point to note here is that neither of the above two encodings are optimal as they are at least 1 bit larger than the shannon entropy. This is because we start with $x_0=1$. This is to differentiate '0' from '00' etc.</p>
+<p>An easily overlooked aspect about the above encodings is that they <em>amortize</em> the coded result over the bits. That is, each bit is not mapped to one number, rather a bunch of bits are mapped into a single number. There is no one-to-one mapping, rather the information is distributed over the entire codeword. Therefore it has potential to be better than bit $\leftrightarrow$ number mapping. This amortization is the basis for all entropy coding methods as it indicates a potential technique get close to the Shannon entropy of the input <sup id="fnref:2"><a class="fnref" href="#fndef:2">[2]</a></sup>.</p>
+<pre><code class="language-python"># Code for binary -&gt; natural number coding
+# Bit Tricks: 
+#   (a &lt;&lt; b) &lt;=&gt; a * (2 ** b)
+#   (a &gt;&gt; b) &lt;=&gt; a / (2 ** b)
+#   (a % (2 ** b)) &lt;=&gt; (a &amp; ((1 &lt;&lt; b) - 1))
+
+def C2(bitstream):  # Encode 
+    """
+    Encodes a list of bits (given in reverse order) to a Natural number.
+    Ex: bitstream = [1, 0, 0, 1, 0, 1, 1, 0, 1].reverse() -&gt; 873
+
+    """
+    x = 1
+    for b in bitstream:
+        x = (x &lt;&lt; 1) + b 
+    return x
+
+def D2(x):  # Decode
+    """
+    Decodes the given coding into a list of bits.
+    Ex: x = 873 -&gt; [1, 0, 0, 1, 0, 1, 1, 0, 1]
+    """
+
+    bits= []
+    while x &gt; 1:
+        bits.append(x % 2)
+        x = x &gt;&gt; 1    
+    return bits
+
+# We convert binary to decimal here. Is it possible change the base? 
+# Can you encode using different bases at each time step?
+</code></pre>
+<h3>Asymmetric Numeral Coding</h3>
+<p>Asymmetric Numeral System (ANS) builds upon the $C_2 - D_2$ coding scheme and generalizes it. The above two coding schemes are sometimes referred as <strong>Positional Numeral Systems</strong> (PNS) and ANS can be viewed as the generalization of positional numeral systems. One concern in the PNS scheme is that $x$ must have a finite range. As the bits keep coming in, $x_i$ cannot be arbitrarily large in practice. Thus we need to address two issues -</p>
+<ol>
+<li>Enforcing $x$ to be within some finite interval of natural numbers.</li>
+<li>Within that finite interval, the distribution of even and odd codings must reflect the corresponding probabilities of the bits.
+Let's address the latter issue first.</li>
+</ol>
+<p>Consider equation <span class='eqref'>(<a href='#eq:ans'>2</a>)</span> again. As discussed earlier, it is optimal only when $p(b = 0) = p(b=1) = 1/2$. We can say that the bit probability splits and uniformly covers the range of $x$, which is the set of all natural numbers $\mathbb{N}$. In the case $p(b=1) = 1/2$, the range is split into two parts - even and odd numbers depending on the value of $b$.  As such $x_{i+1}$ is the $x_i^{th}$ number in the even/odd set.</p>
+<img src="/media/post_images/uabs.png" alt="Uniform Asymmetric Binary Systems">
+
+<p>Extending this intuition to unequal probabilities, $x_{i+1}$ is the $x_{i}^{th}$ number in the subset defined by $b_{i+1}$. For this, the range of $x$ must be split into two subsets whose size reflects the probability of thier respective state. If the probability of 1 is $p(b = 1) = \lambda &lt; p(b= 0) = (1 - \lambda)$ and let the range of $x$ be the set $\fF = [0, N]$, then we want $ \lceil N\lambda \rceil$ odd numbers in $\fF$. The $\lceil \cdot \rceil$ operator accounts for the fractional components as we shall stick to natural numbers. We want a generalized coding method such that the following equality is satisfied.</p>
+<p>$$
+\lceil (x_{i+1} + 1)  \lambda \rceil - \lceil x_{i+1} \lambda \rceil = b_{i+1}
+$$<a id=eq:cond class='anchor'></a></p>
+<p>Say we updated $x_i \to x_{i+1}$ using some encoding. Now, the proportion of odds is $\lceil x_{i+1} \lambda \rceil$. However, the coding must be robust to the ceil operation. For example, for $b_{i+1} = 0, \lambda = 0.3$ say we compute $x_{i+1} = 6$, then we have $\lceil 6 * 0.3 \rceil = 2$ odd values in the range (0,6]. Now $\lceil (6 + 1) * 0.3 \rceil = 3 $ which means $\lceil (6 + 1) * 0.3 \rceil - \lceil 6 * 0.3 \rceil = 1 \neq 0$. Therefore, $x_{i+1} = 6$ cannot be a correct code for $b_{i+1} = 0, \lambda = 0.3$. On the other hand, $x_{i+1} = 9$ is a valid code and can be verified similarly. The idea behind equation <span class='eqref'>(<a href='#eq:cond'>5</a>)</span> is that by doing ceil operation (we will use more of those below), we are essentially rounding the computation results; and when done sequentially, the error may blow up resulting in incorrect code that may not be uniquely reversible <em>i.e.</em> loss of information.</p>
+<p>We can now come up with a coding scheme that accounts for any arbitrary binary distribution $p$, satisfying equation <span class='eqref'>(<a href='#eq:cond'>5</a>)</span>. If the probability of 1 is $p(b = 1) = \lambda &lt; p(b = 0) = (1 - \lambda)$, then</p>
+<p>$$
+x_{i+1} = C_2(x_i, b_{i+1}) = \begin{cases}
+\big \lceil \frac{x_i + 1}{1 - \lambda} \big \rceil -1  &amp;; b_{i+1} = 0 \\
+\big \lfloor \frac{x_i}{\lambda} \big \rfloor  &amp;; b_{i+1} = 1 \\
+\end{cases}
+$$<a id=eq:ubsencode class='anchor'></a></p>
+<p>It is easy to verify the above equation with equation <span class='eqref'>(<a href='#eq:ans'>2</a>)</span> for $\lambda=1/2$. The decoding function $D_2$ can be derived as</p>
+<p>$$
+\begin{aligned} 
+D_2(x_{i+1}) &amp;= (x_i, b_{i+1}) \\
+x_i &amp;= \begin{cases}
+\lceil x_{i+1}  \lambda \rceil &amp;; b_{i+1} = 1 \\
+x_{i+1} - \lceil x_{i+1}  \lambda \rceil &amp;; b_{i+1} = 0
+\end{cases} \\
+b_{i+1} &amp;= \lceil (x_{i+1} + 1)  \lambda \rceil - \lceil x_{i+1} \lambda \rceil
+\end{aligned}
+$$<a id=eq:ubsdecode class='anchor'></a></p>
+<p>Observe that decoding $b_{i+1}$ is essentially through equation <span class='eqref'>(<a href='#eq:cond'>5</a>)</span>. The above encoding scheme is called as <em>uniform Asymmetric Binary Systems</em> (uABS) as we exploit the asymmetry in the probabilities of the bits to get compression, while the subsets segmented by those probabilities are themselves uniformly distributed.</p>
+<p>Let us take an illustrative example - Consider the bitstream <code>1, 0, 0, 1, 0</code> with $p(b =1) = \lambda = 0.3$. This can be encoded using equation <span class='eqref'>(<a href='#eq:ubsencode'>6</a>)</span> as follows (note that we encode in the reverse order)</p>
+<p>$$
+\begin{aligned}
+x_0 &amp; &amp;&amp;= 1 \\
+x_1 &amp;= \bigg \lceil \frac{x_0 + 1}{0.7} \bigg \rceil -1 &amp;&amp;= 2 &amp;&amp;&amp; (b_1 = 0) \\
+x_2 &amp;= \bigg\lceil \frac{x_{1}}{0.3} \bigg \rceil &amp;&amp;= 6 &amp;&amp;&amp; (b_2 = 1) \\
+x_3 &amp;= \bigg \lceil \frac{x_2 + 1}{0.7} \bigg \rceil -1 &amp;&amp;= 9 &amp;&amp;&amp; (b_3 = 0) \\
+x_4 &amp;= \bigg \lceil \frac{x_3 + 1}{0.7} \bigg \rceil -1 &amp;&amp;= 14 &amp;&amp;&amp; (b_4 = 0) \\
+x_5 &amp;= \bigg\lceil \frac{x_{4}}{0.3} \bigg \rceil &amp;&amp;= 46 &amp;&amp;&amp; (b_5 = 1) \\
+\end{aligned}
+$$<a id=eq:example class='anchor'></a></p>
+<p>Similarly decoding can be done as</p>
+<p>$$
+\begin{aligned}
+&amp; &amp;&amp;x_5 &amp;&amp;&amp;= 46 \\
+b_5 &amp;= \lceil (x_5 + 1) \x 0.3 \rceil - \lceil x_5 \x 0.3 \rceil = 1; &amp;&amp;x_4 = x_5 - \lceil x_5 \x 0.3 \rceil &amp;&amp;&amp;=14 \\ 
+b_4 &amp;= \lceil (x_4 + 1) \x 0.3 \rceil - \lceil x_4 \x 0.3 \rceil = 0; &amp;&amp;x_3 = \lceil x_4  \x 0.3 \rceil &amp;&amp;&amp;=9 \\ 
+b_3 &amp;= \lceil (x_2 + 1) \x 0.3 \rceil - \lceil x_2 \x 0.3 \rceil = 0; &amp;&amp;x_2= \lceil x_3 \x 0.3 \rceil &amp;&amp;&amp;=6 \\ 
+b_2 &amp;= \lceil (x_2 + 1) \x 0.3 \rceil - \lceil x_2 \x 0.3 \rceil = 1; &amp;&amp;x_1 = x_2 - \lceil x_2 \x 0.3 \rceil &amp;&amp;&amp;=2 \\ 
+b_1 &amp;= \lceil (x_1 + 1) \x 0.3 \rceil - \lceil x_1 \x 0.3 \rceil = 0; &amp;&amp;x_0= \lceil x_1 \x 0.3 \rceil &amp;&amp;&amp;=1\\ 
+\end{aligned}
+$$<a id=eq:example class='anchor'></a></p>
+<p>And we get back our code in its original order.</p>
+<pre><code class="language-python"># Code for generalized binary -&gt; natural number coding
+import math
+
+def C2(bitstream, p: float = 0.5):  # Encode
+    """
+    Encodes a list of bits (given in reverse order) to a
+    Natural number with probability p.
+    """
+    x = 1
+    for b in bitstream:
+        if b:
+            x = math.floor(x / p)
+        else:
+            x = math.ceil((x + 1) / (1 - p)) - 1
+    return x
+
+def D2(x, p:float = 0.5):  # Decode
+    """
+    Decodes the given coding into a list of bits with probability p.
+    """
+
+    bits= []
+    while x &gt; 1:
+        b = math.ceil((x + 1) * p) - math.ceil(x * p)
+        bits.append(b)
+        if b:
+            x = math.ceil(x * p)
+        else:
+            x = x - math.ceil(x * p)
+    return bits
+
+# What happens if you give a bitstream of length 60 or more? 
+# Does it decode correctly? Why? 
+</code></pre>
+<h4>Extending to Arbitrary Alphabets</h4>
+<p>Now it is important to see the bits in the above discussion as a set containing just two symbols $\fB = \{0, 1\}$. This set is called as the <em>alphabet</em> set. The above discussion pertaining to binary alphabets can be extended to any alphabet set $\fA = \{a_1, ...,a_K \}$ of $K$ elements with an associated probability distribution $p$ over all its symbols. Based on the previous discussion, given the range for the encoding as $(0, M]$ (where $M = 2^r$), which is a part of the natural number range $\mathbb{N}$, we ideally have to split the range into $K$ disjoint regions each with size proportional to the respective symbol probabilities. In other words, we want to split the range into $f_1,f_2, ..., f_K$ where</p>
+<p>$$
+\begin{aligned}
+f_k &amp;= p(s = a_k) M \quad k = 1, ...,K \</p>
+<p>\sum_{k=1}^K f_k &amp;= M
+\end{aligned}
+$$
+These range sizes $f_k$ are called as _scaled probabilities_. To construct a coding scheme, we must ensure that $x_{i+1}$ is the $x_i^{th}$ value in the $k^{th}$ subset, given the symbol $a_k$. This is a direct extension of the idea discussed earlier for even - odd subsets.</p>
+<img src="/media/post_images/ans.svg" alt="ANS - splitting range into subsets">
+
+<p>Recall equation <span class='eqref'>(<a href='#eq:ans'>2</a>)</span>. It can be interpreted as follows $-$ $b_{i+1}$ essentially chooses the odd or even subsets and $2x_i$ adds the necessary offset within that subset. Therefore, our required generalized mechanism can be written in the form
+$$
+x_{i+1} = C_{ANS}(x_i, s_{i+1}) = \text{Offset } + \text{ Subset selection}</p>
+<p>$$
+Where $s_{i+1}$ is the input symbol that can take values in ${a_1, ..., a_K}$. One core insight here is that the values in the subsets of size $f_k$ are <em>uniformly distributed</em>. Each value within those subsets are equally likely. This makes our offset computation much simpler.</p>
+<p>Let $x_i$ be the current state and the incoming symbol be $s_{i+1} = a_k$. The offset can be calculated as
+$$
+M\bigg \lfloor \frac{x_i}{f_k} \bigg \rfloor  + \bmod(x_i, f_k)
+$$
+The precise location within the $k^{th}$ subset is calculated by $\bmod(x_i, f_k)$. This is because $k^{th}$ subset has a fixed size and using modulus helps us recycle the values within the subset. This step is essential to avoid a massive value for $M$. However, this recycling destroys the uniqueness of the encoding. We must therefore, repeat the range of size $M$ over the natural number range $\mathbb{N}$ (Refer the above figure). We can then  uniquely identify the range of size $M$ within the natural number range by $ M\bigg \lfloor \frac{x_i}{f_k} \bigg \rfloor $.</p>
+<p>The subset selection part is pretty straightforward. Each symbol in the alphabet $\fA$ that occurs before $a_k$ occupies $f_1, f_2, .. f_{k-1}$ points on $(0,M]$ respectively. If we wish to select the $k^{th}$ subset, then its starting point is simply</p>
+<p>$$
+\sum_{j=1}^{k-1} f_j = CDF(a_k)
+$$<a id=eq:ans_subselect class='anchor'></a></p>
+<p>This is essentially the CDF of the symbol $a_k$ as $f_1, ... f_K$ are now viewed as scaled probabilities. Putting everything together, we get the final ANS coding scheme.
+$$ 
+x_{i+1} = C_{ANS}(x_i, s_{i+1})=  M\bigg \lfloor \frac{x_i}{f_k} \bigg \rfloor  +\bmod (x_i, f_k) +\sum_{j=1}^{k-1} f_j  
+$$<a id=eq:ans_final class='anchor'></a></p>
+<div class="important"><p><strong>Another way to think about ANS:</strong></p><p>A popular intuition for ANS is to think in terms of range encoding. This is built upon the fact that equation <span class='eqref'>(<a href='#eq:ans'>2</a>)</span> can use any base and not necessarily 2. Additionally, it can also change its base at each time step and still encode all the information faithfully. The decoding can be done correctly if done on the same base as encoding for that step.</p><p>The state $x_i$ represents an encoding of the scaled probability $f_k$. Since the state is  already an encoding, we decode it with the base $f_k$. Recall that each subset is uniformly distributed and therefore, we can simply decode akin to equation <span class='eqref'>(<a href='#eq:decode_ans'>4</a>)</span>.</p><p>$$
+z = \bmod(x_i, f_k); \quad x_i' = \bigg \lfloor \frac{x_i}{f_k} \bigg \rfloor 
+$$
+Where $z$ represents the information associated with $a_i$ within the $k^{th}$ subset. For each symbol, we don't keep track of the symbol itself, rather its scaled probability (base). To get the positional information of the $k^{th}$ subset, we similarly follow equation <span class='eqref'>(<a href='#eq:ans_subselect'>10</a>)</span>.</p><p>$$
+z = z + \sum_{j=1}^{k-1} f_j
+$$</p><p>The second and final step is to encode this information within the finite range $(0,M]$, again assuming that it is uniformly distributed.
+$$
+\begin{aligned}
+x_{i+1} = C_{ANS}(x_i, s_{i+1})&amp;= Mx_i' + z \\
+x_{i+1} = C_{ANS}(x_i, s_{i+1})&amp;=  M\bigg \lfloor \frac{x_i}{f_k} \bigg \rfloor  + \sum_{j=1}^{k-1} f_j + \bmod(x_i, f_k)
+\end{aligned}
+$$
+Since we are encoding the subset range within the given finite interval, this technique is called as <em>range ANS</em> or simply <em>rANS</em>.</p></div>
+<p>Decoding can be done simply by inverting each of the encoding components.
+$$
+\begin{aligned}
+D_{ANS}(x_{i+1}) &amp; = (x_i, s_{i+1}) \\
+x_i &amp;=  f_k \bigg \lfloor \frac{x_{i+1}}{M} \bigg \rfloor -  \sum_{j=1}^{k-1} f_j + \bmod(x_{i+1}, M) \\
+s_{i+1} &amp;= \bmod(x_{i+1},  M) \quad s.t \quad CDF(a_k) \leq \bmod(x_{i+1},  M) &lt; CDF(a_{k+1})
+\end{aligned}
+$$
+The latter part of the above equation can be computed easily through pre-computing the inverse cumulative distribution function. This can understandably be non-trivial to compute in some cases. In such cases there are more sophisticated techniques available. In this discussion, we shall stick to a simple iterative method to find the symbol $s_{i+1}$ that satisfies the above constraint.</p>
+<h3>Implementation</h3>
+<pre><code class="language-python">
+class rANS:
+    """
+    Bit Tricks:
+      (a &lt;&lt; b) &lt;=&gt; a * (2 ** b)
+      (a &gt;&gt; b) &lt;=&gt; a / (2 ** b)
+      (a % (2 ** b)) &lt;=&gt; (a &amp; ((1 &lt;&lt; b) - 1))
+    """
+    def __init__(self,
+                 precision: int,
+                 alphabet: List[str],
+                 probs: List[int],
+                 verbose: bool = False) -&gt; None:
+        """
+        Implements the rANS as a stack.
+        Encoding and Decoding are named as 'push'
+        and 'pop' operations to be consistent with
+        stack terms.
+
+        Usage:
+            rans = rANS(precision, Alphabet, probs)
+            rans.push(symbol)
+            decoded_symbol = rand.pop()
+        """
+        assert precision &gt; 0
+        self.precision = precision
+        self.verbose = verbose
+
+        self.Alphabet = alphabet
+        scaled_probs = probs * (1 &lt;&lt; precision)
+        cum_probs = np.insert(np.cumsum(scaled_probs), 0, 0)
+
+        # Make sure everything is an int
+        scaled_probs = scaled_probs.astype(np.int64)
+        cum_probs = cum_probs.astype(np.int64)
+
+        self.probs = dict(zip(A, probs)) # Python 3.7 Dicts are ordered
+        self.fk = dict(zip(A, scaled_probs))
+        self.cdf = dict(zip(A, cum_probs))
+
+        self.x = 1      # State
+
+    def push(self, symbol: str):    # Encode
+        """
+        Coding formula:
+            M floor(x / Fk) + CDF(symbol) + (x mod Fk)
+        :param s: Symbol
+        """
+        if (self.x // self.fk[symbol] &lt;&lt; self.precision):
+
+        self.x = ((self.x // self.fk[symbol] &lt;&lt; self.precision)
+                  + self.x % self.fk[symbol]
+                  + self.cdf[symbol])
+
+    def pop(self) -&gt; str:   # Decode
+        """
+        Decoding formula:
+            symbol = (x mod M) such that CDF(symbol) &lt;= (x mod M) &lt; CDF(symbol + 1)
+            x = floor(x / M) fk - CDF(symbol) (x mod M)
+        :return: Decoded symbol
+        """
+        cdf = self.x &amp; ((1 &lt;&lt; self.precision) - 1)
+        symbol = self._icdf(cdf)
+        self.x = ((self.x &gt;&gt; self.precision) * self.fk[symbol]
+                  - self.cdf[symbol]
+                  + cdf)
+        return symbol
+
+    def _icdf(self, value: int) -&gt; str :
+        result = None
+        prev_symbol,prev_cdf = list(self.cdf.items())[0]
+        for symbol, cdf in list(self.cdf.items())[1:]:
+            if prev_cdf &lt;= value &lt; cdf:
+                result= prev_symbol
+            prev_symbol,prev_cdf = symbol, cdf
+
+        return result if result else self.Alphabet[-1]  # Account for the last subset
+</code></pre>
+<h3>Conclusion</h3>
+<p>We have discussed ANS from the fundamentals of information theory and hopefully with some good intuition. We have however, ignored one crucial part which makes ANS practical. It is easy to observe that as the stream of symbols becomes longer, the range required to encode them also increases exponentially (in the order of $2^N$ where $N$ is the number of symbols in the stream). This can quickly become infeasible. This can be resolved through a process called <em>renormalization</em> where $x_i$ is normalized to be within some fixed range in some appropriate precision<sup id="fnref:3"><a class="fnref" href="#fndef:3">[3]</a></sup>. In a future post, we shall revisit ANS from a practical perspective.</p>
+<h3>References &amp; Further Reading</h3>
+<p>For a detailed discussion of all the above described methods, refer James Townsend's <a href="https://arxiv.org/abs/2104.10544">PhD thesis</a>. Additionally, his <a href="https://arxiv.org/abs/2001.09186">tutorial</a> provides some implementation details of ANS along with a Python code.</p>
+<p>Another accessible <a href="https://bjlkeng.github.io/posts/lossless-compression-with-asymmetric-numeral-systems/">article</a> on ANS was written by Brian Keng.</p>
+<p>For an authentic source Jarek Duda, the inventor of ANS, has <a href="https://arxiv.org/pdf/1311.2540.pdf">published</a> a very nice overview on ANS.</p>
+<p>A detailed tutorial on ANS is available on <a href="https://www.youtube.com/watch?v=CiSdUE4JRgY&amp;t=2103s">YouTube</a> by Robert Bamler of the University of Tübingen as a part of his course on "Data compression with deep probabilistic models".</p>
+<hr />
+
+        <p><table class="fndef" id="fndef:1">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td> 
+                <td class="fndef-content">One drawback of Huffman coding is that it often fails to achieve the optimal codeword length as the Huffman codewords can only have integer lengths. For Huffman coding, the codeword length $l_H$ is lower-bounded as $l_H(x = a_k) \geq \lceil \mathbb{I}[x = a_k] \rceil = \lceil-\log_2 p(x = a_k) \rceil$. Therefore, for each data, there is a maximum of 1 extra bit in the corresponding Huffman codeword. For $N$ samples, the compression has $N$ extra bits, which is highly inefficient.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:2">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-content">A better example to understand amortization is to encode a list of decimal numbers say [6, 4, 5] as 645 (same as $C_2$ coding in base 10) and checking how the binary representation changes with changes in values. [7,4,5],a change in one value, results in an very different encoding (745) than for [6,4,5]. We can understand this as the information in each input symbol is distributed or amortized over the entire codeword.</td>
+            </tr>
+        </table></p>
+        
+
+        <p><table class="fndef" id="fndef:3">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:3">[3]</a></td> 
+                <td class="fndef-content">Renormalization is required for almost all streaming entropy coding methods like Arithmetic Coding for the same reason - to normalize the codes to be within some finite representable (on the floating-point number line) range.</td>
+            </tr>
+        </table></p>
+        
+
+  </main>
+
+  <!-- Footer
+  <div class="myfooter">
+    &copy; 2024 Anand K Subramanian <span class=" vl"></span>
+    License <span class="vl"></span>
+    Design<span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 1.3rem;">&hearts;</span>
+  </div> -->
+
+  <div
+    style="font-size:1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;">
+    &copy; 2024 Anand K Subramanian <span class="vl"></span>
+    <a href="/license">License</a> <span class="vl"></span>
+    <a href="/design">Design</a> <span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 24px;">&hearts;</span>
+  </div>
+
+  
+  <script src="/_libs/highlight/highlight.min.js"></script>
+  <script>hljs.highlightAll(); hljs.configure({ tabReplace: '    ' });</script>
+  <link rel="stylesheet" href="/_libs/highlight/decaf.css">
+
+  <script src="/_libs/clipboard/clipboard.min.js"></script>
+  <script>
+    (function () {
+
+      // Get the elements.
+      // - the 'pre' element.
+      // - the 'div' with the 'paste-content' id.
+
+      var pre = document.getElementsByTagName('pre');
+
+      // Add a copy button in the 'pre' element.
+      // which only has the className of 'language-'.
+
+      for (var i = 0; i < pre.length; i++) {
+        var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+        if (isLanguage === 0) {
+          var button = document.createElement('button');
+          button.className = 'copy-button';
+          button.textContent = 'Copy';
+
+          pre[i].appendChild(button);
+        }
+      };
+
+      // Run Clipboard
+
+      var copyCode = new Clipboard('.copy-button', {
+        target: function (trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+
+      // On success:
+      // - Change the "Copy" text to "Copied".
+      // - Swap it to "Copy" in 2s.
+      // - Lead user to the "contenteditable" area with Velocity scroll.
+
+      copyCode.on('success', function (event) {
+        event.clearSelection();
+        event.trigger.textContent = 'Copied';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 2000);
+
+      });
+
+      // On error (Safari):
+      // - Change the  "Press Ctrl+C to copy"
+      // - Swap it to "Copy" in 2s.
+
+      copyCode.on('error', function (event) {
+        event.trigger.textContent = 'Press "Ctrl + C" to copy';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 5000);
+      });
+
+    })();
+  </script>
+  
+</body>
+
+</html>
