@@ -210,7 +210,7 @@ def dict_to_html_table(data: dict) -> str:
 
     for date, post in data.items():
         tags = [f"<span class='pound'>#</span>{t}" for t in post['tags']]
-        if "description" in post:
+        if post['description'] != "":
             html += f"""
             <tr>
                 <td>
@@ -401,14 +401,6 @@ def render_html(file: Path, config: dict) -> None:
     save_html(file, html)
 
 def save_html(file: Path, html: str) -> None:
-
-    # print(file, file.relative_to(CONTENT_DIR))
-    # Save html content to file
-    # if file.parent == CONTENT_DIR:
-    #     with open(BUILD_DIR  / f"{file.stem}.html", "w+") as f:
-    #         f.write(html)
-    # else:
-
     parent_dir = file.relative_to(CONTENT_DIR).parent
     if not parent_dir.exists():
         (BUILD_DIR / parent_dir).mkdir(parents=True, exist_ok=True)

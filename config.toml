@@ -37,7 +37,7 @@ encoding = "UTF-8"
 [post]
 title = "No Title"
 published = "1 January 1970"
-description = "this is an empty post"
+description = ""
 has_chart = false
 has_math = true
 has_code = false
