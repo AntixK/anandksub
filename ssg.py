@@ -516,17 +516,17 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
         return fullpath
 
     def do_GET(self):
-        # if self.path not in self.SUFFIXES:
-        #     print(self.path)
-        #     # self.path = self.path.lstrip("/")
-        #     if (not self.path.endswith(".html") and 
-        #         not self.path.endswith("/") and 
-        #         not self.path.endswith(self.MEDIA_EXTENSIONS) and 
-        #         not self.path.endswith(self.JS_EXTENSIONS) and
-        #         not self.path.endswith(self.CSS_EXTENSIONS) and 
-        #         not self.path.endswith(self.FONT_EXTENSIONS)):
-        #         self.path += ".html"
-        #         print(self.path)
+        if self.path not in self.SUFFIXES:
+            print(self.path)
+            # self.path = self.path.lstrip("/")
+            if (not self.path.endswith(".html") and 
+                not self.path.endswith("/") and 
+                not self.path.endswith(self.MEDIA_EXTENSIONS) and 
+                not self.path.endswith(self.JS_EXTENSIONS) and
+                not self.path.endswith(self.CSS_EXTENSIONS) and 
+                not self.path.endswith(self.FONT_EXTENSIONS)):
+                self.path += ".html"
+                print(self.path)
 
 
         server.SimpleHTTPRequestHandler.do_GET(self)
