@@ -9,7 +9,7 @@
 @def has_chart = false
 
 
-&emsp; Don't ask me why, but what if you need to convert a simple multi-class classification problem into a regression problem? Usually, the other way is easier - converting continuous regression targets into classification is done using a simple binning. It is much more popular in Neural Networks (NNs) than classical ML models since NNs are generally better at classification than regression[^1]. 
+&emsp; Don't ask me why, but what if you need to convert a simple multi-class classification problem into a regression problem? Usually, the other way is easier - converting continuous regression targets into classification is done using a simple binning. It is much more popular in Neural Networks (NNs) than classical ML models since NNs are generally better at classification than regression[^1].
 
 But surely, it is an interesting problem to convert discrete classification labels to continuous regression targets and back, irrespective of the model. Let us try to formulate the problem.
 
@@ -17,11 +17,12 @@ But surely, it is an interesting problem to convert discrete classification labe
 
 
 Now, any given discrete class label can be mapped onto a simplex. A simplex is just an $N$-dimensional triangle. So, a class label of 1 in a three class label system of $\{1,2, 3\}$ can be mapped to a simplex as $[1,0, 0]$ and the label 2 as $[0, 1, 0]$ - as in 3D, a unit equilateral triangle is the simplex. Similarly we can extend this idea to $N$ dimensions, where given $N$ classes $\{1, 2, \ldots, N\}$, the $i^{th}$ label will be represented on the simplex as a $N$-d vector with 1 at the $(N-i+1)^{th}$ position. But why a simplex? Well, simplex is the smallest possible form (polytope) where each label is uniquely identifiable. You may recall this simplex-mapping in ML as one-hot encoding.
+
 !!!
 <img  style="width:50%;min-width:400px;"  src="/media/post_images/one-hot.svg" alt="One-Hot Encoding">
 !!!
 
-The above encoding can be thought as each label existing on the non-origin vertex of the $N$-d unit-simplex. Which implies that the sum of the coordinates sum up to 1. We can then re-imagine them as a probability vector for the $i^{th}$ class. In other words, the simplex can be recast as logits. 
+The above encoding can be thought as each label existing on the non-origin vertex of the $N$-d unit-simplex. Which implies that the sum of the coordinates sum up to 1. We can then re-imagine them as a probability vector for the $i^{th}$ class. In other words, the simplex can be recast as logits.
 
 Say, given a $N$-d one-hot encoding, how we map it to a $N$-d probability vector $\{[p_1, p_2, \ldots, p_N] \in \R^N | p_i \geq 0, \sum p_i = 1 \}$. Any procedure involving the conversion of discrete to continuous must have some relaxation or noise addition. In literature, it is sometimes called as *label smoothing*. Let us try to reuse the label smoothing used in say, the Inception V2 paper[^2].
 
@@ -29,14 +30,14 @@ $$
 LS(\delta_i) = (1 - \gamma) \delta_i + \gamma \epsilon
 $$
 
-where $\delta_i$ is the one-hot vector of the $i^{th}$ class, $\epsilon \sim \fU$ is a uniform noise distribution over the $N$ classes, and $\gamma$ is the coefficient that controls the relaxation. Basically, given a uniform prior distribution over all classes, each label is jittered away from the vertex. This relaxed one-hot vector is now a point on the *probability simplex*. 
+where $\delta_i$ is the one-hot vector of the $i^{th}$ class, $\epsilon \sim \fU$ is a uniform noise distribution over the $N$ classes, and $\gamma$ is the coefficient that controls the relaxation. Basically, given a uniform prior distribution over all classes, each label is jittered away from the vertex. This relaxed one-hot vector is now a point on the *probability simplex*.
 
 
 !!!
 <img  style="width:30%;min-width:300px;"  src="/media/post_images/label-smooth.svg" alt="Label Smoothing">
 !!!
 
-So, that's it? We have now a real-valued vector from the discrete class labels. Note that these vectors, although continuous, exists on the simplex. In other words, they are constrained to be within the simplex. Even if we use a regression loss, the optimizer needs account for this constraint. This is not so straight-forward[^3]. 
+So, that's it? We have now a real-valued vector from the discrete class labels. Note that these vectors, although continuous, exists on the simplex. In other words, they are constrained to be within the simplex. Even if we use a regression loss, the optimizer needs account for this constraint. This is not so straight-forward[^3].
 
 &emsp; Here's the most interesting part of the problem - one that motivated me to write this article. One can transform the probability simplex vector such that the resultant follows a Multivariate Normal (MVN) Distribution. That is, given the relaxed simplex vector $\delta_i$
 
@@ -46,7 +47,7 @@ y_i = \big [\log(\delta_i^1 / \delta_i^M), \log(\delta_i^2 / \delta_i^M), \ldots
 \end{aligned}
 $$
 
-Where $\delta_i^j$ is the $j^{th}$ component of the $\delta_i$ vector, and $\delta_i^M$ is the $M^{th}$ component of $\delta_i$ chosen to the normalizer. This result is due to Aichison and Shen (1980)[^4]. 
+Where $\delta_i^j$ is the $j^{th}$ component of the $\delta_i$ vector, and $\delta_i^M$ is the $M^{th}$ component of $\delta_i$ chosen to the normalizer. This result is due to Aichison and Shen (1980)[^4].
 
 Based on the above idea, a general class of log-ratio transforms were introduced to reparameterize probability simplexes on to MVN. The one caveat being that no logit should be zero. A more recent such log-ratio transform is the *isometric log-ratio transform* (ILR). This is a more sophisticated transform but the crux is still the log-ratio of the individual components. IRL uses the geometric mean of the simplex vector to normalize the simplex vector and projects the resultant log vector unto an orthogonal space.
 
@@ -67,11 +68,11 @@ Where $g(\delta_i)$ is the geometric mean of the vector $\delta_i$, and $V$ is s
 import numpy as np
 from scipy.stats import gmean    # geometric mean
 from scipy.linalg import helmert # For orthogonal matrix
-from scipy.special import softmax 
+from scipy.special import softmax
 
 def label_to_continuous(labels, num_classes:int, gamma:float = 0.3):
     """
-    Transforms the given labels into a set of 
+    Transforms the given labels into a set of
     continuous, unconstrained normal-distributed variables
     of dimension num_classes-1.
     """
@@ -104,7 +105,7 @@ def continuous_to_label(y, num_classes:int):
     delta = softmax(lr)
 
     # Compute labels
-    return np.argmax(delta, -1)  
+    return np.argmax(delta, -1)
 
 ```
 

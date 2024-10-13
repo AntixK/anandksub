@@ -157,7 +157,7 @@ h4 {
 }
 
 h1 {
-    /* margin-top: 4rem; */
+    margin-top: 4rem;
     font-size: 3.2rem;
     line-height: 1.5;
     margin-bottom: 1rem;
@@ -360,11 +360,11 @@ img {
 .icon-image {
     /* max-width: 4%; */
     display: inline;
-    width: 1.5rem;
-    height: 1.5rem;
-    position: relative;
+    width: 1.8rem;
+    height: 1.8rem;
+    /* position: relative; */
     overflow: hidden;
-    margin-bottom: -0.3em;
+    /* margin-bottom: -0.3em; */
     pointer-events: none;
     min-width: 0;
 }
@@ -405,6 +405,7 @@ img {
     box-shadow:
         0 2px 2px 0 rgba(0, 0, 0, 0.2),
         0 2px 2px 0 rgba(0, 0, 0, 0.19);
+    min-width: 220px;
 }
 
 .caption-text {
@@ -704,9 +705,9 @@ hr {
 .social-links {
     color: var(--c-4);
     font-family: var(--monospace-font);
-    font-size: 1.4rem;
-    padding-top: 0.5rem;
-    line-height: 1.5;
+    font-size: 1.7rem;
+    /* padding-top: 0.5rem; */
+    /* line-height: 1.5; */
 }
 
 .social-links:hover #hide {
