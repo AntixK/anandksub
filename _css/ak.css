@@ -408,12 +408,12 @@ img {
     /* display: inline-flexbox; */
     width: 80%;
     margin-left: auto;
-    /* margin-right: auto; */
+    margin-right: auto;
     /* line-height: 1.5em; */
     color: var(--c-4);
     font-family: var(--monospace-font);
-    font-size: 0.9rem;
-    text-align: right;
+    font-size: 1.1rem;
+    text-align: center;
 }
 
 /* ==================================================================
@@ -619,7 +619,7 @@ input[type="range"]::-webkit-slider-thumb:active {
 
 /* ================================================================ */
 /* Gen Art thumbnail stacking*/
-.tn-stack {
+/* .tn-stack {
     display: flex;
 }
 
@@ -632,7 +632,7 @@ input[type="range"]::-webkit-slider-thumb:active {
 .tn-container figure {
     flex-grow: 1;
     width: 30%;
-}
+} */
 
 /* ================================================================ */
 

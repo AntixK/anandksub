@@ -67,7 +67,8 @@ def gather_html_files(dir, only_modified:bool = False) -> List:
 
 def render(clean: bool = False):
     t1_start = perf_counter() 
-    if clean:
+    if clean and BUILD_DIR.exists():
+        logger.info("Cleaning build directory...")
         shutil.rmtree(BUILD_DIR)
     
     BUILD_DIR.mkdir(exist_ok=True)
@@ -100,6 +101,15 @@ def render(clean: bool = False):
         #Insert the html content into the template
         insert_hfun(html_file, config)
 
+    FILETYPES_TO_COPY = [".js"]
+    for filetype in FILETYPES_TO_COPY:
+        files = list(CONTENT_DIR.glob(f"**/*{filetype}"))
+        for file in files:
+            logger.info(f"Copying {file}")
+            print(file.relative_to(CONTENT_DIR))
+            shutil.copy(file, BUILD_DIR / file.relative_to(CONTENT_DIR))
+
+
     t1_stop = perf_counter()
     logger.success(f"Rendering complete. Elapsed time: {(t1_stop - t1_start)*100:.4f}ms")
 # =============================================
@@ -115,8 +125,7 @@ def tag_list() -> dict:
         # Convert tags to list of strings
         if "tags" in header_info:
             header_info["tags"] = list(map(str.strip, header_info["tags"].strip('][').replace('"', '').split(',')))
-
-        all_tags += header_info["tags"]
+            all_tags += header_info["tags"]
 
     tags = Counter(all_tags)
     
@@ -228,7 +237,7 @@ def dict_to_html_table(data: dict) -> str:
 def insert_hfun(file: Path, config: dict):
     default_header = config["site"]
     default_header["current_year"] = current_year()
-    tag_list()
+
     index_data = {
         **default_header,
         "all_articles": dict_to_html_table(posts_by_dir(CONTENT_DIR / "blog")),
@@ -379,14 +388,19 @@ def render_html(file: Path, config: dict) -> None:
     save_html(file, html)
 
 def save_html(file: Path, html: str) -> None:
+
+    # print(file, file.relative_to(CONTENT_DIR))
     # Save html content to file
-    if file.parent == CONTENT_DIR:
-        with open(BUILD_DIR  / f"{file.stem}.html", "w+") as f:
-            f.write(html)
-    else:
-        (BUILD_DIR / file.parent.name).mkdir(parents=True, exist_ok=True)
-        with open(BUILD_DIR / file.parent.name / f"{file.stem}.html", "w+") as f:
-            f.write(html)
+    # if file.parent == CONTENT_DIR:
+    #     with open(BUILD_DIR  / f"{file.stem}.html", "w+") as f:
+    #         f.write(html)
+    # else:
+
+    parent_dir = file.relative_to(CONTENT_DIR).parent
+    if not parent_dir.exists():
+        (BUILD_DIR / parent_dir).mkdir(parents=True, exist_ok=True)
+    with open(BUILD_DIR / parent_dir / f"{file.stem}.html", "w+") as f:
+        f.write(html)
     
 
 # ========================= Utilities =====================#
@@ -489,8 +503,11 @@ class ContentMonitor(FileSystemEventHandler):
 
 # ============================ Server =========================== #
 class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
-    SUFFIXES = [".html", "/index.html", "/", ""]
-    MEDIA_EXTENSIONS = (".webp", ".svg", ".pdf", ".mp4")
+    SUFFIXES = [".html", "/index.html", "/"]
+    JS_EXTENSIONS = (".js", ".mjs")
+    CSS_EXTENSIONS = (".css", ".scss")
+    MEDIA_EXTENSIONS = (".webp", ".svg", ".pdf", ".mp4", ".png", ".jpg", ".jpeg", ".gif")
+    FONT_EXTENSIONS = (".woff", ".woff2", ".ttf", ".otf")
 
     def translate_path(self, path):
         path = server.SimpleHTTPRequestHandler.translate_path(self, path)
@@ -499,12 +516,18 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
         return fullpath
 
     def do_GET(self):
-        if self.path not in self.SUFFIXES:
-            # self.path = self.path.lstrip("/")
-            if (not self.path.endswith(".html") and 
-                not self.path.endswith("/") and 
-                not self.path.endswith(self.MEDIA_EXTENSIONS)):
-                self.path += ".html"
+        # if self.path not in self.SUFFIXES:
+        #     print(self.path)
+        #     # self.path = self.path.lstrip("/")
+        #     if (not self.path.endswith(".html") and 
+        #         not self.path.endswith("/") and 
+        #         not self.path.endswith(self.MEDIA_EXTENSIONS) and 
+        #         not self.path.endswith(self.JS_EXTENSIONS) and
+        #         not self.path.endswith(self.CSS_EXTENSIONS) and 
+        #         not self.path.endswith(self.FONT_EXTENSIONS)):
+        #         self.path += ".html"
+        #         print(self.path)
+
 
         server.SimpleHTTPRequestHandler.do_GET(self)
     

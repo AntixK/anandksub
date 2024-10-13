@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <link rel="stylesheet" type="text/css" href="/art/math-of-pasta/style.css"> -->
+  <link rel="stylesheet" href="/_css/ak.css">
+
+  <!-- Add Katex -->
+  <script src="/_libs/katex/katex.min.js"></script>
+  <script defer src="/_libs/katex/auto-render.min.js">
+  </script>
+  <link async rel="stylesheet" href="/_libs/katex/katex.min.css">
+  <!-- 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@200;400&display=swap" rel="stylesheet"> -->
+  <script type="text/javascript" src="/art/math-of-pasta/pastas.js"></script>
+  <script type="module" src="/art/math-of-pasta/script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        // customised options
+        // • auto-render specific keys, e.g.:
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+          { left: '\\(', right: '\\)', display: false },
+          { left: '\\[', right: '\\]', display: true },
+        ],
+        // • rendering keys, e.g.:
+        throwOnError: false
+      });
+    });
+  </script>
+</head>
+
+
+<body>
+
+  <h1>Math of Pasta</h1>
+
+  <!-- <hr> -->
+
+  <h2 style="text-align: center;"><span id="pasta_type"></span></h2>
+
+  <canvas id="c"></canvas>
+
+  <h2>Parametric Equations</h2>
+
+  <p id="eq">
+    <span id="pasta_eq"></span>
+  </p>
+
+  <!-- Footer -->
+  <div
+    style="font-size: 1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;">
+    &copy; {{current_year}} {{author}} <span class="vl"></span>
+    <a href="/license">License</a> <span class="vl"></span>
+    <a href="/design">Design</a> <span class="vl"></span>
+    Built with SSG
+    <span style="color: #e25555; font-size: 24px;">&hearts;</span>
+  </div>
+
+</body>
+
+</html>
