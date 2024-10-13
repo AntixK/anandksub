@@ -1,36 +1,37 @@
+import itertools
+import os
 import re
 import shutil
-import tomllib
+from collections import Counter
+from copy import deepcopy
+
 # import markdown
 from datetime import datetime
-from pathlib import Path
-from typing import List, Tuple
-from copy import deepcopy
-from jinja2 import Environment, FileSystemLoader
-from watchdog.observers import Observer
-from watchdog.events import  FileSystemEventHandler
-from time import perf_counter
-import os
-from pprint import pformat
 from http import server
-# from ext import MyExtension
+from pathlib import Path
+from pprint import pformat
+from time import perf_counter
+from typing import List, Tuple
 
+# from ext import MyExtension
 # from markdown import markdown
 # import mistune
 # from mistune.directives import FencedDirective, Admonition, TableOfContents
 # from ext import MyRenderer
-
 import mistletoe
+import tomllib
+from htmlmin import Minifier
+from jinja2 import Environment, FileSystemLoader
+from loguru import logger
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+
 # from mistletoe.latex_renderer import LaTeXRenderer
 # from mistletoe.contrib.mathjax import MathJaxRenderer
 from ext import MyHtmlRenderer
-from loguru import logger
-from htmlmin import Minifier
-import itertools
-from collections import Counter
 
 
-def parse_config(CONFIG_FILE : str):
+def parse_config(CONFIG_FILE : Path):
     # Parse config.toml file
     with CONFIG_FILE.open("rb") as f:
         config = tomllib.load(f)
@@ -38,20 +39,20 @@ def parse_config(CONFIG_FILE : str):
     config["build"]["build_dir"] =  Path("build") if config["build"]["build_dir"] == "" else Path(config["build"]['build_dir'])
 
     if config["build"]["content_dir"] == "":
-        raise ValueError(f"'content_dir' in config.toml is empty. Set the correct content directory.")
+        raise ValueError("'content_dir' in config.toml is empty. Set the correct content directory.")
 
     if config["build"]['assets_dir'] == "":
-        raise ValueError(f"'assets_dir' in config.toml is empty. Set the correct content directory.")
+        raise ValueError("'assets_dir' in config.toml is empty. Set the correct content directory.")
 
     if config["build"]['templates_dir'] == "":
-        raise ValueError(f"'templates_dir' in config.toml is empty. Set the correct content directory.")
+        raise ValueError("'templates_dir' in config.toml is empty. Set the correct content directory.")
 
     if config["build"]['css_dir'] == "":
-        raise ValueError(f"'css_dir' in config.toml is empty. Set the correct content directory.")
+        raise ValueError("'css_dir' in config.toml is empty. Set the correct content directory.")
 
     if config["build"]['libs_dir'] == "":
-        raise ValueError(f"'libs_dir' in config.toml is empty. Set the correct content directory.")
-    
+        raise ValueError("'libs_dir' in config.toml is empty. Set the correct content directory.")
+
     return config
 
 
@@ -66,11 +67,11 @@ def gather_html_files(dir, only_modified:bool = False) -> List:
     return sorted(list(dir.glob("**/*.html")))
 
 def render(clean: bool = False):
-    t1_start = perf_counter() 
+    t1_start = perf_counter()
     if clean and BUILD_DIR.exists():
         logger.info("Cleaning build directory...")
         shutil.rmtree(BUILD_DIR)
-    
+
     BUILD_DIR.mkdir(exist_ok=True)
 
     dirs_2_copy = [CSS_DIR, ASSETS_DIR, LIBS_DIR]
@@ -91,7 +92,7 @@ def render(clean: bool = False):
         logger.info(f"Rendering {md_file}")
         # TODO: Only render the ones that has changed
         render_html(md_file, config)
-    
+
     # Gather index html files
     html_files = gather_html_files(CONTENT_DIR)
     logger.info(f"Found {len(html_files)} html file(s).")
@@ -106,7 +107,7 @@ def render(clean: bool = False):
         files = list(CONTENT_DIR.glob(f"**/*{filetype}"))
         for file in files:
             logger.info(f"Copying {file}")
-            print(file.relative_to(CONTENT_DIR))
+            # print(file.relative_to(CONTENT_DIR))
             shutil.copy(file, BUILD_DIR / file.relative_to(CONTENT_DIR))
 
 
@@ -115,67 +116,78 @@ def render(clean: bool = False):
 # =============================================
 ## HELPER FUNCTIONS
 
-def tag_list() -> dict:
+def tag_list(config: dict) -> dict:
     posts = gather_md_files(CONTENT_DIR)
 
     all_tags = []
     for post in posts:
         # Get the header information
-        header_info, _ = get_header_info(post)
+        header_info, _ = get_meta_info(post, config)
         # Convert tags to list of strings
-        if "tags" in header_info:
-            header_info["tags"] = list(map(str.strip, header_info["tags"].strip('][').replace('"', '').split(',')))
-            all_tags += header_info["tags"]
+        # if "tags" in header_info and not header_info["is_draft"]:
+        #     header_info["tags"] = list(map(str.strip, header_info["tags"].strip('][').replace('"', '').split(',')))
+        all_tags += header_info["tags"]
 
     tags = Counter(all_tags)
-    
+
     return tags
 
 def current_year() -> int:
     return datetime.now().year
 
-def recent_posts(N:int = 5) -> dict:
-    return dict(itertools.islice(posts_by_dir(CONTENT_DIR / "blog").items(), N)) 
+def recent_posts(N:int, config: dict) -> dict:
+    return dict(
+        itertools.islice(posts_by_dir(CONTENT_DIR / "blog",
+                                      config,
+                                      get_relative_path=True).items(),
+                         N))
 
-def posts_by_tag(tag:str) -> dict:
+def posts_by_tag(tag:str, config: dict) -> dict:
     posts = gather_md_files(CONTENT_DIR)
 
     result = {}
     for post in posts:
         # Get the header information
-        header_info, _ = get_header_info(post)
+        header_info, _ = get_meta_info(post, config)
         if tag in header_info["tags"]:
             result[header_info["published"]] = post.relative_to(CONTENT_DIR).stem
-    
+
     return result
 
-def posts_by_dir(directory:Path) -> dict:
+def posts_by_dir(directory:Path, config: dict, get_relative_path:bool = False) -> dict:
     posts = gather_md_files(directory)
 
     result = {}
     for post in posts:
         # Get the header information
-        header_info, _ = get_header_info(post)
+        header_info, _ = get_meta_info(post, config)
+        print(header_info["is_draft"])
+        # Only include the published posts and ignore drafts
+        if not header_info["is_draft"]:
 
-        # Convert tags to list of strings
-        if "tags" in header_info:
-            header_info["tags"] = list(map(str.strip, header_info["tags"].strip('][').replace('"', '').split(',')))
+            pub_date = datetime.strptime(header_info["published"], '%d %B %Y')
+            pub_date = pub_date.strftime('%d %b %Y')
 
-        pub_date = datetime.strptime(header_info["published"], '%d %B %Y')
-        pub_date = pub_date.strftime('%d %b %Y')
+            if not get_relative_path:
+                result[pub_date] = {
+                    "url":  f"{post.relative_to(CONTENT_DIR).stem}",
+                    "title": header_info["title"],
+                    "tags": header_info["tags"],
+                }
+            else: # Useful for recent posts
+                result[pub_date] = {
+                    "url":  f"{post.relative_to(CONTENT_DIR).with_suffix('')}",
+                    "title": header_info["title"],
+                    "tags": header_info["tags"],
+                }
 
-        result[pub_date] = {
-            "url": f"{post.relative_to(directory).stem}",
-            "title": header_info["title"],
-            "tags": header_info["tags"],
-        }
+            if "description" in header_info:
+                result[pub_date].update({"description":header_info["description"]})
 
-        if "description" in header_info:
-            result[pub_date].update({"description":header_info["description"]})
-    
+    # print(result)
     # Sort the posts by date
     result = dict(sorted(result.items(), key=lambda x: datetime.strptime(x[0], '%d %b %Y'), reverse=True))
-    
+
     return result
 
 def create_tag_cloud(tags: dict) -> str:
@@ -184,7 +196,6 @@ def create_tag_cloud(tags: dict) -> str:
 
     for tag, count in tags.items():
         tag_cloud += f"""<li><span class="pound">#</span><span class="tags"><a href="/tag/{tag}/" data-weight={count}>{tag}</a>[{count}]</span></li>"""
-    
     tag_cloud += """</ul>"""
     return tag_cloud
 
@@ -229,7 +240,7 @@ def dict_to_html_table(data: dict) -> str:
                     </p>
                 </td>
             </tr>"""
-        
+
     html += """</table>"""
     return html
 
@@ -240,10 +251,10 @@ def insert_hfun(file: Path, config: dict):
 
     index_data = {
         **default_header,
-        "all_articles": dict_to_html_table(posts_by_dir(CONTENT_DIR / "blog")),
-        "all_notes": dict_to_html_table(posts_by_dir(CONTENT_DIR / "notes")),
-        "recent_posts": dict_to_html_table(recent_posts(5)),
-        "tag_cloud": create_tag_cloud(tag_list()),
+        "all_articles": dict_to_html_table(posts_by_dir(CONTENT_DIR / "blog", config)),
+        "all_notes": dict_to_html_table(posts_by_dir(CONTENT_DIR / "notes", config)),
+        "recent_posts": dict_to_html_table(recent_posts(5, config)),
+        "tag_cloud": create_tag_cloud(tag_list(config)),
         # "tag_list": dict_to_html_table(tag_list()),
     }
 
@@ -275,7 +286,7 @@ def get_meta_info(file, config: dict):
 
     default_header = config["post"]
     # =============================================
-    
+
     _header_data, md_content = get_header_info(file)
 
     header_data = {}
@@ -286,7 +297,7 @@ def get_meta_info(file, config: dict):
     else:
         header_data["published"] = default_header["published"]
         logger.warning(f"Published date not set for {file}.")
-    
+
     if "description" in _header_data:
         header_data["description"] = _header_data["description"]
     else:
@@ -296,31 +307,33 @@ def get_meta_info(file, config: dict):
     # Convert tags to list of strings
     if "tags" in _header_data:
         header_data["tags"] = list(map(str.strip, _header_data["tags"].strip('][').replace('"', '').split(',')))
-    
+    else:
+        header_data["tags"] = []
+        logger.warning(f"Tags not set for {file}.")
     if "has_code" in _header_data:
         header_data["has_code"] = True if _header_data["has_code"] == "true" else False
     else:
         header_data["has_code"] = default_header["has_code"]
         logger.warning(f"Code status not set for {file}.")
-    
+
     if "is_draft" in _header_data:
         header_data["is_draft"] = True if _header_data["is_draft"] == "true" else False
     else:
         header_data["is_draft"] = True
         logger.warning(f"Draft status not set for {file}.")
-    
+
     if "has_chart" in _header_data:
         header_data["has_chart"] = True if _header_data["has_chart"] == "true" else False
     else:
         header_data["has_chart"] = False
         logger.warning(f"Chart status not set for {file}.")
-    
+
     if "has_math" in _header_data:
         header_data["has_math"] = True if _header_data["has_math"] == "true" else False
     else:
         header_data["has_math"] = False
         logger.warning(f"Math status not set for {file}.")
-    
+
     if "show_info" in _header_data:
         header_data["show_info"] = True if _header_data["show_info"] == "true" else False
     else:
@@ -350,8 +363,8 @@ def render_html(file: Path, config: dict) -> None:
     html_data.update(header_data)
 
     # Convert to html content
-    # html_content = markdown.markdown(md_content, 
-    #                                  output_format='html5', 
+    # html_content = markdown.markdown(md_content,
+    #                                  output_format='html5',
     #                                  encoding="utf-8",
     #                                  extensions=[
     #                                             #  'markdown.extensions.smarty',
@@ -359,13 +372,13 @@ def render_html(file: Path, config: dict) -> None:
     #                                              'markdown.extensions.fenced_code',
     #                                             #  MyExtension(),
     #                                              ])
-    # markdown = mistune.create_markdown(plugins=['footnotes', 
+    # markdown = mistune.create_markdown(plugins=['footnotes',
     #                                             'math',
     #                                              FencedDirective([
     #                                                 Admonition(),
     #                                                 TableOfContents(),
     #                                             ]),
-    #                                             ], 
+    #                                             ],
     #                                    renderer="html")
     # html_content = markdown(md_content)
 
@@ -401,51 +414,13 @@ def save_html(file: Path, html: str) -> None:
         (BUILD_DIR / parent_dir).mkdir(parents=True, exist_ok=True)
     with open(BUILD_DIR / parent_dir / f"{file.stem}.html", "w+") as f:
         f.write(html)
-    
+
 
 # ========================= Utilities =====================#
 def get_read_time(text: str) -> int:
     num_words = len(text.split())
     reading_speed = 180 # Accounting for math equations
     return num_words // reading_speed
-
-def get_recent_posts(dir: Path, config:dict, N:int = -1) -> dict:
-    md_files = gather_md_files(dir)
-    header_infos = {}
-    for md_file in md_files:
-        header_data, _ = get_meta_info(md_file, config)
-        # print(md_file, header_data['published'])
-        header_infos[header_data['published']] =  str(md_file)
-    # print( header_infos)
-    recent_posts = dict(sorted(header_infos.items(), key=lambda x: datetime.strptime(x[0], '%d %B %Y'), reverse=True))
-    print(recent_posts)
-    # print(sorted(header_infos.keys(), key=lambda x: datetime.strptime(x, '%d %B %Y'), reverse=True))
-    
-
-def get_posts_by_tag(tag:str):
-    pass
-
-# # observer =  Observer()
-# # event_handler = LoggingEventHandler()
-# # observer.schedule(event_handler, CONTENT_DIR, recursive=True)
-# # observer.start()
-
-# # try:
-# #     while observer.isAlive():
-# #         observer.join(1)
-# # finally:
-# #     observer.stop()
-# #     observer.join()
-
-
-# Utils
-# 1. current_year
-# 2. time_now
-# 3. today
-# 4. Get posts by directory (blog, notes)
-# 5. Get recent posts
-# 6. Get posts by tags
-
 
 # ============================ Sanity Checks =========================== #
 # Check for woff/woff2 font files
@@ -460,12 +435,12 @@ def check_for_optimized_font_files():
 
     if len(font_files['ttf']) > 0:
         logger.info(f"Consider converting the following ttf fonts to woff/woff2 {font_files['ttf']}")
-    
+
     if len(font_files['otf']) > 0:
         logger.info(f"Consider converting the following otf fonts to woff/woff2 {font_files['ttf']}")
-    
+
     if len(font_files['otf']) == 0 and len(font_files['ttf']) == 0:
-        logger.info(f"All font assets are optimized.")
+        logger.info("All font assets are optimized.")
 
 
 def check_for_optimized_image_formats():
@@ -479,7 +454,7 @@ def check_for_optimized_image_formats():
     if len(un_opt) > 0:
         logger.warning(f"The following assets are not optimized. Consider optimizing them before publishing.{pformat(un_opt)}")
     else:
-        logger.info(f"All media assets are optimized.")
+        logger.info("All media assets are optimized.")
 
 html_minifier = Minifier(
         remove_comments=True,
@@ -519,18 +494,18 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
         if self.path not in self.SUFFIXES:
             print(self.path)
             # self.path = self.path.lstrip("/")
-            if (not self.path.endswith(".html") and 
-                not self.path.endswith("/") and 
-                not self.path.endswith(self.MEDIA_EXTENSIONS) and 
+            if (not self.path.endswith(".html") and
+                not self.path.endswith("/") and
+                not self.path.endswith(self.MEDIA_EXTENSIONS) and
                 not self.path.endswith(self.JS_EXTENSIONS) and
-                not self.path.endswith(self.CSS_EXTENSIONS) and 
+                not self.path.endswith(self.CSS_EXTENSIONS) and
                 not self.path.endswith(self.FONT_EXTENSIONS)):
                 self.path += ".html"
-                print(self.path)
+                # print(self.path)
 
 
         server.SimpleHTTPRequestHandler.do_GET(self)
-    
+
     def send_error(self, code, message=None):
         if code == 404:
             with open(BUILD_DIR / "404.html", "r") as f:
@@ -538,6 +513,13 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
             self.error_message_format = f"""{msg_404}"""
 
         server.SimpleHTTPRequestHandler.send_error(self, code, message)
+
+    # WARNING: This is a hack to prevent caching of files
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
 
 
 class SSGHTTPServer(server.HTTPServer):
@@ -548,7 +530,7 @@ class SSGHTTPServer(server.HTTPServer):
 
 
 if __name__ == "__main__":
-    
+
 
     CONFIG_FILE: Path = Path("config.toml")
 
@@ -571,18 +553,29 @@ if __name__ == "__main__":
     check_for_optimized_font_files()
 
 
-    # Setup the watcdog observer
+    # Setup the watcdog observers
     event_handler = ContentMonitor()
-    observer = Observer()
-    observer.schedule(event_handler, CONTENT_DIR, recursive=True)
-    observer.start()
+
+    dirs_to_watch = [CONTENT_DIR, TEMPLATE_DIR, LIBS_DIR, ASSETS_DIR, CSS_DIR]
+    observers = []
+    for directory in dirs_to_watch:
+        observer = Observer()
+        observer.schedule(event_handler, directory, recursive=True)
+        observers.append(observer)
+
+    for observer in observers:
+        observer.start()
 
     try:
-        with SSGHTTPServer(str(BUILD_DIR),(config["server"]["host"], config["server"]["port"]), SSGHTTPRequestHandler) as httpd:
+        with SSGHTTPServer(str(BUILD_DIR),
+                           (config["server"]["host"], config["server"]["port"]),
+                           SSGHTTPRequestHandler) as httpd:
             logger.info(f"Starting server at http://{config['server']['host']}:{config['server']['port']}")
             httpd.serve_forever()
 
     except KeyboardInterrupt:
-            observer.stop()
-
-    observer.join()
+            for observer in observers:
+                observer.unschedule_all()
+                observer.stop()
+                observer.join()
+            logger.info("Shutting down server...")

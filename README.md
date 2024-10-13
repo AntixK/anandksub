@@ -23,8 +23,8 @@ TODO
   - [x] logging
   - [x] Convert fonts to woff2 (atleast set warning)
   - [x] Katex macros
-  - [ ] Proper HTML Error Pages
-    - [ ] 404
+  - [x] Proper HTML Error Pages
+    - [x] 404
 - [ ] Advanced Features
   - [ ] Resize Images
   - [x] Auto convert images to webp (atleast set warning)
@@ -32,8 +32,8 @@ TODO
   - [ ] Pre-render code highlighting (pygments)
   - [x] Minify HTML
   - [ ] RSS Feed
-- [ ] Add Art section
-- [ ] Add CV
+- [x] Add Art section
+- [x] Add CV
 - [ ] Add tags
   - [x] Create tag cloud
   - [ ] Create page for each tag with the list of posts
