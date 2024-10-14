@@ -1,7 +1,11 @@
 @def title = "Spirit of Enquiry - T.M. Krishna"
 @def published = "30 May 2022"
-@def tags = ["art", "philosophy", "aesthetics",  "socio-political", "karnatik-music"] 
+@def tags = ["art", "philosophy", "aesthetics",  "socio-political", "karnatik-music"]
 @def is_draft = false
+@def show_info = true
+@def has_code = false
+@def has_chart = false
+@def has_math = false
 
 
 TM Krishna's *Spirit of Enquiry* is a collection of essays he had written over a span of 6 years - from 2014 to 2020. This also marks his period of transformation as an artist, his engagement with bodies more than just Karnatik music. This series of essays fundamentally aim to present the various problems and the subtleties that unravel when investigating the symbiotic world of art and society (and its associated politics).

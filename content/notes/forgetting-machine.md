@@ -1,9 +1,13 @@
 @def title = "The Forgetting Machine - Rodrigo Quian Quiroga"
 @def published = "2 January 2022"
-@def tags = ["neuroscience", "memory"] 
+@def tags = ["neuroscience", "memory"]
 @def is_draft = false
+@def show_info = true
+@def has_code = false
+@def has_chart = false
+@def has_math = false
 
-&emsp; In this book, Rodrigo Quiroga illuminates the inner workings of the brain, specifically the aspect of how memory works in humans. 
+&emsp; In this book, Rodrigo Quiroga illuminates the inner workings of the brain, specifically the aspect of how memory works in humans.
 
 ###The Neuron and its models
 
@@ -17,7 +21,7 @@ The brain's capacity is limited - in terms of the number of neurons. And they ar
 
 :::multilinequote
 ... memories are usually generated from perceptions, since we tend to create memories of things we see or hear. But the most important reason to discuss vision as we probe the subject of memory is that the brain uses very similar strategies to see and to remember. Both processes are based on the construction of meaning, an interpretation of the outside world that relies on selecting a minimum of information and making abstractions—while discarding a multitude of detail.
-::: 
+:::
 
 Forgetting is an important and an essential behavioral process. While the lament towards forgetting important memories is aflood in literature, there are few works exploring the consequences of never forgetting. Forgetting, or discarding information is crucial for building abstract representations that can help in extrapolation and pattern matching. Luis Borges, beautifully writes in "Funes the Memorious" about a guy who can't forget anything -
 
@@ -33,7 +37,7 @@ The construction of a schema based on such inferences—remembering our subjecti
 :::
 
 Mnemonics is the art of enhancing memory through various techniques - usually through associating a memory with some place - *method of loci*. According to this method, memory retrieval can be made easier though the following techniques -
-1) The memories are organized or have some sort of structure. This avoids interference, where some memories block others. 
+1) The memories are organized or have some sort of structure. This avoids interference, where some memories block others.
 2) Creating mental images. Mental images turn a set of disjoint memories into a connected one ans gives a spatial aspect to them. More memorable memories can be given more remarkable visuals.
 3) Creating associations between memories.
 
@@ -60,7 +64,7 @@ The *Atkinson-Shiffrin* model classifies memory into 3 types - sensory, short-te
 
 Fascinatingly, humans can still learn motor skills - those that involve physical movement along with some sensory stimuli - even without any ability to form long-term memory. This has been tested and verified in patients whose hippocampus - place where the long-term memories are stored - was removed. Therefore, this learning of motor skills, or *muscle memory* if you will - is called *non-declarative memory* and is not stored in the hippocampus, although it is classified under long-term memory. Sensory memory can also become a type of non-declarative memory if it is strong enough to cause a strong emotional response. This is called *emotional memory*. For example - a like or dislike of a particular food can become ingrained in the memory to become an emotional memory. Alternatively, the *declarative memory* is the usual memory of facts, events, concepts, experiences and so on. But of course, memories can be more nuanced and finer and finer subclassifications can be made.
 
-What we mean by "thinking" is usually the processing of concepts - basic units of thought. How these "concepts" are stored and processed in the brain and its relation to the representations of input signals is an interesting one. In case of visual system (knows as the *ventral visual pathway*), the brain contains specialized neurons that respond only to certain signals - like faces, hands, fruits etc. There are neurons in different areas that respond to different information and along the pathway - the complexity of the encoded information increases. 
+What we mean by "thinking" is usually the processing of concepts - basic units of thought. How these "concepts" are stored and processed in the brain and its relation to the representations of input signals is an interesting one. In case of visual system (knows as the *ventral visual pathway*), the brain contains specialized neurons that respond only to certain signals - like faces, hands, fruits etc. There are neurons in different areas that respond to different information and along the pathway - the complexity of the encoded information increases.
 
 :::multilinequote
 we move from a representation of local contrasts in the retina, to one of borders in V1 (primary visual cortex), to one of faces in the inferior temporal cortex.
@@ -68,7 +72,7 @@ we move from a representation of local contrasts in the retina, to one of border
 
 These increasing complex representations are then sent to the hippocampus where the neurons start to encode *concepts*. A famous example is the "Jennifer Aniston neuron" which responded to the "concept" Jennifer Aniston and only Jennifer Aniston. This was because the patient tested was familiar with the actress. Further experiments have shown that we can localize neurons that activate when a certain concept is presented before them - albeit thought any sensory stimuli like pictures, voice, or text.
 
-Furthermore, the same neurons that fire at a certain concept, also fire when a closely related concept is presented. Therefore, the associations between concepts are also stored in the hippocampus - though partial neuronal overlap between the two concepts (recall Hebb's principle). Note that these concepts constitute the Declarative memory and hence are stored in the hippocampus. The primitive representations in the ventral visual pathway is an example of sensory memory and thus, exists only for a small period of time and cannot be used for reasoning. 
+Furthermore, the same neurons that fire at a certain concept, also fire when a closely related concept is presented. Therefore, the associations between concepts are also stored in the hippocampus - though partial neuronal overlap between the two concepts (recall Hebb's principle). Note that these concepts constitute the Declarative memory and hence are stored in the hippocampus. The primitive representations in the ventral visual pathway is an example of sensory memory and thus, exists only for a small period of time and cannot be used for reasoning.
 
 :::multilinequote
 ...it is no coincidence that these neurons encode associations, since associations constitute the basis of memory
@@ -80,7 +84,7 @@ Higher the neural plasticity, quicker and stronger are these associations made i
 The scant information we choose to process depends on the task we have at hand—for example, we see the same book very differently if we are looking for something to read than if we need a way to raise the computer monitor. This flexibility in attributing meaning, in selecting which information to process and which to discard, is what defines our intelligence. ... Our capacity to manage and relate abstractions, coded by concept neurons in the hippocampus, is the basis of our memory—and, perhaps, the cornerstone of what makes us human.
 :::
 
-The book was an overall "huh?! cool" for me, with some interesting neuroscientific results scattered here and there. The last chapter, titled "Can Androids Feel?" however, was a total mishmash of ideas ranging from materialism/functionalism, mind-body problem, to the connection between language and intelligence. The author failed to provide a coherent and insightful account on any of these topics. 
+The book was an overall "huh?! cool" for me, with some interesting neuroscientific results scattered here and there. The last chapter, titled "Can Androids Feel?" however, was a total mishmash of ideas ranging from materialism/functionalism, mind-body problem, to the connection between language and intelligence. The author failed to provide a coherent and insightful account on any of these topics.
 
 ----
 
@@ -88,8 +92,3 @@ All the above excerpts are attributed to their original author(s). Book info -
 
 
 > Rodrigo Quian Quiroga, *The Forgetting Machine: Memory, Perception, and the "Jennifer Aniston Neuron"*, 2017. BenBella Books. ISBN-13: 9781944648541 ISBN-10: 1944648542
-
-
-
-
-

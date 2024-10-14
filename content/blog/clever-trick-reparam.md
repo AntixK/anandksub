@@ -6,9 +6,10 @@
 @def has_code = false
 @def is_draft = false
 @def show_info = true
+@def has_chart = false
 
 
-&emsp;  The famous *reparametrization trick* has been employed in estimating the gradients of samples from probability distributions by replacing an equivalent estimator that is *deterministic* and a *differential transformation* of a simple distribution.  
+&emsp;  The famous *reparametrization trick* has been employed in estimating the gradients of samples from probability distributions by replacing an equivalent estimator that is *deterministic* and a *differential transformation* of a simple distribution.
 
 The 2018 NeurIPS paper by [Figurnov et.al](https://arxiv.org/abs/1805.08498) expounds the requirements of probability distributions on which the reparametrization trick can be used. For the reparametrization trick, the probability distribution, whose sample gradients are required, must satisfy at least one of the following conditions
 - Has location-scale parametrization
@@ -84,4 +85,3 @@ Therefore, through implicit differentiation, it is possible to find the gradient
 Now, observe that $\nabla_{\theta}x$ is simply $\nabla_{\theta}s_{\theta}(x')$. Since implicit differentiation yields the same result as that of the usual differentiation, the overall results for easier distributions like Gaussian are identical to the usual procedure. Furthermore, note that the above expression is only in terms of $s_{\theta}^{-1}$ which is essentially the CDF of complicated distributions like Gamma distribution. In such cases, numeric differentiation can be used to find the gradients.
 
 In conclusion, using implicit differentiation, a generic method for finding the gradient of the reparametrized expression $s_{\theta}(x')$ can be determined. In cases where the CDF is intractable, the gradient can be directly found using numeric differentiation, as opposed to inverting the CDF and then computing the gradient in the usual reparametrization trick.
-

@@ -2,6 +2,11 @@
 @def published = "17 July 2021"
 @def tags = ["art", "philosophy"]
 @def is_draft = false
+@def show_info = true
+@def has_code = false
+@def has_chart = false
+@def has_math = false
+
 
 
 > In a place of hermeneutics we need an erotics of art.
@@ -13,9 +18,9 @@ Sontag points out that the problems delimited by the mimetic theory of art persi
 > Whatever it may have been in the past, the idea of content is today mainly a hinderance, a nuisance, a subtle or not so subtle philistinism.
 
 
-Why does art need to justify itself? Even if artistic developments move away from primarily being about content, the idea is still perpetuated by those within artistic circles like critics and enthusiasts. Films are the most pitiable victim of all - every review focusses on the "meaning" of the film, the supposed parallels, because god forbid a good movie not being allegorical. YouTube is filled with people interpreting movies, explaining movie endings[^1]. This task of interpretation is one usually of translation - that A is really B, that X is actually a homage to this great work Y. 
+Why does art need to justify itself? Even if artistic developments move away from primarily being about content, the idea is still perpetuated by those within artistic circles like critics and enthusiasts. Films are the most pitiable victim of all - every review focusses on the "meaning" of the film, the supposed parallels, because god forbid a good movie not being allegorical. YouTube is filled with people interpreting movies, explaining movie endings[^1]. This task of interpretation is one usually of translation - that A is really B, that X is actually a homage to this great work Y.
 
-This is act of interpretation is nothing new and has been continuing for thousands of years. Religious texts, myths and epics are still being reinterpreted to suit modern world; poems and classical texts are almost always allegorized away. 
+This is act of interpretation is nothing new and has been continuing for thousands of years. Religious texts, myths and epics are still being reinterpreted to suit modern world; poems and classical texts are almost always allegorized away.
 
 
 > Interpretation is a radical strategy for conserving an old text, which is thought too precious to repudiate, by revamping it.
@@ -31,7 +36,7 @@ Through interpretation we filter the art, discard aspects of it, avoid the respo
 
 Sontag does call for inventing vocabulary and literature for art criticism itself; a new vocabulary that is more descriptive than prescriptive. Attention to the form in textual, aural, spatial, temporal and all other forms of art is in need. Art needs to be experienced more though our senses than understood. Truly, _erotics_ for art is required.
 
-This brilliant essay, in my opinion, one of the most important critiques of art. It does raise interesting afterthoughts - How does art analysis look bereft of interpretation? Is only form sufficient for art? Is art nothing but form? However, Sontag only provides some idealistic targets through examples without a detailed description about _form_. Is form and content clearly distinguishable? Can form be interpreted too? Can form be experienced in several levels? 
+This brilliant essay, in my opinion, one of the most important critiques of art. It does raise interesting afterthoughts - How does art analysis look bereft of interpretation? Is only form sufficient for art? Is art nothing but form? However, Sontag only provides some idealistic targets through examples without a detailed description about _form_. Is form and content clearly distinguishable? Can form be interpreted too? Can form be experienced in several levels?
 
 <!-- I do have a major disagreement with a point she made - "What we decidedly do not need now is further to assimilate Art into Thought, or (worse yet) Art in Culture". Art and Culture should not be separated. Art is very much a sociological and cultural practice. Culture does not dilute art, rather art can be mirror to look into our culture. -->
 

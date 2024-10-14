@@ -1,7 +1,11 @@
 @def title = "Human Kind, A Hopeful History - Rutger Bregman"
 @def published = "10 February 2022"
-@def tags = ["anthropology", "socio-political"] 
+@def tags = ["anthropology", "socio-political"]
 @def is_draft = false
+@def show_info = true
+@def has_code = false
+@def has_chart = false
+@def has_math = false
 
 
 :::multilinequote
@@ -12,9 +16,9 @@ There is a persistent myth that by their very nature humans are selfish, aggress
 If we believe most people can’t be trusted, that’s how we’ll treat each other, to everyone’s detriment. Few ideas have as much power to shape the world as our view of other people. If we want to tackle the greatest challenges of our times – from the climate crisis to our growing distrust of one another – then I think the place we need to start is our view of human nature.
 :::
 
-The phenomenon of the general misanthropy, cynicism, and pessimism seen in the world today has been categorized as a clinical symptom of the *mean world syndrome*. A driving force behind this syndrome is unsurprisingly, news and the social media. The deep impact of such sensational news on our minds can be explained through 
+The phenomenon of the general misanthropy, cynicism, and pessimism seen in the world today has been categorized as a clinical symptom of the *mean world syndrome*. A driving force behind this syndrome is unsurprisingly, news and the social media. The deep impact of such sensational news on our minds can be explained through
 
-1. **Negativity Bias** - Being negative about things like being frightened or cautious is always more beneficial rather than being confident or positive.  
+1. **Negativity Bias** - Being negative about things like being frightened or cautious is always more beneficial rather than being confident or positive.
 2. **Availability Bis** - if we can recall examples of events, we tend to believe that such events are rampant.
 
 The veneer theory is not a new one. For centuries, philosophers and social critics have anchored this negative view in our minds steadily. Thomas Hobbes proclaimed that humans are innately wicked, "solitary, nasty, brutish and short". While, Rousseau, though he claimed that humans were kind in the "olden days", but civilization ruins us. Interestingly, albeit proclaiming the negative view of humanity, the solutions they propose are contradictory. Rousseau's solution is more liberty and freedom, while Hobbes solution is more control and taming of human wickedness. These solutions are still being proposed at various levels and various degrees in our modern world.
@@ -23,7 +27,7 @@ The veneer theory is not a new one. For centuries, philosophers and social criti
 ### Anthropological & Psychological Perspective
 
 
-&emsp; From a biological perspective, Dmitri Belyaev and Lyudmila proposed a radical theory that domestication or selection for the "friendliest" made hormonal changes to animals - causing more serotonin and oxytocin to be produced and more "cute" physical features to develop. The cute features are a positive reinforcement causing humans to be more friendly towards the animals. The animals were friendly not just towards humans but to one another as well. They further went to proclaim that humans are domesticated apes. Furthermore, additional evidence showed that domestication - i.e. selection for the friendliest also improved mental capabilities - domesticated animals were more astute and cleverer than their wild counterparts. Current standing is that human toddlers excel at all 4 intelligence tests - *Spatial understanding, Calculation, Causality, and Social learning*, while other primates like chimps and orangutans excel at only 3 of the 4 - failing miserably at the social learning test. This social learning abilities and cooperation may have been the prime force behind the survival of homo sapiens and the extinction of Neanderthals during the last 100,000-year ice age. Even anthropologically speaking, the author shows that there is lack of proof that our early ancestors were war-mongering savages. 
+&emsp; From a biological perspective, Dmitri Belyaev and Lyudmila proposed a radical theory that domestication or selection for the "friendliest" made hormonal changes to animals - causing more serotonin and oxytocin to be produced and more "cute" physical features to develop. The cute features are a positive reinforcement causing humans to be more friendly towards the animals. The animals were friendly not just towards humans but to one another as well. They further went to proclaim that humans are domesticated apes. Furthermore, additional evidence showed that domestication - i.e. selection for the friendliest also improved mental capabilities - domesticated animals were more astute and cleverer than their wild counterparts. Current standing is that human toddlers excel at all 4 intelligence tests - *Spatial understanding, Calculation, Causality, and Social learning*, while other primates like chimps and orangutans excel at only 3 of the 4 - failing miserably at the social learning test. This social learning abilities and cooperation may have been the prime force behind the survival of homo sapiens and the extinction of Neanderthals during the last 100,000-year ice age. Even anthropologically speaking, the author shows that there is lack of proof that our early ancestors were war-mongering savages.
 
 :::multilinequote
 'The Hobbesian image of humans, judging from the most common evidence, is empirically wrong,’ Collins asserts. ‘Humans are hardwired for […] solidarity; and this is what makes violence so difficult'
@@ -38,7 +42,7 @@ Power distinctions between people were – if nomads tolerated them at all – t
 At the same time, these societies wielded a simple weapon to keep members humble: shame.
 :::
 
-Another way early societies kept people in check (domesticated themselves) was through punishment, albeit rarely. Aggressive personalities had fewer opportunities to reproduce, while more amiable types had more offsprings. With the advent of agriculture around 10,000 years ago, civilization started. According to the followers of Rousseau, this is where the problem of violence and widespread negativism of human nature started. With additional supporting evidence, and the simultaneous debunking of veneer-like theories from Stanford prison experiment, Easter Island history, Milgram's shock experiment, and the Robbers Cave experiment, the innate pacifist nature of humans always surfaces. But the human interest in our supposedly violent  nature is always strong. 
+Another way early societies kept people in check (domesticated themselves) was through punishment, albeit rarely. Aggressive personalities had fewer opportunities to reproduce, while more amiable types had more offsprings. With the advent of agriculture around 10,000 years ago, civilization started. According to the followers of Rousseau, this is where the problem of violence and widespread negativism of human nature started. With additional supporting evidence, and the simultaneous debunking of veneer-like theories from Stanford prison experiment, Easter Island history, Milgram's shock experiment, and the Robbers Cave experiment, the innate pacifist nature of humans always surfaces. But the human interest in our supposedly violent  nature is always strong.
 
 :::multilinequote
 In other words, if you push people hard enough, if you poke and prod, bait and manipulate, many of us are indeed capable of doing evil. The road to hell is paved with good intentions. But evil doesn’t live just beneath the surface; it takes immense effort to draw it out. And most importantly, evil has to be disguised as doing good.
@@ -57,7 +61,7 @@ However, modern armies train so that soldiers shoot more often and without hesit
 In modern armies, comradeship has become less important. Instead we have, to quote one American veteran, ‘manufactured contempt'.
 :::
 
-Group identity, familiarity, belonging-to-a-group, these emotions are way stronger than we realize. These fundamental and innate feelings are responsible for all our actions - good or evil. These emotions are so overpowering that they cloud our discernibility between good and evil- even feel apathetic and towards the impact of one's own actions. 
+Group identity, familiarity, belonging-to-a-group, these emotions are way stronger than we realize. These fundamental and innate feelings are responsible for all our actions - good or evil. These emotions are so overpowering that they cloud our discernibility between good and evil- even feel apathetic and towards the impact of one's own actions.
 
 :::multilinequote
 One of the effects of power, myriad studies show, is that it makes you see others in a negative light.13 If you’re powerful you’re more likely to think most people are lazy and unreliable. That they need to be supervised and monitored, managed and regulated, censored and told what to do. And because power makes you feel superior to other people, you’ll believe all this monitoring should be entrusted to you.
@@ -95,17 +99,17 @@ Similar negative view has plagued our education system as well. Kids are corrall
 
 :::multilinequote
 ..philosopher Ivan Illich said decades ago: ‘School is the advertising agency which makes you believe that you need the society as it is'.
-::: 
+:::
 
 :::multilinequote
 Time and again, researchers remark on the fact that almost everybody has something worthwhile to contribute – regardless of formal education – as long as everyone’s taken seriously.
 :::
 
-Modern psychologists propose *non-complementary behavior* as a rational measure for dealing with violent and unsavory behavior. This includes the ideologies of Mahatma Gandhi, Martin Luther King Jr, and even Jesus. 
+Modern psychologists propose *non-complementary behavior* as a rational measure for dealing with violent and unsavory behavior. This includes the ideologies of Mahatma Gandhi, Martin Luther King Jr, and even Jesus.
 
 :::multilinequote
 “It’s really very simple,’ explains Bastøy’s warden, Tom Eberhardt. ‘Treat people like dirt, and they’ll be dirt. Treat them like human beings, and they’ll act like human beings.'
-::: 
+:::
 
 
 :::multilinequote
@@ -126,9 +130,9 @@ To believe people are hardwired to be kind isn’t sentimental or naive. On the 
 ### Lessons
 
 - When is doubt, assume the best - We tend to have the negativity bias, or the *nocebo effect*. Address this bias with assuming the best of other people. Don't be ashamed to do good.
-- Think in win-win scenarios 
+- Think in win-win scenarios
 - Ask more questions
-- Temper your empathy, train your compassion and try to understand others - Having faith in others is as much a rational decision as an emotional one. 
+- Temper your empathy, train your compassion and try to understand others - Having faith in others is as much a rational decision as an emotional one.
 - Love you own as others love their own
 - Being kind to others is the new realism
 

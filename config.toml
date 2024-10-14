@@ -20,7 +20,7 @@ include_files = []
 resize_images = true
 highlight_code = true
 pre_render_math = false
-minify_html = false
+minify_html = true
 
 # Website Info
 [site]

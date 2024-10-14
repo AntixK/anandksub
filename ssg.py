@@ -1,33 +1,24 @@
-import itertools
 import os
 import re
 import shutil
-from collections import Counter
-from copy import deepcopy
-
-# import markdown
-from datetime import datetime
+import tomllib
+import itertools
 from http import server
 from pathlib import Path
+from copy import deepcopy
 from pprint import pformat
+from datetime import datetime
 from time import perf_counter
 from typing import List, Tuple
+from collections import Counter
 
-# from ext import MyExtension
-# from markdown import markdown
-# import mistune
-# from mistune.directives import FencedDirective, Admonition, TableOfContents
-# from ext import MyRenderer
 import mistletoe
-import tomllib
-from htmlmin import Minifier
-from jinja2 import Environment, FileSystemLoader
 from loguru import logger
-from watchdog.events import FileSystemEventHandler
+from htmlmin import Minifier
 from watchdog.observers import Observer
+from jinja2 import Environment, FileSystemLoader
+from watchdog.events import FileSystemEventHandler
 
-# from mistletoe.latex_renderer import LaTeXRenderer
-# from mistletoe.contrib.mathjax import MathJaxRenderer
 from ext import MyHtmlRenderer
 
 
@@ -55,10 +46,15 @@ def parse_config(CONFIG_FILE : Path):
 
     return config
 
-
 # Precompile regex patterns
 HEADER_PATTERN = re.compile(r'^\s*@.*$', re.MULTILINE)
 CONTENT_PATTERN = re.compile(r'@def.*$', re.MULTILINE)
+HTMLMINIFIER = Minifier(
+        remove_comments=True,
+        remove_empty_space=True,
+        remove_all_empty_space=False, # Be very careful when changing this
+        keep_pre=True,
+)
 
 def gather_md_files(dir, only_modified:bool = False) -> List:
     return sorted(list(dir.glob("**/*.md")))
@@ -131,8 +127,6 @@ def tag_list(config: dict) -> dict:
         # Get the header information
         header_info, _ = get_meta_info(post, config)
         # Convert tags to list of strings
-        # if "tags" in header_info and not header_info["is_draft"]:
-        #     header_info["tags"] = list(map(str.strip, header_info["tags"].strip('][').replace('"', '').split(',')))
         all_tags += header_info["tags"]
 
     tags = Counter(all_tags)
@@ -264,6 +258,10 @@ def insert_hfun(file: Path, inserts: dict):
     _env = Environment(loader=FileSystemLoader(str(file.parent)))
     template = _env.get_template(str(file.relative_to(file.parent)))
     html = template.render(index_data)
+
+    if DO_MINIFY:
+        html = do_minify_html(html)
+
     save_html(file, html)
 
 
@@ -365,26 +363,6 @@ def render_html(file: Path, config: dict) -> None:
     html_data.update(header_data)
 
     # Convert to html content
-    # html_content = markdown.markdown(md_content,
-    #                                  output_format='html5',
-    #                                  encoding="utf-8",
-    #                                  extensions=[
-    #                                             #  'markdown.extensions.smarty',
-    #                                              'markdown.extensions.footnotes',
-    #                                              'markdown.extensions.fenced_code',
-    #                                             #  MyExtension(),
-    #                                              ])
-    # markdown = mistune.create_markdown(plugins=['footnotes',
-    #                                             'math',
-    #                                              FencedDirective([
-    #                                                 Admonition(),
-    #                                                 TableOfContents(),
-    #                                             ]),
-    #                                             ],
-    #                                    renderer="html")
-    # html_content = markdown(md_content)
-
-    # print(html_data)
     html_content = mistletoe.markdown(md_content, MyHtmlRenderer)
 
     html_data.update({"html_content":html_content})
@@ -395,12 +373,11 @@ def render_html(file: Path, config: dict) -> None:
     # print(html)
 
     if DO_MINIFY:
-        # print()
-        logger.info(f"Minifying {file}")
-        html = minify_html(html)
+        html = do_minify_html(html)
 
     # =============================================
     save_html(file, html)
+
 
 def save_html(file: Path, html: str) -> None:
     parent_dir = file.relative_to(CONTENT_DIR).parent
@@ -450,15 +427,21 @@ def check_for_optimized_image_formats():
     else:
         logger.info("All media assets are optimized.")
 
-html_minifier = Minifier(
-        remove_comments=True,
-        remove_empty_space=True,
-        remove_all_empty_space=False, # Be very careful when changing this
-        keep_pre=True,
-)
 
-def minify_html(html_str: str) -> str:
-    return html_minifier.minify(html_str)
+
+def do_minify_html(html: str) -> str:
+    # print()
+    logger.info("Minifying html...")
+
+    # Compute the size of the html file
+    size_before = len(html) / 1024 # in KB
+
+    html = HTMLMINIFIER.minify(html)
+
+    size_after = len(html) / 1024 # in KB
+    logger.info(f"Size before: {size_before:.2f} KB, Size after: {size_after:.2f} KB, Saved: {size_before - size_after:.2f} KB")
+
+    return html
 
 # ============================ Watchdogs =========================== #
 
@@ -468,7 +451,7 @@ class ContentMonitor(FileSystemEventHandler):
             return
         elif event.event_type in ["created", "modified"]:
             logger.info(f"Reloading server due to file change: {event.src_path}")
-            render(clean=True)
+            build()
 
 # ============================ Server =========================== #
 class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
@@ -486,7 +469,7 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path not in self.SUFFIXES:
-            print(self.path)
+            # print(self.path)
             # self.path = self.path.lstrip("/")
             if (not self.path.endswith(".html") and
                 not self.path.endswith("/") and
@@ -523,6 +506,11 @@ class SSGHTTPServer(server.HTTPServer):
         self.base_path = base_path
 
 
+def build() -> None:
+    render(clean=True)
+    check_for_optimized_image_formats()
+    check_for_optimized_font_files()
+
 if __name__ == "__main__":
 
 
@@ -542,10 +530,7 @@ if __name__ == "__main__":
     # Load our template environment
     env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 
-    render(clean=True)
-    check_for_optimized_image_formats()
-    check_for_optimized_font_files()
-
+    build()
 
     # Setup the watcdog observers
     event_handler = ContentMonitor()

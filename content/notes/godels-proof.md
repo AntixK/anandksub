@@ -1,11 +1,15 @@
 @def title = "Gödel's Proof - Ernest Nagel & James Newman"
 @def published = "28 July 2021"
-@def tags = ["math", "philosophy", "self-referential"] 
+@def tags = ["math", "philosophy", "self-referential"]
 @def is_draft = false
+@def show_info = true
+@def has_code = false
+@def has_chart = false
+@def has_math = true
 
 &emsp; In this book, Nagel and Newman labours to explain the famous incompleteness theorems of Kurt Gödel and their mathematical and philosophical implications. They elaborate  the list of developments leading up to _Principia Mathematica_, which formed the colossal sculpture that Gödel destroyed.
 
-### Axiomatic systems and their consistency 
+### Axiomatic systems and their consistency
 
 &emsp; The earliest framework for a mathematical _proof_, in contrast to experimental science, is that of the _axiomatic method_ where a proposition is logically deduced based on a set of commonly accepted statements (axioms / postulates). The Greeks developed geometry based on this system - recall Euclid's _Elements_.
 
@@ -42,7 +46,7 @@ An absolute proof of consistency should have finite steps, finite number of oper
 
 Bertrand Russell and Whitehead took up the challenge of formalizing mathematics as posed by Hilbert. They identified formal logic as the most fundamental of all mathematics and began to formalize it in an attempt to prove its consistency. After Hilbert, algebra itself was converted to arithmetic, whose axioms were shown to be deducible from a small number of basic propositions as logical truths. Therefore, Russel and Whitehead decided to tackle formal logic and build up foundations of mathematics, while pursuing its absolute proof of consistency in their famous _Principia Mathematica_.
 
-### *Principia Mathematica* & Absolute Consistency 
+### *Principia Mathematica* & Absolute Consistency
 
 :::multilinequote
 _Principia_, in sum, created the essential instrument for investigating the entire system of arithmetic as an uninterrupted calculus - that is, a a system of meaningless marks, whose formulas (or "strings") are combined and transformed in accordance with stated rules of operation.
@@ -72,7 +76,7 @@ $$
 Which says there exists a numerical variable $x$ that is a successor to another numerical variable $y$. The numbers for these symbols (as they are merely strings) are $8, 4, 11, 9, 8, 11,5,7,13, 9$. The Gödel number for the above formula is
 
 $$
-2^{8} \x 3^{4} \x 5^{11} \x 7^{9} \x 11^{8} \x 13^{11} \x 17^{5} \x 19^{7} \x 23^{13} \x 29^{9} 
+2^{8} \x 3^{4} \x 5^{11} \x 7^{9} \x 11^{8} \x 13^{11} \x 17^{5} \x 19^{7} \x 23^{13} \x 29^{9}
 $$
 
 Similarly, a sequence of formulas with corresponding Gödel numbers $n_1, n_2, ... n_m$ can be combined to give a single godel number as $p_1^{n_1} \x p_2^{n_2} \x ... \x p_m^{n_m}$ where $p_i$ is the $i^{th}$ prime number.
@@ -81,7 +85,7 @@ This _arithmetization_ of formal calculus also yields the ability to verify whet
 
 Any meta-mathematical statement about the expressions in the formal calculus can be considered as a statement about their Gödel numbers and their arithmetic relations. Recall that the formal system of arithmetic is essentially describing the same. Therefore,  all of the meta-mathematical statements is can be adequately mapped back to the calculus itself.
 
-It is not difficult to anticipate Gödel's next set of arguments. 
+It is not difficult to anticipate Gödel's next set of arguments.
 1) An arithmetic formula $G$ can be constructed that represents the meta-mathematical statement that "The formula G is not demonstrable" *i.e.* provable. This can be done in a way such as a Gödel number $h$ represents "the formula associated with $h$ is not demonstrable".
 2) This, by definition, leads to a contradiction that $G$ is demonstrable if, and only if, $\neg G$ is demonstrable. This means that arithmetic is inconsistent.
 3) However, Gödel did not stop there. He proceeded to show that $G$ is not only undecidable, it is also _true_. The meta-mathematical statement "G is not demonstrable" is indeed true since both $G$ and $\neg G$ are demonstrable. Thus, the system is _incomplete_. In other words, we cannot deduce all arithmetic truths from the given set of axioms. Even if a system is augmented with additional axioms, other true but undecidable arithmetic statements will still exist.
@@ -89,8 +93,8 @@ It is not difficult to anticipate Gödel's next set of arguments.
 
 ### Caveats & Takeaways
 - Gödel's theorems do not say that no _finitistic absolute proof of consistency_ can be constructed for a given formal system. In fact it can be done as shown previously. For a simple enough system, its consistency can be proved.
-- Gödel's showed that no _finitistic absolute proof of consistency_ can be constructed _within_ arithmetic. However, it does not exclude the possibility of constructing a finitistic absolute proof of consistency _for_ arithmetic using another axiomatic system. This means an axiomatic system may exist in which a finitistic proof of consistency of arithmetic can be constructed provided, the proof is *not* capable of formulation within arithmetic [^6]. 
-- They show that there is an endless number of true arithmetic statements which cannot be formally deduced from any given set of axioms by a closed set of inference rules. This is an inherent inability of the axiomatic system pertaining to the arithmetic field (and by extension algebra, geometry and etc.). 
+- Gödel's showed that no _finitistic absolute proof of consistency_ can be constructed _within_ arithmetic. However, it does not exclude the possibility of constructing a finitistic absolute proof of consistency _for_ arithmetic using another axiomatic system. This means an axiomatic system may exist in which a finitistic proof of consistency of arithmetic can be constructed provided, the proof is *not* capable of formulation within arithmetic [^6].
+- They show that there is an endless number of true arithmetic statements which cannot be formally deduced from any given set of axioms by a closed set of inference rules. This is an inherent inability of the axiomatic system pertaining to the arithmetic field (and by extension algebra, geometry and etc.).
 :::multilinequote
 ..what we understand by the process of mathematical proof does not coincide with the exploitation of a formalized axiomatic method.
 :::

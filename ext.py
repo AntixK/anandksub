@@ -64,7 +64,7 @@ class MyHtmlRenderer(HtmlRenderer, LaTeXRenderer):
     def render_eqref_label(self, token) -> str:
         # Links to the equation label with the given tag.
 
-        print(self.eq_map)
+        # print(self.eq_map)
         eq_label = self.eq_map[token.eqtag]
         return f"<span class='eqref'>(<a href='#{token.eqtag}'>{eq_label}</a>)</span>"
 

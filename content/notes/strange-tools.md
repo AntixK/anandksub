@@ -1,8 +1,12 @@
 @def title = "Strange Tools: Art and Human Nature - Alva Noë"
 @def published = "24 July 2021"
-@def tags = ["art", "philosophy", "technology", "aesthetics"] 
+@def tags = ["art", "philosophy", "technology", "aesthetics"]
 @def is_draft = false
 @def show_info = true
+@def show_info = true
+@def has_code = false
+@def has_chart = false
+@def has_math = false
 
 &emsp; Alva Noë explores the question *Why is the perspective of an artist so different from that of a scientist?* The way art associates itself with creation, knowledge and understanding is quite different, and at times opposing, to the way science attends to these matters.
 
@@ -26,7 +30,7 @@ The book delves a lot into reversals of commonly asked questions just as an arti
 To be alive is to be organized...
 :::
 
-&emsp; The first aspect of art is that it organizes us. Any activity that organizes us has artistic potential as also helps us introspect and reorganize. An activity can be said to be organized if it is natural or basic, has delicate cognitive involvement, structure, adaptation/responsive (a sort of entrainment and "going with the flow"), a function and helps reach some emotional state. These six qualities, the author proposes, are crucial for organized activity and art. 
+&emsp; The first aspect of art is that it organizes us. Any activity that organizes us has artistic potential as also helps us introspect and reorganize. An activity can be said to be organized if it is natural or basic, has delicate cognitive involvement, structure, adaptation/responsive (a sort of entrainment and "going with the flow"), a function and helps reach some emotional state. These six qualities, the author proposes, are crucial for organized activity and art.
 
 A remarkable point is that the organized activity requires both delicate cognitive involvement and entrainment but without deliberate contemplation and control. These apparently opposing qualities can be patently found in a musician's performance. This intermediate state, referred as _embodiment state_, is the result of habitual practice of that activity so that it becomes one's _second nature_.
 
@@ -111,7 +115,7 @@ The common perception about art, leading to the usual criticism of modern art, i
 Art is a problem for itself.Art is always, whatever else it is about, an engagement with other art, with artists, and audiences, and teacher and students. Art is, really, _itself_, a critical practice.
 :::
 
-Nöe extends philosopher Daniel Dennett's idea that brain is merely a syntactic engine and the evolved consciousness is a semantic engine. Though reorganization, art is an neuroscientific experiment about our own perception and understanding. Art imbibes the experiencing person, signally a way into an analysis of our consciousness, constrained by our brain. For instance, visual artistic explorations provide insights into our consciousness though the constrained 2D perception of the world. Therefore artistic explorations are neuroscientific investigations indeed and should be considered as  equally valid. Furthermore, artistic investigations and experiences leave neural traces through reorganization. 
+Nöe extends philosopher Daniel Dennett's idea that brain is merely a syntactic engine and the evolved consciousness is a semantic engine. Though reorganization, art is an neuroscientific experiment about our own perception and understanding. Art imbibes the experiencing person, signally a way into an analysis of our consciousness, constrained by our brain. For instance, visual artistic explorations provide insights into our consciousness though the constrained 2D perception of the world. Therefore artistic explorations are neuroscientific investigations indeed and should be considered as  equally valid. Furthermore, artistic investigations and experiences leave neural traces through reorganization.
 
 :::multilinequote
 Aesthetic judgements are the beginning of conversations and not their conclusions. Art is in the setting of arguments, criticism, and persuasion.
