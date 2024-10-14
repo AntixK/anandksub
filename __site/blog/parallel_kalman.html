@@ -340,18 +340,18 @@ p(\vy_{1:2}) &amp;= p(\vy_1, \vy_2) \\
 &amp;= \lambda_1 \int \lambda_2 \phi_1
 \end{aligned}
 $$<a id=eq:marginal-decomp class='anchor'></a></p>
-<p>Equations <span class='eqref'>(<a href='#eq:filter-decomp'>1</a>)</span> and <span class='eqref'>(<a href='#eq:marginal-decomp'>2</a>)</span> can be combined to result
+<p>Equations <span class='eqref'>(<a href='#eq:filter-decomp'>5</a>)</span> and <span class='eqref'>(<a href='#eq:marginal-decomp'>7</a>)</span> can be combined to result
 $$
 \begin{pmatrix} \phi_1 \\ \lambda_1 \end{pmatrix} \otimes \begin{pmatrix} \phi_2 \\ \lambda_2 \end{pmatrix} = \begin{pmatrix} p(\vx_2 | \vy_{1:2}) \\ p(\vy_{1:2}) \end{pmatrix}
 $$<a id=eq:operator-k2 class='anchor'></a></p>
-<p>The point of equations <span class='eqref'>(<a href='#eq:filter-decomp'>1</a>)</span> to <span class='eqref'>(<a href='#eq:operator-k2'>3</a>)</span> is to sever the dependence of the filtering update on the previous hidden state $\vx$ as they depend only upon $\vx_1$. For instance,
+<p>The point of equations <span class='eqref'>(<a href='#eq:filter-decomp'>5</a>)</span> to <span class='eqref'>(<a href='#eq:operator-k2'>8</a>)</span> is to sever the dependence of the filtering update on the previous hidden state $\vx$ as they depend only upon $\vx_1$. For instance,
 $$
 \begin{aligned}
 p(\vx_2 | \vy_{1:k}) &amp;= \frac{\int  p( \vy_{2:k} | \vx_1) p(\vx_k | \vy_{2:k}, \vx_1) p(\vx_1 | \vy_1) d\vx_1}{\int p(\vy_{2:k} | \vx_1) p(\vx_1 | \vy_1) d\vx_1} \\
 p(\vy_{1:k}) &amp;= p(\vy_1) \int p(\vy_{2:k} | \vx_1) p(\vx_1 | \vy_1) d\vx_1
 \end{aligned}
 $$</p>
-<p>In fact, this can be generalized to dependence upon any of the previous states $\vx_{k-l}$ for filtering at state $\vx_k$ <sup id="fnref:5"><a class="fnref" href="#fndef:5">[5]</a></sup>. By induction, we can generalize equation <span class='eqref'>(<a href='#eq:operator-k2'>3</a>)</span> to</p>
+<p>In fact, this can be generalized to dependence upon any of the previous states $\vx_{k-l}$ for filtering at state $\vx_k$ <sup id="fnref:5"><a class="fnref" href="#fndef:5">[5]</a></sup>. By induction, we can generalize equation <span class='eqref'>(<a href='#eq:operator-k2'>8</a>)</span> to</p>
 <p>$$
 \begin{pmatrix} \phi_1 \\ \lambda_1 \end{pmatrix} \otimes \begin{pmatrix} \phi_2 \\ \lambda_2 \end{pmatrix} \otimes \cdots \otimes \begin{pmatrix} \phi_k \\ \lambda_k \end{pmatrix} = \begin{pmatrix} p(\vx_k | \vy_{1:k}) \\ p(\vy_{1:k}) \end{pmatrix}
 $$</p>
@@ -563,7 +563,7 @@ def parallel_kalman(model: NamedTuple, y: jnp.array) -&gt; Tuple:
 
         <p><table class="fndef" id="fndef:1">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td>
                 <td class="fndef-content">A detailed discussion of the parallel prefix-sum algorithm can be found  <a href="https://www.cs.cmu.edu/~guyb/papers/Ble93.pdf">here</a>.</td>
             </tr>
         </table></p>
@@ -571,7 +571,7 @@ def parallel_kalman(model: NamedTuple, y: jnp.array) -&gt; Tuple:
 
         <p><table class="fndef" id="fndef:2">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td>
                 <td class="fndef-content">The technique discussed here was originally proposed in <a href="https://arxiv.org/abs/1905.13002">this paper</a>.</td>
             </tr>
         </table></p>
@@ -579,7 +579,7 @@ def parallel_kalman(model: NamedTuple, y: jnp.array) -&gt; Tuple:
 
         <p><table class="fndef" id="fndef:3">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:3">[3]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:3">[3]</a></td>
                 <td class="fndef-content">The two distributions are actually a simplification. The more general solution would be the join posterior $p(\vx_{0:T}|\vy_{1:T})$ over a period of measurements $1, \cdots,T$. However, this is practically intractable and not scalable. So, the problem is reduced to computing only the marginals - filtering, prediction, and smoothing distributions. Kalman filter addresses the former two, while the Rauch-Tung-Striebel smoother addresses the latter.</td>
             </tr>
         </table></p>
@@ -587,7 +587,7 @@ def parallel_kalman(model: NamedTuple, y: jnp.array) -&gt; Tuple:
 
         <p><table class="fndef" id="fndef:4">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:4">[4]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:4">[4]</a></td>
                 <td class="fndef-content">Highly recommend Simo Särkkä's book <em>Bayesian Filtering and Smoothing</em> for a detailed discussion of Kalman filter and other Bayesian filtering techniques. The book can be freely accessed <a href="https://users.aalto.fi/~ssarkka/#publications">here</a>. The derivation for the equations provided here can be found in the book in Chapter 4, section 4.3.</td>
             </tr>
         </table></p>
@@ -595,7 +595,7 @@ def parallel_kalman(model: NamedTuple, y: jnp.array) -&gt; Tuple:
 
         <p><table class="fndef" id="fndef:5">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:5">[5]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:5">[5]</a></td>
                 <td class="fndef-content">This is possible mainly due to the Markov property.</td>
             </tr>
         </table></p>
@@ -603,7 +603,7 @@ def parallel_kalman(model: NamedTuple, y: jnp.array) -&gt; Tuple:
 
         <p><table class="fndef" id="fndef:6">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:6">[6]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:6">[6]</a></td>
                 <td class="fndef-content">The proof of the associativity can be found in the appendix of <a href="https://arxiv.org/abs/1905.13002">this paper</a>.</td>
             </tr>
         </table></p>

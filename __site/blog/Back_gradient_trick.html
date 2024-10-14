@@ -242,13 +242,13 @@ $$<a id=eq:sgd class='anchor'></a></p>
 
 <p>  From the above graph, it is clear that there is no, or rather shouldn't be, one-to-one mapping between the initial points and the optimum. A good optimizer should converge to the optimum from any initial point. However, back-tracing requires that the mapping be one-to-one <em>i.e.</em> reversible. How do we resolve this apparent paradox? It is resolved from the observation that each step of the gradient descent update is bijective and can be exactly inverted. The entire trace is a series of small bijective mappings and the convergence to the optimum hinges on the local gradient. If we can retrieve the local gradient exactly, we can reverse the entire trace!</p>
 <p><strong>Note</strong>: The above contours represent the <em>loss landscape</em> and not the $\lambda-\theta$ space. Even when the loss landscape has one (simple) global minimum, as shown above, the $\lambda-\theta$ space can have multiple optima.</p>
-<p>Mathematically, unrolled version of equation <span class='eqref'>(<a href='#eq:sgd'>1</a>)</span> can be constructed as function $h : \R^{|\vtheta|} \x \R^{|\vlambda|} \to \R^{|\vtheta|}$ which takes in the inputs $\vlambda$ and the initial parameters $\vtheta_1$ and outputs the trained parameters $\vtheta_T$.</p>
+<p>Mathematically, unrolled version of equation <span class='eqref'>(<a href='#eq:sgd'>2</a>)</span> can be constructed as function $h : \R^{|\vtheta|} \x \R^{|\vlambda|} \to \R^{|\vtheta|}$ which takes in the inputs $\vlambda$ and the initial parameters $\vtheta_1$ and outputs the trained parameters $\vtheta_T$.</p>
 <p>$$
 h(\vlambda, \vtheta_1) = \vtheta_T
 $$</p>
 <p>The function $h$ represents the trajectory of points $\vtheta_1 \to \vtheta_T$, and itself represents a (massive) computational graph. The task now is to address the irreversibility of the above function to obtain the hyperparameter gradient $\nabla \vlambda$.</p>
 <h2>Back-Gradient Trick</h2>
-<p>  Observe that the equations of the gradient descent, like equation <span class='eqref'>(<a href='#eq:sgd'>1</a>)</span>, are reversible. One can easily obtain $\vtheta_t$ from $\vtheta_{t+1}$ given $\nabla \vtheta_t$. Therefore, the naïve method is to store every intermediate weight gradients $\nabla \vtheta_1, \nabla \vtheta_2, \ldots, \nabla \vtheta_T$ for traversing back across $h$ <sup id="fnref:1"><a class="fnref" href="#fndef:1">[1]</a></sup>.</p>
+<p>  Observe that the equations of the gradient descent, like equation <span class='eqref'>(<a href='#eq:sgd'>2</a>)</span>, are reversible. One can easily obtain $\vtheta_t$ from $\vtheta_{t+1}$ given $\nabla \vtheta_t$. Therefore, the naïve method is to store every intermediate weight gradients $\nabla \vtheta_1, \nabla \vtheta_2, \ldots, \nabla \vtheta_T$ for traversing back across $h$ <sup id="fnref:1"><a class="fnref" href="#fndef:1">[1]</a></sup>.</p>
 <p>However, this method is quite memory intensive and becomes impractical even for medium-sized problems $(\dim(\theta) \geq 10^2)$ as this requires storing weights at every optimization step. The memory complexity would be $\fO(L|\theta|)$ where the number of iterations $L$ can be in 1000s. Furthermore, if the gradient descent algorithm becomes a bit more sophisticated like heavy-ball momentum, Nesterov's momentum, and RMSprop, then all their intermediate values also need to be stored.</p>
 <p>  An alternative method is the <em>back-gradient method</em><sup id="fnref:2"><a class="fnref" href="#fndef:2">[2]</a></sup> where each step of the gradient descent is reversed, instead of the whole trace $h$. In each step, the gradient is recomputed, rather than stored.</p>
 <p>$$
@@ -478,7 +478,7 @@ $$</p>
 
         <p><table class="fndef" id="fndef:1">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td>
                 <td class="fndef-content">This observation was first made by Justin Domke in his 2012 <a href="https://people.cs.umass.edu/~domke/papers/2012aistats.pdf">paper</a>.</td>
             </tr>
         </table></p>
@@ -486,7 +486,7 @@ $$</p>
 
         <p><table class="fndef" id="fndef:2">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td>
                 <td class="fndef-content">The term <em>back-gradient</em> is relatively new. There have been many names used in literature like <em>reversible learning</em>, <em>back optimization</em>, and <em>hypergradients</em>.</td>
             </tr>
         </table></p>
@@ -494,7 +494,7 @@ $$</p>
 
         <p><table class="fndef" id="fndef:3">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:3">[3]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:3">[3]</a></td>
                 <td class="fndef-content">From an information theoretic perspective, optimization always moves from a high-entropy initial state to a low-entropy (ideally zero-entropy) optimum. Attractors, saddle points, and plateaus are low entropy states that also cause multiple trajectories to converge towards them, besides the optimum. Once multiple trajectories converge, then they cannot be uniquely traced back.</td>
             </tr>
         </table></p>
@@ -502,7 +502,7 @@ $$</p>
 
         <p><table class="fndef" id="fndef:4">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:4">[4]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:4">[4]</a></td>
                 <td class="fndef-content">A slightly more memory-efficient algorithm is given in <a href="https://arxiv.org/abs/1502.03492">Maclaurin et. al.</a> Algorithm 3 and the code follows the same.</td>
             </tr>
         </table></p>
@@ -510,7 +510,7 @@ $$</p>
 
         <p><table class="fndef" id="fndef:5">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:5">[5]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:5">[5]</a></td>
                 <td class="fndef-content">Why isn't vanilla SGD exactly reversible? From the figure, SGD + momentum and Nesterov momentum are both exactly reversible. This is because the $\gamma$ (akin to the mass) acts as the anchor for reversibility. In the code for momentum-based methods, both the weights and the velocity parameters are stored as <code>ExactArray</code> <em>i.e</em> more information per step is stored compared to vanilla SGD. For exact reversibility of vanilla SGD, we have no other option but to store the entire gradient which is infeasible as discussed previously.</td>
             </tr>
         </table></p>
@@ -518,7 +518,7 @@ $$</p>
 
         <p><table class="fndef" id="fndef:6">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:6">[6]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:6">[6]</a></td>
                 <td class="fndef-content">See Baydin et. al.'s 2018 <a href="https://openreview.net/forum?id=BkrsAzWAb">paper</a> for a more practical solution to this problem.</td>
             </tr>
         </table></p>

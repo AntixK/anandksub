@@ -289,7 +289,7 @@ Here, we computed only till $A^3$ since we know the longest cycle in the graph i
 $$
 e^A = \sum_{k=0}^\infty \frac{1}{k!} A^k
 $$
-Computing the $k^{th}$ power of a matrix can be done at $\fO(\log_2 k)$ matrix multiplications, each of which has $\fO(d^3)$ complexity and we have an infinite series to compute. The matrix exponential $e^A$, on the other hand, can be computed in $\fO(d^3)$ directly without numerical issues. Therefore, we can simply replace this in equation <span class='eqref'>(<a href='#eq:2'>2</a>)</span> as
+Computing the $k^{th}$ power of a matrix can be done at $\fO(\log_2 k)$ matrix multiplications, each of which has $\fO(d^3)$ complexity and we have an infinite series to compute. The matrix exponential $e^A$, on the other hand, can be computed in $\fO(d^3)$ directly without numerical issues. Therefore, we can simply replace this in equation <span class='eqref'>(<a href='#eq:2'>4</a>)</span> as
 $$
 \begin{aligned}
 tr \big (\sum_{k=0}^\infty A^k \big) &amp;= d \\
@@ -308,7 +308,7 @@ Where $h(W) = tr(e^{W \circ W})$. Now, this constraint is smooth, computable (co
 
         <p><table class="fndef" id="fndef:1">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td>
                 <td class="fndef-content">Another simple idea is to remove or "peel" off the lead nodes until we have either peeled off all nodes (acyclic) or no leaf nodes left (cyclic). <a href="https://www.cs.hmc.edu/~keller/courses/cs60/s98/examples/acyclic/">Link</a</td>
             </tr>
         </table></p>
@@ -316,7 +316,7 @@ Where $h(W) = tr(e^{W \circ W})$. Now, this constraint is smooth, computable (co
 
         <p><table class="fndef" id="fndef:2">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td>
                 <td class="fndef-content">Robinson R.W. (1977) Counting unlabeled acyclic digraphs. In: Little C.H.C. (eds) Combinatorial Mathematics V. Lecture Notes in Mathematics, vol 622. Springer, Berlin, Heidelberg. https://doi.org/10.1007/BFb0069178</td>
             </tr>
         </table></p>

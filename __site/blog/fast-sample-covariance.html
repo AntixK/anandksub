@@ -323,13 +323,13 @@ $$<a id=eq:seq_cov class='anchor'></a></p>
 $$
 S_i  = \frac{N - 2}{N-1} S_{i-1} + \frac{1}{N} (\vx_i - \hat{\vmu})(\vx_i - \hat{\vmu})^T
 $$
-The above formula is just a few steps away from equation <span class='eqref'>(<a href='#eq:seq_cov'>1</a>)</span> (full derivation is shown <a href="https://stats.stackexchange.com/a/310701">here</a>). However, in practice it does not work well due to the need for proper initialization and is often numerically unstable<sup id="fnref:2"><a class="fnref" href="#fndef:2">[2]</a></sup>.</p>
+The above formula is just a few steps away from equation <span class='eqref'>(<a href='#eq:seq_cov'>2</a>)</span> (full derivation is shown <a href="https://stats.stackexchange.com/a/310701">here</a>). However, in practice it does not work well due to the need for proper initialization and is often numerically unstable<sup id="fnref:2"><a class="fnref" href="#fndef:2">[2]</a></sup>.</p>
 <p>It is quite fascinating that an intermediate step in a mathematical procedure yields numerically efficient implementation rather than the final, supposedly more beautiful, result.</p>
 <hr />
 
         <p><table class="fndef" id="fndef:1">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td>
                 <td class="fndef-content">Looking at you, Hilbert-Schmidt Independence Criterion (HSIC) :smirk:</td>
             </tr>
         </table></p>
@@ -337,7 +337,7 @@ The above formula is just a few steps away from equation <span class='eqref'>(<a
 
         <p><table class="fndef" id="fndef:2">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td>
                 <td class="fndef-content">Although, this has been addressed by the Welford's online algorithm.</td>
             </tr>
         </table></p>

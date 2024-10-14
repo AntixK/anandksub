@@ -241,7 +241,7 @@ Where the probability that a sampled point is an inlier is $|\fI(\theta, \sigma,
 <h3>RANSAC Code</h3>
 <pre><code class="language-python">
 import jax # v0.4.26
-import jax.numpy as jnp 
+import jax.numpy as jnp
 from typing import Tuple
 
 def dist(x1, y1, x2, y2, x, y):
@@ -267,9 +267,9 @@ def fit(x, y):
     return jnp.linalg.lstsq(x, y)[0]
 
 
-def ransac(data: Tuple, 
-           S: int, 
-           sigma: float, 
+def ransac(data: Tuple,
+           S: int,
+           sigma: float,
            beta:float) -&gt; jax.Array:
     """
     RANSAC algorithm in JAX.
@@ -289,7 +289,7 @@ def ransac(data: Tuple,
     assert S &lt; N, "S must be less than N"
     # assert 0.0 &lt; beta &lt; 1.0 , "beta must be in (0.0, 1.0)"
 
-    I = 0    
+    I = 0
     key = jax.random.key(42345)
 
     # def fwd():
@@ -297,36 +297,36 @@ def ransac(data: Tuple,
     for _ in range(1000):
         # Sample a subset
         key, subkey = jax.random.split(key)
-        i = jax.random.permutation(subkey, 
-                                   jnp.arange(x.shape[0]), 
-                                   independent=True) 
+        i = jax.random.permutation(subkey,
+                                   jnp.arange(x.shape[0]),
+                                   independent=True)
         ids = i[:S]
         xs = x[ids]
         ys = y[ids]
 
         ws = fit(xs, ys)
         ys_pred = predict(ws, xs)
-        dist_vec = lambda x__, y__: dist(xs[0], 
-                                   ys_pred[0], 
-                                   xs[-1], 
-                                   ys_pred[-1], 
-                                   x__, 
+        dist_vec = lambda x__, y__: dist(xs[0],
+                                   ys_pred[0],
+                                   xs[-1],
+                                   ys_pred[-1],
+                                   x__,
                                    y__)
         d = jax.vmap(dist_vec)(x, y)[:, 0] # SIMD computation
-        
+
         inds = jnp.where(d &lt; sigma, True, False)
         I = inds.sum()
 
         if I &gt; beta * N:
             d_final = d.copy()
             break
-            
+
     # Fit the model on the final inlier set
     id_final = jnp.arange(d_final.shape[0])[d_final &lt; sigma]
-    
+
     x_final = jnp.ones((id_final.shape[0], x.shape[1]))
     y_final = jnp.zeros((id_final.shape[0], y.shape[1]))
-    
+
     # print(x_final.shape, x.shape)
     x_final = x_final.at[:].set(x[id_final])
     y_final = y_final.at[:].set(y[id_final])
@@ -368,11 +368,11 @@ L(\vx, \vy | \theta) &amp;= \int L(\vx, \vy | \theta, \sigma)\fU(0, \sigma_{\tex
 \end{aligned}
 $$<a id=eq:marglik class='anchor'></a></p>
 <p>Where $\sigma_1 &lt; \sigma_2 &lt;\cdots &lt; \sigma_K &lt; \sigma_{\max}$.
-Interestingly, we can consider the likelihood as the importance or <em>weight</em> of that point and fit the model using weighted least squares (WLS).</p>
+Interestingly, we can consider the likelihood as the importance or <em>weight</em> of that point and fit the model using the weighted least squares (WLS) algorithm.</p>
 <h3>σ-consensus algorithm</h3>
 <p>  Simply marginalizing away the $\sigma$ doesn't yield a proper algorithm. Note that even after marginalization, we still have to set a max noise level $\sigma_{\max}$ as an input parameter. This, however, is much easier to set than the noise threshold $\sigma$.</p>
 <p>Given a max noise level in the data $\sigma_{\max}$, we can get the worse possible inlier set $\fI$ as the initial set, based on the given model $\theta$ and the inlier threshold is given by $\tau(\sigma_{\max})$. We then divide the max noise level into $m$ sub-levels $\sigma'$. When we encounter a data point that has a greater noise level than the current one, we update the model and the likelihood, and move onto the next noise level.</p>
-<ol>
+<div class="important"><ol>
 <li>Initialize $\delta_{\sigma} \leftarrow \sigma_{\max} / m, \fI^\ast \leftarrow \emptyset$</li>
 <li>For each point $\vx, \vy$ in $\fI$
 <ol>
@@ -387,7 +387,7 @@ Interestingly, we can consider the likelihood as the importance or <em>weight</e
 <p>$\theta = \underset{\theta}{\argmin}f(\theta; \fI^\ast)$. Refit the model to the consensus set $\fI^\ast$ using least squares.</p>
 </li>
 <li>
-<p>$w_i \leftarrow w_i + L(\vx', \vy', \theta)/\sigma_{\max}, \forall \vx', \vy' \in \fI.$ Update the weights $w_i$ for <em>all the points</em> from the marginal likelihood (equation <span class='eqref'>(<a href='#eq:marglik'>2</a>)</span>)</p>
+<p>$w_i \leftarrow w_i + L(\vx', \vy', \theta)/\sigma_{\max}, \forall \vx', \vy' \in \fI.$ Update the weights $w_i$ for <em>all the points</em> from the marginal likelihood (equation <span class='eqref'>(<a href='#eq:marglik'>4</a>)</span>)</p>
 </li>
 <li>
 <p>$\fI^\ast \leftarrow \fI^\ast \cup \{\vx, \vy\}$. Add the point to the consensus set.</p>
@@ -400,11 +400,11 @@ Interestingly, we can consider the likelihood as the importance or <em>weight</e
 </ol>
 </li>
 <li>$\theta^\ast = \underset{\theta}{\argmin}f(\theta; \fI^\ast, w)$. Refit model on the consensus set using <strong>weighted least squares</strong>.</li>
-</ol>
+</ol></div>
 <h3>Model Quality</h3>
 <p>The procedure for getting the best model in the original RANSAC is based on the size of the consensus set. If the size of $\fI &gt; \beta N$, then we terminate. More generally, we can construct a quality function $Q$ such that the higher the quality, the better the algorithm. We can define the quality function as the log likelihood of the model at a given noise level $\sigma$
 $$
-Q := \log L(\theta, \fD | \sigma) 
+Q := \log L(\theta, \fD | \sigma)
 $$</p>
 <p>For RANSAC, let $L_{\text{RANSAC}}(\theta, \sigma, (\vx, \vy))$ be the likelihood function of being an inlier (<em>i.e.</em> belonging to the consensus set), for a given noise level $\sigma$ at the given point $\vy, \vy$.</p>
 <p>$$
@@ -424,8 +424,8 @@ Q_{\text{RANSAC}} &amp;=  \log \prod_{(\vx, \vy) \in \fD} L_{\text{RANSAC}}(\the
 &amp;= |\fI(\theta, \sigma, \fD)|
 \end{aligned}
 $$</p>
-<p>For MAGSAC, the likelihood of the model for each data point is given by equation <span class='eqref'>(<a href='#eq:magsac_lik'>1</a>)</span>. Marginalizing over $\sigma$, we get</p>
-<p>$$   
+<p>For MAGSAC, the likelihood of the model for each data point is given by equation <span class='eqref'>(<a href='#eq:magsac_lik'>3</a>)</span>. Marginalizing over $\sigma$, we get</p>
+<p>$$
 \begin{aligned}
 Q_{\text{MAGSAC}} &amp;= \frac{1}{\sigma_{\max}}\int_0^{\sigma_{\max}} \log \prod_{(\vx, \vy) \in \fD}L(\vx, \vy | \theta, \sigma)\; d\sigma \\
 &amp;\approx \frac{1}{\sigma_{\max}} \sum_{i=1}^{K} \left [i (\log 2C(d)l - d\log \sigma_i) - \frac{R_i}{\sigma_i^2} + (d-1)B_i \right ](\sigma_i - \sigma_{i-1})
@@ -438,7 +438,7 @@ $$</p>
 
         <p><table class="fndef" id="fndef:1">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td>
                 <td class="fndef-content">Barath, Daniel, Jiri Matas, and Jana Noskova. "MAGSAC: marginalizing sample consensus." Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2019.</td>
             </tr>
         </table></p>
@@ -446,7 +446,7 @@ $$</p>
 
         <p><table class="fndef" id="fndef:2">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td>
                 <td class="fndef-content">In his article <a href="https://cims.nyu.edu/~andrewgw/caseforbdl/">The Case for Bayesian Deep Learning</a>, Andrew Gordon Wilson writes - "<em>The key distinguishing property of a Bayesian approach is marginalization instead of optimization, not the prior, or Bayes rule.</em>"</td>
             </tr>
         </table></p>

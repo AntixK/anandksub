@@ -268,7 +268,7 @@ def complex_step_diff(func, x, h):
     return np.imag(func(z) / h)
 </code></pre>
 <h3>Comparison with Automatic Differentiation</h3>
-<p>The equation <span class='eqref'>(<a href='#eq:com_diff'>3</a>)</span> and forward-mode automatic differentiations bears a close relationship. Consider the function $f(x_1, x_2) = x_1^2 \sin(x_2)$. The differential $df/d x_1$ can be computed by forward-mode autodiff and complex-step differentiation as follows.</p>
+<p>The equation <span class='eqref'>(<a href='#eq:com_diff'>5</a>)</span> and forward-mode automatic differentiations bears a close relationship. Consider the function $f(x_1, x_2) = x_1^2 \sin(x_2)$. The differential $df/d x_1$ can be computed by forward-mode autodiff and complex-step differentiation as follows.</p>
 <p>$$
 \begin{aligned}
 \Delta x_1 &amp;= 1 &amp;&amp;&amp; h_1 &amp;= 1e-20 \\
@@ -283,7 +283,7 @@ df/dx_1 &amp;= 2x_1\sin(x_2) &amp;&amp;&amp; df/dx_1 &amp;= \Im[\bar{f}]/h_1 = 2
 $$<a id=eq:comp_cs_ad class='anchor'></a></p>
 <p>Both methods yield the same result. The perturbations $\Delta x$ are stored in a separate variables in autodiff, while they are stored in the imaginary parts in complex-step differentiation. Compared to the forward (and reverse) mode autodiff that computes gradients based on perturbations at the level of machine precision<sup id="fnref:2"><a class="fnref" href="#fndef:2">[2]</a></sup>, complex-step too can produce equally accurate gradients at the level of machine precision (refer to above figure).</p>
 <p>  However, complex-step differentiation is not applicable in cases where there is a complicated control flow in the computational graph of the function $f$. These control flows often result in discontinuities. Complex-step differentiation requires specific tricks to handle each of these cases<sup id="fnref:3"><a class="fnref" href="#fndef:3">[3]</a></sup> while autodiff handles them in a more rigorous manner. Moreover, complex-step always performs additional computations
-compared to autodiff as shown in equation <span class='eqref'>(<a href='#eq:comp_cs_ad'>4</a>)</span>. For these reasons, autodiff should still be preferred.</p>
+compared to autodiff as shown in equation <span class='eqref'>(<a href='#eq:comp_cs_ad'>7</a>)</span>. For these reasons, autodiff should still be preferred.</p>
 <hr />
 <h2>2 : Complex Momentum Stochastic Gradient Descent</h2>
 <!-- &emsp; 
@@ -319,7 +319,7 @@ V(G, D) = \E[f(D(\vx))] + \E[f(-D(G(\vz)))]$<sup id="fnref:nag"><a class="fnref"
 <p class = "caption-text ">Behold, the eye!</p>
 
 <p>The above figure shows the training trajectories of Dirac GAN<sup id="fnref:dirac"><a class="fnref" href="#fndef:dirac">[6]</a></sup> with learning rate $\alpha = 0.01$ across various momentum values - no momentum($\nu=0$), positive, negative, and even complex momentum. Intuitively, if positive momentum is akin to a heavy ball that accelerates the gradient descent, negative momentum is like friction that slows it down<sup id="fnref:negmom"><a class="fnref" href="#fndef:negmom">[7]</a></sup>. From the above figure, the training converges for all momentum values <em>except</em> for a positive-valued momentum ($\nu = 0.9$).</p>
-<p>If positive momentum values work well for non-adversarial problems, and negative momentum works for adversarial problems, what if we use a complex valued momentum $\nu$? That way, we may obtain a more generic first-order optimizer. That exactly what Lorraine et. al. did<sup id="fnref:complexsgd"><a class="fnref" href="#fndef:complexsgd">[8]</a></sup>. We can directly modify the equation <span class='eqref'>(<a href='#eq:sgd'>5</a>)</span> for a complex0valued momentum as</p>
+<p>If positive momentum values work well for non-adversarial problems, and negative momentum works for adversarial problems, what if we use a complex valued momentum $\nu$? That way, we may obtain a more generic first-order optimizer. That exactly what Lorraine et. al. did<sup id="fnref:complexsgd"><a class="fnref" href="#fndef:complexsgd">[8]</a></sup>. We can directly modify the equation <span class='eqref'>(<a href='#eq:sgd'>8</a>)</span> for a complex0valued momentum as</p>
 <p>$$
 \begin{aligned}
 \Re\{\upsilon_{t+1}\} &amp;= \Re \{\nu \, \upsilon_t - \nabla_{\theta} f \} \\
@@ -384,7 +384,7 @@ $$<a id=eq:minmax-gen class='anchor'></a></p>
 
         <p><table class="fndef" id="fndef:1">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td>
                 <td class="fndef-content">Refer to this <a href="https://math.stackexchange.com/a/888280">stackexchange answer</a> for a derivation.</td>
             </tr>
         </table></p>
@@ -392,7 +392,7 @@ $$<a id=eq:minmax-gen class='anchor'></a></p>
 
         <p><table class="fndef" id="fndef:2">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td>
                 <td class="fndef-content">Refer to chapter 3 of Griewank, A. and Walther, A., 2008. Evaluating derivatives: principles and techniques of algorithmic differentiation. SIAM.</td>
             </tr>
         </table></p>
@@ -400,7 +400,7 @@ $$<a id=eq:minmax-gen class='anchor'></a></p>
 
         <p><table class="fndef" id="fndef:3">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:3">[3]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:3">[3]</a></td>
                 <td class="fndef-content">Examples of handling special control flows can be found in Martins et. al.'s <a href="https://hal.archives-ouvertes.fr/hal-01483287/document">paper</a>.</td>
             </tr>
         </table></p>
@@ -408,7 +408,7 @@ $$<a id=eq:minmax-gen class='anchor'></a></p>
 
         <p><table class="fndef" id="fndef:adam">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:adam">[4]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:adam">[4]</a></td>
                 <td class="fndef-content">The squared-gradient terms that you see in RMSProp, Adam etc, is basically an approximation of the local curvature (Hessian) of the loss landscape. These techniques adapt the learning rate using this local curvature, although from the way they are written in literature, one may think of them as modifying just the velocity factor.</td>
             </tr>
         </table></p>
@@ -416,7 +416,7 @@ $$<a id=eq:minmax-gen class='anchor'></a></p>
 
         <p><table class="fndef" id="fndef:nag">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:nag">[5]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:nag">[5]</a></td>
                 <td class="fndef-content">Nagarajan, Vaishnavh, and J. Zico Kolter. <em>Gradient descent GAN optimization is locally stable.</em> Advances in neural information processing systems 30 (2017).</td>
             </tr>
         </table></p>
@@ -424,7 +424,7 @@ $$<a id=eq:minmax-gen class='anchor'></a></p>
 
         <p><table class="fndef" id="fndef:dirac">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:dirac">[6]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:dirac">[6]</a></td>
                 <td class="fndef-content">Mescheder, L., Geiger, A., &amp; Nowozin, S. (2018, July). <em>Which training methods for gans do actually converge?</em>. In International conference on machine learning (pp. 3481-3490). PMLR. <a href="https://arxiv.org/abs/1801.04406">ArXiv Link</a</td>
             </tr>
         </table></p>
@@ -432,7 +432,7 @@ $$<a id=eq:minmax-gen class='anchor'></a></p>
 
         <p><table class="fndef" id="fndef:negmom">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:negmom">[7]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:negmom">[7]</a></td>
                 <td class="fndef-content">Gidel, G., Hemmat, R. A., Pezeshki, M., Le Priol, R., Huang, G., Lacoste-Julien, S., &amp; Mitliagkas, I. (2019, April). Negative momentum for improved game dynamics. In The 22nd International Conference on Artificial Intelligence and Statistics (pp. 1802-1811). PMLR. <a href="https://arxiv.org/abs/1807.04740">ArXiv Link</a</td>
             </tr>
         </table></p>
@@ -440,7 +440,7 @@ $$<a id=eq:minmax-gen class='anchor'></a></p>
 
         <p><table class="fndef" id="fndef:complexsgd">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:complexsgd">[8]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:complexsgd">[8]</a></td>
                 <td class="fndef-content">Lorraine, J.P., et al. <em>Complex momentum for optimization in games.</em> International Conference on Artificial Intelligence and Statistics. PMLR, 2022. <a href="https://arxiv.org/abs/2102.08431">ArXiv Link</a</td>
             </tr>
         </table></p>

@@ -11,7 +11,7 @@
 &emsp; RANSAC (RANdom SAmple Consensus) is a popular method for model estimation from a data with a large number of outliers. This belongs to a family of methods called robust estimation methods. Another example in this family is the *least-median squares estimation*. In this note, we shall discuss the RANSAC algorithm and a recently proposed improvement to it.
 
 
-> **Problem Setting:** Consider a dataset $\fD$ with $d-$dimensional points $\vx, \vy \in \R^d$ of size $N$. The data is known to have a significant number of outliers. The objective is to fit a model $f(\theta)$ accounting for the outliers in $\fD$. 
+> **Problem Setting:** Consider a dataset $\fD$ with $d-$dimensional points $\vx, \vy \in \R^d$ of size $N$. The data is known to have a significant number of outliers. The objective is to fit a model $f(\theta)$ accounting for the outliers in $\fD$.
 
 For illustration, let us consider a simple 2D linear fitting. The figure shows a dataset with a lot of outliers with the ground truth and least-squares fit.
 
@@ -47,7 +47,7 @@ Note that $1 - \left(\frac{|\fI(\theta, \sigma, \fD)|}{|\fD|}\right)^S$ is the p
 ```python
 
 import jax # v0.4.26
-import jax.numpy as jnp 
+import jax.numpy as jnp
 from typing import Tuple
 
 def dist(x1, y1, x2, y2, x, y):
@@ -73,9 +73,9 @@ def fit(x, y):
     return jnp.linalg.lstsq(x, y)[0]
 
 
-def ransac(data: Tuple, 
-           S: int, 
-           sigma: float, 
+def ransac(data: Tuple,
+           S: int,
+           sigma: float,
            beta:float) -> jax.Array:
     """
     RANSAC algorithm in JAX.
@@ -95,7 +95,7 @@ def ransac(data: Tuple,
     assert S < N, "S must be less than N"
     # assert 0.0 < beta < 1.0 , "beta must be in (0.0, 1.0)"
 
-    I = 0    
+    I = 0
     key = jax.random.key(42345)
 
     # def fwd():
@@ -103,36 +103,36 @@ def ransac(data: Tuple,
     for _ in range(1000):
         # Sample a subset
         key, subkey = jax.random.split(key)
-        i = jax.random.permutation(subkey, 
-                                   jnp.arange(x.shape[0]), 
-                                   independent=True) 
+        i = jax.random.permutation(subkey,
+                                   jnp.arange(x.shape[0]),
+                                   independent=True)
         ids = i[:S]
         xs = x[ids]
         ys = y[ids]
 
         ws = fit(xs, ys)
         ys_pred = predict(ws, xs)
-        dist_vec = lambda x__, y__: dist(xs[0], 
-                                   ys_pred[0], 
-                                   xs[-1], 
-                                   ys_pred[-1], 
-                                   x__, 
+        dist_vec = lambda x__, y__: dist(xs[0],
+                                   ys_pred[0],
+                                   xs[-1],
+                                   ys_pred[-1],
+                                   x__,
                                    y__)
         d = jax.vmap(dist_vec)(x, y)[:, 0] # SIMD computation
-        
+
         inds = jnp.where(d < sigma, True, False)
         I = inds.sum()
 
         if I > beta * N:
             d_final = d.copy()
             break
-            
+
     # Fit the model on the final inlier set
     id_final = jnp.arange(d_final.shape[0])[d_final < sigma]
-    
+
     x_final = jnp.ones((id_final.shape[0], x.shape[1]))
     y_final = jnp.zeros((id_final.shape[0], y.shape[1]))
-    
+
     # print(x_final.shape, x.shape)
     x_final = x_final.at[:].set(x[id_final])
     y_final = y_final.at[:].set(y[id_final])
@@ -153,17 +153,17 @@ def ransac(data: Tuple,
 
 The initial techniques, such as the RANSAAC, relied on model ensembles where a set of minimal sample models $\theta^\ast_1, \theta^\ast_2, \ldots, \theta^\ast_k$ are trained using the RANSAC algorithm each corresponding to $\sigma_1, \sigma_2, \ldots, \sigma_k$ and the final model $f(\theta^\ast)$ is obtained using weighted average of model parameters.
 
-The next apparent extension is marginalization over the $\sigma$ parameter rather than relying on ensembles, as marginalization over $\sigma$ can be viewed as a generalization of ensembles. This avoids issues with the ensembles such as choosing appropriate weights for the ensembles. Secondly, the final model $f(\theta^\ast)$ can be obtained without a strict inlier/outlier decision. This is precisely what the MAGSAC (MArGinalizing SAmple Consensus) algorithm does[^1]. Interestingly, this makes it a *Bayesian model*[^2], although the authors didn't claim it to be one. 
+The next apparent extension is marginalization over the $\sigma$ parameter rather than relying on ensembles, as marginalization over $\sigma$ can be viewed as a generalization of ensembles. This avoids issues with the ensembles such as choosing appropriate weights for the ensembles. Secondly, the final model $f(\theta^\ast)$ can be obtained without a strict inlier/outlier decision. This is precisely what the MAGSAC (MArGinalizing SAmple Consensus) algorithm does[^1]. Interestingly, this makes it a *Bayesian model*[^2], although the authors didn't claim it to be one.
 
-This paper, in my opinion, is a great example where a theoretical motivation is insufficient to lead to a proper algorithm. As such, the theoretical derivation of a $\sigma$-free model and the actual algorithm (the $\sigma-$consensus) are quite different. First, let's look at the marginalization part. 
+This paper, in my opinion, is a great example where a theoretical motivation is insufficient to lead to a proper algorithm. As such, the theoretical derivation of a $\sigma$-free model and the actual algorithm (the $\sigma-$consensus) are quite different. First, let's look at the marginalization part.
 
 
 ### σ-Marginalization
 &emsp; The distance metric can be thought of as computing the residuals of the model after fitting a subset of the input data. One issue with setting the $\sigma$ value manually is that the inlier is computed based on the distance metric, which depends on both the model, the distance metric, and the data distribution. The problem arises in our understanding of the role of $\sigma$. The inlier-outlier threshold is thought to be the same as the noise level in the data, according to the RANSAC algorithm. It is better to decouple them.
 
-One way to resolve this is to set the inlier-outlier threshold based on the residuals computed by the distance metric. When the distance metric $D$ is euclidean, its square value follows a $\chi^2_m$ distribution (as $D^2$ is a sum of squared Gaussian variables), represented by the density $h(\vx, \vy)$, with degrees of freedom equal to the dimension of the data $d$. Based on this, we can say that a point is an inlier if it is in the 95% (0.95 quantile) of this $\chi^2$ distribution (from its inverse CDF). Specifically, the inlier-outlier threshold $\tau(\sigma) = H^{-1}_d(q) \sigma^{d}$ where $H$ is the CDF of the $\chi^2$ distribution and $q$ is set to a high quantile value like 0.95 or 0.99. Thus, based on the distance metric alone, we can obtain a way to set the noise threshold automatically. 
+One way to resolve this is to set the inlier-outlier threshold based on the residuals computed by the distance metric. When the distance metric $D$ is euclidean, its square value follows a $\chi^2_m$ distribution (as $D^2$ is a sum of squared Gaussian variables), represented by the density $h(\vx, \vy)$, with degrees of freedom equal to the dimension of the data $d$. Based on this, we can say that a point is an inlier if it is in the 95% (0.95 quantile) of this $\chi^2$ distribution (from its inverse CDF). Specifically, the inlier-outlier threshold $\tau(\sigma) = H^{-1}_d(q) \sigma^{d}$ where $H$ is the CDF of the $\chi^2$ distribution and $q$ is set to a high quantile value like 0.95 or 0.99. Thus, based on the distance metric alone, we can obtain a way to set the noise threshold automatically.
 
-Now that we have a way to set the threshold, let's look closely at the $\chi^2$ distribution $h(\vx, \vy)$ given by 
+Now that we have a way to set the threshold, let's look closely at the $\chi^2$ distribution $h(\vx, \vy)$ given by
 
 $$
 \begin{aligned}
@@ -172,7 +172,7 @@ C(d) &= \frac{1}{2^{d/2}\Gamma(d/2)}
 \end{aligned}
 $$
 
-Where $\Gamma$ is the Gamma function. This provides the likelihood of the point $\vx, \vy$ belonging to the model $\theta$, given the threshold $\tau(\sigma)$, based on the Euclidean distance metric $D$. If the point is an outlier, then the likelihood is 0. 
+Where $\Gamma$ is the Gamma function. This provides the likelihood of the point $\vx, \vy$ belonging to the model $\theta$, given the threshold $\tau(\sigma)$, based on the Euclidean distance metric $D$. If the point is an outlier, then the likelihood is 0.
 
 $$
 \begin{aligned}
@@ -183,7 +183,7 @@ h(\vx, \vy | \sigma) &, D(\vx, \vy, \theta) \geq \tau(\sigma)\\
 \end{aligned}
 $$\label{eq:magsac_lik}
 
-By marginalizing over $\sigma$, we can get the likelihood of the point simply being an inlier to the model. 
+By marginalizing over $\sigma$, we can get the likelihood of the point simply being an inlier to the model.
 
 $$
 \begin{aligned}
@@ -193,35 +193,34 @@ L(\vx, \vy | \theta) &= \int L(\vx, \vy | \theta, \sigma)\fU(0, \sigma_{\text{ma
 $$\label{eq:marglik}
 
 Where $\sigma_1 < \sigma_2 <\cdots < \sigma_K < \sigma_{\max}$.
-Interestingly, we can consider the likelihood as the importance or *weight* of that point and fit the model using weighted least squares (WLS).
+Interestingly, we can consider the likelihood as the importance or *weight* of that point and fit the model using the weighted least squares (WLS) algorithm.
 
 ### σ-consensus algorithm
-&emsp; Simply marginalizing away the $\sigma$ doesn't yield a proper algorithm. Note that even after marginalization, we still have to set a max noise level $\sigma_{\max}$ as an input parameter. This, however, is much easier to set than the noise threshold $\sigma$. 
+&emsp; Simply marginalizing away the $\sigma$ doesn't yield a proper algorithm. Note that even after marginalization, we still have to set a max noise level $\sigma_{\max}$ as an input parameter. This, however, is much easier to set than the noise threshold $\sigma$.
 
 Given a max noise level in the data $\sigma_{\max}$, we can get the worse possible inlier set $\fI$ as the initial set, based on the given model $\theta$ and the inlier threshold is given by $\tau(\sigma_{\max})$. We then divide the max noise level into $m$ sub-levels $\sigma'$. When we encounter a data point that has a greater noise level than the current one, we update the model and the likelihood, and move onto the next noise level.
 
-
+::: important
 1. Initialize $\delta_{\sigma} \leftarrow \sigma_{\max} / m, \fI^\ast \leftarrow \emptyset$
 2. For each point $\vx, \vy$ in $\fI$
-   1. If $D(\theta, \vx, \vy) < \tau(\sigma')$, then 
+   1. If $D(\theta, \vx, \vy) < \tau(\sigma')$, then
       1. $\fI^\ast \leftarrow \fI^\ast \cup \{\vx, \vy\}$. Add the point to consensus set $\fI^\ast$. **note:** It is helpful to pre-sort the inlier points based on their distance $D(\theta, \fI_i)$ and get their corresponding noise level $\sigma_i$. So, the points at smaller noise levels are gathered first.
-   2. Otherwise, 
+   2. Otherwise,
       1. $\theta = \underset{\theta}{\argmin}f(\theta; \fI^\ast)$. Refit the model to the consensus set $\fI^\ast$ using least squares.
       2. $w_i \leftarrow w_i + L(\vx', \vy', \theta)/\sigma_{\max}, \forall \vx', \vy' \in \fI.$ Update the weights $w_i$ for *all the points* from the marginal likelihood (equation \eqref{eq:marglik})
-        
+
       3. $\fI^\ast \leftarrow \fI^\ast \cup \{\vx, \vy\}$. Add the point to the consensus set.
       4. $\sigma' \leftarrow \sigma' + \delta_{\sigma}$. Update to the next noise level.
 3. $\theta^\ast = \underset{\theta}{\argmin}f(\theta; \fI^\ast, w)$. Refit model on the consensus set using **weighted least squares**.
-
-
+:::
 
 ### Model Quality
 The procedure for getting the best model in the original RANSAC is based on the size of the consensus set. If the size of $\fI > \beta N$, then we terminate. More generally, we can construct a quality function $Q$ such that the higher the quality, the better the algorithm. We can define the quality function as the log likelihood of the model at a given noise level $\sigma$
 $$
-Q := \log L(\theta, \fD | \sigma) 
+Q := \log L(\theta, \fD | \sigma)
 $$
 
-For RANSAC, let $L_{\text{RANSAC}}(\theta, \sigma, (\vx, \vy))$ be the likelihood function of being an inlier (*i.e.* belonging to the consensus set), for a given noise level $\sigma$ at the given point $\vy, \vy$. 
+For RANSAC, let $L_{\text{RANSAC}}(\theta, \sigma, (\vx, \vy))$ be the likelihood function of being an inlier (*i.e.* belonging to the consensus set), for a given noise level $\sigma$ at the given point $\vy, \vy$.
 
 $$
 \begin{aligned}
@@ -246,12 +245,12 @@ $$
 For MAGSAC, the likelihood of the model for each data point is given by equation \eqref{eq:magsac_lik}. Marginalizing over $\sigma$, we get
 
 
-$$   
+$$
 \begin{aligned}
 Q_{\text{MAGSAC}} &= \frac{1}{\sigma_{\max}}\int_0^{\sigma_{\max}} \log \prod_{(\vx, \vy) \in \fD}L(\vx, \vy | \theta, \sigma)\; d\sigma \\
 &\approx \frac{1}{\sigma_{\max}} \sum_{i=1}^{K} \left [i (\log 2C(d)l - d\log \sigma_i) - \frac{R_i}{\sigma_i^2} + (d-1)B_i \right ](\sigma_i - \sigma_{i-1})
 \end{aligned}
-$$ 
+$$
 
 Where $R_i = 0.5 \sum_{j=1}^i D(\theta, (\vx_j, \vy_j))^2$ and $B_i =  \sum_{j=1}^i \log D(\theta, (\vx_j, \vy_j))$.
 
@@ -266,4 +265,3 @@ The MAGSAC algorithm improves upon the original RANSAC significantly enough to b
 [^1]: Barath, Daniel, Jiri Matas, and Jana Noskova. "MAGSAC: marginalizing sample consensus." Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2019.
 
 [^2]: In his article [The Case for Bayesian Deep Learning](https://cims.nyu.edu/~andrewgw/caseforbdl/), Andrew Gordon Wilson writes - "*The key distinguishing property of a Bayesian approach is marginalization instead of optimization, not the prior, or Bayes rule.*"
-

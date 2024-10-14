@@ -252,7 +252,7 @@ $$<a id=eq:riemann class='anchor'></a></p>
 <p>$$
 G(\vx) = \sum_{k} p(k|\vx)S_k^{-1} 
 $$
-Which is simply the average of the individual inverse covariance matrices. To circumvent the intractability of equation <span class='eqref'>(<a href='#eq:riemann'>2</a>)</span>, Tipping offers a tractable approximation that yields a distance metric of the same <em>form</em> as <span class='eqref'>(<a href='#eq:mahalanobis'>1</a>)</span>.</p>
+Which is simply the average of the individual inverse covariance matrices. To circumvent the intractability of equation <span class='eqref'>(<a href='#eq:riemann'>4</a>)</span>, Tipping offers a tractable approximation that yields a distance metric of the same <em>form</em> as <span class='eqref'>(<a href='#eq:mahalanobis'>2</a>)</span>.</p>
 <p>$$
 d_{GMM}(\vx_i, \vx_j) = \sqrt{(\vx_i - \vx_j)^TG(\vx)(\vx_i - \vx_j)} 
 $$<a id=eq:gmm_dist class='anchor'></a></p>
@@ -341,7 +341,7 @@ def GMMDist(x1: np.array, x2:np.array,
 
         <p><table class="fndef" id="fndef:1">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td>
                 <td class="fndef-content">As long we are dealing with data samples, it is almost always good to think of the data as samples from some data-generating distribution and that probability distribution lies on a manifold called <em>statistical manifold</em>. This idea has been quite fruitful in a variety of areas within ML.</td>
             </tr>
         </table></p>
@@ -349,7 +349,7 @@ def GMMDist(x1: np.array, x2:np.array,
 
         <p><table class="fndef" id="fndef:2">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td>
                 <td class="fndef-content">Tipping, M. E. (1999). <em>Deriving cluster analytic distance functions from Gaussian mixture models</em>. <a href="https://citeseerx.ist.psu.edu/document?repid=rep1&amp;type=pdf&amp;doi=08d20f55442aeb79edfaaaafa7ad54c513ee1dcb">Link</a>.</td>
             </tr>
         </table></p>

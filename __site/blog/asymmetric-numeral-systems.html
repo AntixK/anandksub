@@ -239,7 +239,7 @@ $$<a id=eq:ac class='anchor'></a></p>
 <p>$$
 x_{i+1} = C_2(x_i, b_{i+1}) = 2x_i + b_{i+1}
 $$<a id=eq:ans class='anchor'></a></p>
-<p>In other words, $b_{i+1}$ determines whether $x_{i+1}$ will be even or odd. In entropy coding, equation <span class='eqref'>(<a href='#eq:ac'>1</a>)</span> is  used in the well-known Arithmetic Coding (AC) technique while equation <span class='eqref'>(<a href='#eq:ans'>2</a>)</span> is used in Asymmetric Numeral Systems(ANS). AC requires that the bits come in from LSB to MSB, while ANS requires from MSB to LSB. This fundamental difference lies in they way they are implemented. By default, all streaming data comes from MSB to LSB - AC implements like a queue (first-in-first-out) while ANS implements like a stack (last-in-first-out). Note that both methods are equally fast - both $2^{i+1}$ and $2x_{i}$ can be computed through bit-shift operations.</p>
+<p>In other words, $b_{i+1}$ determines whether $x_{i+1}$ will be even or odd. In entropy coding, equation <span class='eqref'>(<a href='#eq:ac'>2</a>)</span> is  used in the well-known Arithmetic Coding (AC) technique while equation <span class='eqref'>(<a href='#eq:ans'>3</a>)</span> is used in Asymmetric Numeral Systems(ANS). AC requires that the bits come in from LSB to MSB, while ANS requires from MSB to LSB. This fundamental difference lies in they way they are implemented. By default, all streaming data comes from MSB to LSB - AC implements like a queue (first-in-first-out) while ANS implements like a stack (last-in-first-out). Note that both methods are equally fast - both $2^{i+1}$ and $2x_{i}$ can be computed through bit-shift operations.</p>
 <img  src="/media/post_images/ent-code.png"  alt="Entropy Coding">
 
 <p>The fundamental idea behind both is that, given a symbol $x_i$, if one needs to add an incoming bit $b_{i+1}$ without any loss in information, any coding method should increase the information content should increase no more than the information content in the incoming bit.</p>
@@ -252,7 +252,7 @@ $$<a id=eq:comp_cond class='anchor'></a></p>
 <p>Where $p(b)$ is the probability distribution of the bits. This means that any encoding function $C$ must be of the form
 $$C \approx x_i/p(b)
 $$
-If the bits are equally probable, <em>i.e.</em> $p(b = 1) = p(b=0) = 1/2$, then the equation <span class='eqref'>(<a href='#eq:ans'>2</a>)</span> is optimal in the sense that it satisfies the encoding condition $\big (C_1(x_i, b_{i+1}) \approx 2x_i \big )$.</p>
+If the bits are equally probable, <em>i.e.</em> $p(b = 1) = p(b=0) = 1/2$, then the equation <span class='eqref'>(<a href='#eq:ans'>3</a>)</span> is optimal in the sense that it satisfies the encoding condition $\big (C_1(x_i, b_{i+1}) \approx 2x_i \big )$.</p>
 <p>The decoding function $D_2(x_{i+1})$ for $C_2$ can be constructed as</p>
 <p>$$
 D_2(x_{i+1}) = (x_i, b_{i+1}) = \bigg ( \bigg \lfloor \frac{x_{i+1}}{2} \bigg \rfloor, \bmod( x_{i+1}, 2) \bigg )
@@ -298,22 +298,22 @@ def D2(x):  # Decode
 <li>Within that finite interval, the distribution of even and odd codings must reflect the corresponding probabilities of the bits.
 Let's address the latter issue first.</li>
 </ol>
-<p>Consider equation <span class='eqref'>(<a href='#eq:ans'>2</a>)</span> again. As discussed earlier, it is optimal only when $p(b = 0) = p(b=1) = 1/2$. We can say that the bit probability splits and uniformly covers the range of $x$, which is the set of all natural numbers $\mathbb{N}$. In the case $p(b=1) = 1/2$, the range is split into two parts - even and odd numbers depending on the value of $b$.  As such $x_{i+1}$ is the $x_i^{th}$ number in the even/odd set.</p>
+<p>Consider equation <span class='eqref'>(<a href='#eq:ans'>3</a>)</span> again. As discussed earlier, it is optimal only when $p(b = 0) = p(b=1) = 1/2$. We can say that the bit probability splits and uniformly covers the range of $x$, which is the set of all natural numbers $\mathbb{N}$. In the case $p(b=1) = 1/2$, the range is split into two parts - even and odd numbers depending on the value of $b$.  As such $x_{i+1}$ is the $x_i^{th}$ number in the even/odd set.</p>
 <img src="/media/post_images/uabs.png" alt="Uniform Asymmetric Binary Systems">
 
 <p>Extending this intuition to unequal probabilities, $x_{i+1}$ is the $x_{i}^{th}$ number in the subset defined by $b_{i+1}$. For this, the range of $x$ must be split into two subsets whose size reflects the probability of thier respective state. If the probability of 1 is $p(b = 1) = \lambda &lt; p(b= 0) = (1 - \lambda)$ and let the range of $x$ be the set $\fF = [0, N]$, then we want $ \lceil N\lambda \rceil$ odd numbers in $\fF$. The $\lceil \cdot \rceil$ operator accounts for the fractional components as we shall stick to natural numbers. We want a generalized coding method such that the following equality is satisfied.</p>
 <p>$$
 \lceil (x_{i+1} + 1)  \lambda \rceil - \lceil x_{i+1} \lambda \rceil = b_{i+1}
 $$<a id=eq:cond class='anchor'></a></p>
-<p>Say we updated $x_i \to x_{i+1}$ using some encoding. Now, the proportion of odds is $\lceil x_{i+1} \lambda \rceil$. However, the coding must be robust to the ceil operation. For example, for $b_{i+1} = 0, \lambda = 0.3$ say we compute $x_{i+1} = 6$, then we have $\lceil 6 * 0.3 \rceil = 2$ odd values in the range (0,6]. Now $\lceil (6 + 1) * 0.3 \rceil = 3 $ which means $\lceil (6 + 1) * 0.3 \rceil - \lceil 6 * 0.3 \rceil = 1 \neq 0$. Therefore, $x_{i+1} = 6$ cannot be a correct code for $b_{i+1} = 0, \lambda = 0.3$. On the other hand, $x_{i+1} = 9$ is a valid code and can be verified similarly. The idea behind equation <span class='eqref'>(<a href='#eq:cond'>5</a>)</span> is that by doing ceil operation (we will use more of those below), we are essentially rounding the computation results; and when done sequentially, the error may blow up resulting in incorrect code that may not be uniquely reversible <em>i.e.</em> loss of information.</p>
-<p>We can now come up with a coding scheme that accounts for any arbitrary binary distribution $p$, satisfying equation <span class='eqref'>(<a href='#eq:cond'>5</a>)</span>. If the probability of 1 is $p(b = 1) = \lambda &lt; p(b = 0) = (1 - \lambda)$, then</p>
+<p>Say we updated $x_i \to x_{i+1}$ using some encoding. Now, the proportion of odds is $\lceil x_{i+1} \lambda \rceil$. However, the coding must be robust to the ceil operation. For example, for $b_{i+1} = 0, \lambda = 0.3$ say we compute $x_{i+1} = 6$, then we have $\lceil 6 * 0.3 \rceil = 2$ odd values in the range (0,6]. Now $\lceil (6 + 1) * 0.3 \rceil = 3 $ which means $\lceil (6 + 1) * 0.3 \rceil - \lceil 6 * 0.3 \rceil = 1 \neq 0$. Therefore, $x_{i+1} = 6$ cannot be a correct code for $b_{i+1} = 0, \lambda = 0.3$. On the other hand, $x_{i+1} = 9$ is a valid code and can be verified similarly. The idea behind equation <span class='eqref'>(<a href='#eq:cond'>7</a>)</span> is that by doing ceil operation (we will use more of those below), we are essentially rounding the computation results; and when done sequentially, the error may blow up resulting in incorrect code that may not be uniquely reversible <em>i.e.</em> loss of information.</p>
+<p>We can now come up with a coding scheme that accounts for any arbitrary binary distribution $p$, satisfying equation <span class='eqref'>(<a href='#eq:cond'>7</a>)</span>. If the probability of 1 is $p(b = 1) = \lambda &lt; p(b = 0) = (1 - \lambda)$, then</p>
 <p>$$
 x_{i+1} = C_2(x_i, b_{i+1}) = \begin{cases}
 \big \lceil \frac{x_i + 1}{1 - \lambda} \big \rceil -1  &amp;; b_{i+1} = 0 \\
 \big \lfloor \frac{x_i}{\lambda} \big \rfloor  &amp;; b_{i+1} = 1 \\
 \end{cases}
 $$<a id=eq:ubsencode class='anchor'></a></p>
-<p>It is easy to verify the above equation with equation <span class='eqref'>(<a href='#eq:ans'>2</a>)</span> for $\lambda=1/2$. The decoding function $D_2$ can be derived as</p>
+<p>It is easy to verify the above equation with equation <span class='eqref'>(<a href='#eq:ans'>3</a>)</span> for $\lambda=1/2$. The decoding function $D_2$ can be derived as</p>
 <p>$$
 \begin{aligned} 
 D_2(x_{i+1}) &amp;= (x_i, b_{i+1}) \\
@@ -324,8 +324,8 @@ x_{i+1} - \lceil x_{i+1}  \lambda \rceil &amp;; b_{i+1} = 0
 b_{i+1} &amp;= \lceil (x_{i+1} + 1)  \lambda \rceil - \lceil x_{i+1} \lambda \rceil
 \end{aligned}
 $$<a id=eq:ubsdecode class='anchor'></a></p>
-<p>Observe that decoding $b_{i+1}$ is essentially through equation <span class='eqref'>(<a href='#eq:cond'>5</a>)</span>. The above encoding scheme is called as <em>uniform Asymmetric Binary Systems</em> (uABS) as we exploit the asymmetry in the probabilities of the bits to get compression, while the subsets segmented by those probabilities are themselves uniformly distributed.</p>
-<p>Let us take an illustrative example - Consider the bitstream <code>1, 0, 0, 1, 0</code> with $p(b =1) = \lambda = 0.3$. This can be encoded using equation <span class='eqref'>(<a href='#eq:ubsencode'>6</a>)</span> as follows (note that we encode in the reverse order)</p>
+<p>Observe that decoding $b_{i+1}$ is essentially through equation <span class='eqref'>(<a href='#eq:cond'>7</a>)</span>. The above encoding scheme is called as <em>uniform Asymmetric Binary Systems</em> (uABS) as we exploit the asymmetry in the probabilities of the bits to get compression, while the subsets segmented by those probabilities are themselves uniformly distributed.</p>
+<p>Let us take an illustrative example - Consider the bitstream <code>1, 0, 0, 1, 0</code> with $p(b =1) = \lambda = 0.3$. This can be encoded using equation <span class='eqref'>(<a href='#eq:ubsencode'>8</a>)</span> as follows (note that we encode in the reverse order)</p>
 <p>$$
 \begin{aligned}
 x_0 &amp; &amp;&amp;= 1 \\
@@ -393,7 +393,7 @@ $$
 These range sizes $f_k$ are called as _scaled probabilities_. To construct a coding scheme, we must ensure that $x_{i+1}$ is the $x_i^{th}$ value in the $k^{th}$ subset, given the symbol $a_k$. This is a direct extension of the idea discussed earlier for even - odd subsets.</p>
 <img src="/media/post_images/ans.svg" alt="ANS - splitting range into subsets">
 
-<p>Recall equation <span class='eqref'>(<a href='#eq:ans'>2</a>)</span>. It can be interpreted as follows $-$ $b_{i+1}$ essentially chooses the odd or even subsets and $2x_i$ adds the necessary offset within that subset. Therefore, our required generalized mechanism can be written in the form
+<p>Recall equation <span class='eqref'>(<a href='#eq:ans'>3</a>)</span>. It can be interpreted as follows $-$ $b_{i+1}$ essentially chooses the odd or even subsets and $2x_i$ adds the necessary offset within that subset. Therefore, our required generalized mechanism can be written in the form
 $$
 x_{i+1} = C_{ANS}(x_i, s_{i+1}) = \text{Offset } + \text{ Subset selection}</p>
 <p>$$
@@ -411,10 +411,10 @@ $$<a id=eq:ans_subselect class='anchor'></a></p>
 $$ 
 x_{i+1} = C_{ANS}(x_i, s_{i+1})=  M\bigg \lfloor \frac{x_i}{f_k} \bigg \rfloor  +\bmod (x_i, f_k) +\sum_{j=1}^{k-1} f_j  
 $$<a id=eq:ans_final class='anchor'></a></p>
-<div class="important"><p><strong>Another way to think about ANS:</strong></p><p>A popular intuition for ANS is to think in terms of range encoding. This is built upon the fact that equation <span class='eqref'>(<a href='#eq:ans'>2</a>)</span> can use any base and not necessarily 2. Additionally, it can also change its base at each time step and still encode all the information faithfully. The decoding can be done correctly if done on the same base as encoding for that step.</p><p>The state $x_i$ represents an encoding of the scaled probability $f_k$. Since the state is  already an encoding, we decode it with the base $f_k$. Recall that each subset is uniformly distributed and therefore, we can simply decode akin to equation <span class='eqref'>(<a href='#eq:decode_ans'>4</a>)</span>.</p><p>$$
+<div class="important"><p><strong>Another way to think about ANS:</strong></p><p>A popular intuition for ANS is to think in terms of range encoding. This is built upon the fact that equation <span class='eqref'>(<a href='#eq:ans'>3</a>)</span> can use any base and not necessarily 2. Additionally, it can also change its base at each time step and still encode all the information faithfully. The decoding can be done correctly if done on the same base as encoding for that step.</p><p>The state $x_i$ represents an encoding of the scaled probability $f_k$. Since the state is  already an encoding, we decode it with the base $f_k$. Recall that each subset is uniformly distributed and therefore, we can simply decode akin to equation <span class='eqref'>(<a href='#eq:decode_ans'>6</a>)</span>.</p><p>$$
 z = \bmod(x_i, f_k); \quad x_i' = \bigg \lfloor \frac{x_i}{f_k} \bigg \rfloor 
 $$
-Where $z$ represents the information associated with $a_i$ within the $k^{th}$ subset. For each symbol, we don't keep track of the symbol itself, rather its scaled probability (base). To get the positional information of the $k^{th}$ subset, we similarly follow equation <span class='eqref'>(<a href='#eq:ans_subselect'>10</a>)</span>.</p><p>$$
+Where $z$ represents the information associated with $a_i$ within the $k^{th}$ subset. For each symbol, we don't keep track of the symbol itself, rather its scaled probability (base). To get the positional information of the $k^{th}$ subset, we similarly follow equation <span class='eqref'>(<a href='#eq:ans_subselect'>13</a>)</span>.</p><p>$$
 z = z + \sum_{j=1}^{k-1} f_j
 $$</p><p>The second and final step is to encode this information within the finite range $(0,M]$, again assuming that it is uniformly distributed.
 $$
@@ -523,7 +523,7 @@ class rANS:
 
         <p><table class="fndef" id="fndef:1">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:1">[1]</a></td>
                 <td class="fndef-content">One drawback of Huffman coding is that it often fails to achieve the optimal codeword length as the Huffman codewords can only have integer lengths. For Huffman coding, the codeword length $l_H$ is lower-bounded as $l_H(x = a_k) \geq \lceil \mathbb{I}[x = a_k] \rceil = \lceil-\log_2 p(x = a_k) \rceil$. Therefore, for each data, there is a maximum of 1 extra bit in the corresponding Huffman codeword. For $N$ samples, the compression has $N$ extra bits, which is highly inefficient.</td>
             </tr>
         </table></p>
@@ -531,7 +531,7 @@ class rANS:
 
         <p><table class="fndef" id="fndef:2">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:2">[2]</a></td>
                 <td class="fndef-content">A better example to understand amortization is to encode a list of decimal numbers say [6, 4, 5] as 645 (same as $C_2$ coding in base 10) and checking how the binary representation changes with changes in values. [7,4,5],a change in one value, results in an very different encoding (745) than for [6,4,5]. We can understand this as the information in each input symbol is distributed or amortized over the entire codeword.</td>
             </tr>
         </table></p>
@@ -539,7 +539,7 @@ class rANS:
 
         <p><table class="fndef" id="fndef:3">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:3">[3]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:3">[3]</a></td>
                 <td class="fndef-content">Renormalization is required for almost all streaming entropy coding methods like Arithmetic Coding for the same reason - to normalize the codes to be within some finite representable (on the floating-point number line) range.</td>
             </tr>
         </table></p>

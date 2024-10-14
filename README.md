@@ -44,7 +44,7 @@ Goals
 - Optimized output
 - well tested
 - Prefer pure python libs
-  
+
 Non-goals
 1. Support for mdx
 2. Support for sass
@@ -66,7 +66,8 @@ Bugs
 - [x] Clean up footnote labels
 - [x] Equation numbering
 - [x] Footer design
- 
+- [ ] Equation numbering with some equations without labels
+
 ## Usage
 
 ```
@@ -84,7 +85,7 @@ antixk.dev
   │   │   ├── index.html # Front page of blog section
   │   │   └── article.md
   │   ├── index.md    # Front page
-  │   ├── media       # Put your site media here     
+  │   ├── media       # Put your site media here
   │   └── notes  # You can also include notes to be published
   │       ├── index.html # Front page of blog section
   │       └── article.md

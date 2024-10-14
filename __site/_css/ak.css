@@ -93,6 +93,7 @@
         "Palatino LT STD", "Book Antiqua", serif;
     --sanserif-font: "Nunito", Verdana, Helvetica, sans-serif;
     --header-font: "Overpass", Verdana, Helvetica, sans-serif;
+    --scrollbar-thumb: #ce5d97;
 }
 
 /* ==================================================================
@@ -100,7 +101,7 @@
 ================================================================== */
 html {
     font-size: clamp(0.8rem, 1.5vw, 1rem);
-    scrollbar-color: var(--scrollbar-thumb) var(--background-body);
+    /* scrollbar-color: var(--scrollbar-thumb) var(--background-body); */
     scrollbar-width: thin;
 }
 
@@ -475,6 +476,8 @@ td {
     white-space: normal;
     overflow: auto hidden;
     margin: 0.5em 0;
+    /* scrollbar-color: #90a4ae #cfd8dc; */
+    scrollbar-width: thin;
 }
 
 .katex-display > .katex {

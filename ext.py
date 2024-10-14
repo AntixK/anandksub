@@ -13,12 +13,12 @@ from mistletoe.block_token import tokenize, BlockToken
 
 class MyHtmlRenderer(HtmlRenderer, LaTeXRenderer):
     def __init__(self):
-        super().__init__(TripleCommaDiv, 
-                         FootNote, 
-                         SpanFootNote, 
+        super().__init__(TripleCommaDiv,
+                         FootNote,
+                         SpanFootNote,
                          EqLabel,
                          EqrefLabel,
-                         HTMLInMD, 
+                         HTMLInMD,
                          process_html_tokens=True)
         self.fn_counter = 0
         self.fn_map = {}
@@ -33,46 +33,50 @@ class MyHtmlRenderer(HtmlRenderer, LaTeXRenderer):
         https://docs.mathjax.org/en/latest/basic/mathematics.html#tex-and-latex-input.
         """
         if token.content.startswith('$$'):
+            self.eq_counter += 1
+            # self.eq_map[token.eqtag] = self.eq_counter
+
             return self.render_raw_text(token)
         # return '\\({}\\)'.format(self.render_raw_text(token).strip('$'))
         return self.render_raw_text(token)
-    
+
     def render_triple_comma_div(self, token) -> str:
         inner = self.render_inner(token)
         return f'<div class="{token.classes}">{inner}</div>'
-    
+
     def render_html_in_md(self, token):
         return token.children
-    
+
     def render_span_foot_note(self, token) -> str:
         self.fn_counter += 1
         self.fn_map[token.label] = self.fn_counter
         return f'<sup id="fnref:{token.label}"><a class="fnref" href="#fndef:{token.label}">[{self.fn_map[token.label]}]</a></sup>'
-    
+
     def render_eq_label(self, token) -> str:
         # Render the equation label.
         # Creates an anchor tag with the equation label as the id.
 
-        self.eq_counter += 1
+        # self.eq_counter += 1
         self.eq_map[token.eqtag] = self.eq_counter
-        
+
         return f"<a id={token.eqtag} class='anchor'></a>"
-    
+
     def render_eqref_label(self, token) -> str:
         # Links to the equation label with the given tag.
 
+        print(self.eq_map)
         eq_label = self.eq_map[token.eqtag]
         return f"<span class='eqref'>(<a href='#{token.eqtag}'>{eq_label}</a>)</span>"
 
     def render_foot_note(self, token) -> str:
         inner = self.render_inner(token)
-        
+
         # print(self.fn_map)
         # print(token.tag)
         return f"""
         <p><table class="fndef" id="fndef:{token.tag}">
             <tr>
-                <td class="fndef-backref"><a href="#fnref:{token.tag}">[{self.fn_map[token.tag]}]</a></td> 
+                <td class="fndef-backref"><a href="#fnref:{token.tag}">[{self.fn_map[token.tag]}]</a></td>
                 <td class="fndef-content">{inner.lstrip("<p>").rstrip("</p>")}</td>
             </tr>
         </table></p>
@@ -82,7 +86,7 @@ class MyHtmlRenderer(HtmlRenderer, LaTeXRenderer):
         self.footnotes.update(token.footnotes)
         inner = '\n'.join([self.render(child) for child in token.children])
         return '{}\n'.format(inner) if inner else ''
-    
+
 
 class HTMLInMD(BlockToken):
     @staticmethod

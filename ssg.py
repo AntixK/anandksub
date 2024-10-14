@@ -94,13 +94,20 @@ def render(clean: bool = False):
         render_html(md_file, config)
 
     # Gather index html files
+    hfun_inserts = {
+        "all_articles": dict_to_html_table(posts_by_dir(CONTENT_DIR / "blog", config)),
+        "all_notes": dict_to_html_table(posts_by_dir(CONTENT_DIR / "notes", config)),
+        "recent_posts": dict_to_html_table(recent_posts(5, config)),
+        "tag_cloud": create_tag_cloud(tag_list(config)),
+    }
+
     html_files = gather_html_files(CONTENT_DIR)
     logger.info(f"Found {len(html_files)} html file(s).")
     for html_file in html_files:
         logger.info(f"Copying {html_file}")
 
         #Insert the html content into the template
-        insert_hfun(html_file, config)
+        insert_hfun(html_file, hfun_inserts)
 
     FILETYPES_TO_COPY = [".js"]
     for filetype in FILETYPES_TO_COPY:
@@ -161,7 +168,7 @@ def posts_by_dir(directory:Path, config: dict, get_relative_path:bool = False) -
     for post in posts:
         # Get the header information
         header_info, _ = get_meta_info(post, config)
-        print(header_info["is_draft"])
+        # print(header_info["is_draft"])
         # Only include the published posts and ignore drafts
         if not header_info["is_draft"]:
 
@@ -245,19 +252,14 @@ def dict_to_html_table(data: dict) -> str:
     return html
 
 # =============================================
-def insert_hfun(file: Path, config: dict):
+def insert_hfun(file: Path, inserts: dict):
     default_header = config["site"]
     default_header["current_year"] = current_year()
 
     index_data = {
         **default_header,
-        "all_articles": dict_to_html_table(posts_by_dir(CONTENT_DIR / "blog", config)),
-        "all_notes": dict_to_html_table(posts_by_dir(CONTENT_DIR / "notes", config)),
-        "recent_posts": dict_to_html_table(recent_posts(5, config)),
-        "tag_cloud": create_tag_cloud(tag_list(config)),
-        # "tag_list": dict_to_html_table(tag_list()),
+        **inserts,
     }
-
 
     _env = Environment(loader=FileSystemLoader(str(file.parent)))
     template = _env.get_template(str(file.relative_to(file.parent)))
