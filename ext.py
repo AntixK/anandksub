@@ -11,7 +11,7 @@ from mistletoe import token
 from mistletoe.block_token import tokenize, BlockToken
 
 
-class MyHtmlRenderer(HtmlRenderer, LaTeXRenderer):
+class KuttiHtmlRenderer(HtmlRenderer, LaTeXRenderer):
     def __init__(self):
         super().__init__(TripleCommaDiv,
                          FootNote,

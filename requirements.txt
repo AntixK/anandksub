@@ -1,10 +1,6 @@
 jinja2
-pygments
 markdown
-click
 watchdog
-pillow
 mistune
 htmlmin
 loguru
-minify-html

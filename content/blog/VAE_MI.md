@@ -2,7 +2,7 @@
 @def published = "2 October 2024"
 @def description = "Why did diffusion win over VAEs."
 @def tags = ["math","ml", "code", "information-theory"]
-@def draft = true
+@def is_draft = true
 @def show_info = true
 @def has_code = false
 @def has_chart = false

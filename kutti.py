@@ -13,13 +13,197 @@ from typing import List, Tuple
 from collections import Counter
 
 import mistletoe
+from mistletoe import token, span_token
+from mistletoe.span_token import SpanToken
+from mistletoe.block_token import Document
+from mistletoe.html_renderer import HtmlRenderer
+from mistletoe.base_renderer import BaseRenderer
+from mistletoe.latex_renderer import LaTeXRenderer
+from mistletoe.block_token import tokenize, BlockToken
+
 from loguru import logger
 from htmlmin import Minifier
 from watchdog.observers import Observer
 from jinja2 import Environment, FileSystemLoader
 from watchdog.events import FileSystemEventHandler
 
-from ext import MyHtmlRenderer
+class KuttiHtmlRenderer(HtmlRenderer, LaTeXRenderer):
+    def __init__(self):
+        super().__init__(TripleCommaDiv,
+                         FootNote,
+                         SpanFootNote,
+                         EqLabel,
+                         EqrefLabel,
+                         HTMLInMD,
+                         process_html_tokens=True)
+        self.fn_counter = 0
+        self.fn_map = {}
+
+        self.eq_counter = 0
+        self.eq_map = {}
+
+    def render_math(self, token):
+        """
+        Convert single dollar sign enclosed math expressions to the ``\\(...\\)`` syntax, to support
+        the default MathJax settings which ignore single dollar signs as described at
+        https://docs.mathjax.org/en/latest/basic/mathematics.html#tex-and-latex-input.
+        """
+        if token.content.startswith('$$'):
+            self.eq_counter += 1
+            # self.eq_map[token.eqtag] = self.eq_counter
+
+            return self.render_raw_text(token)
+        # return '\\({}\\)'.format(self.render_raw_text(token).strip('$'))
+        return self.render_raw_text(token)
+
+    def render_triple_comma_div(self, token) -> str:
+        inner = self.render_inner(token)
+        return f'<div class="{token.classes}">{inner}</div>'
+
+    def render_html_in_md(self, token):
+        return token.children
+
+    def render_span_foot_note(self, token) -> str:
+        self.fn_counter += 1
+        self.fn_map[token.label] = self.fn_counter
+        return f'<sup id="fnref:{token.label}"><a class="fnref" href="#fndef:{token.label}">[{self.fn_map[token.label]}]</a></sup>'
+
+    def render_eq_label(self, token) -> str:
+        # Render the equation label.
+        # Creates an anchor tag with the equation label as the id.
+
+        # self.eq_counter += 1
+        self.eq_map[token.eqtag] = self.eq_counter
+
+        return f"<a id={token.eqtag} class='anchor'></a>"
+
+    def render_eqref_label(self, token) -> str:
+        # Links to the equation label with the given tag.
+
+        # print(self.eq_map)
+        eq_label = self.eq_map[token.eqtag]
+        return f"<span class='eqref'>(<a href='#{token.eqtag}'>{eq_label}</a>)</span>"
+
+    def render_foot_note(self, token) -> str:
+        inner = self.render_inner(token)
+
+        # print(self.fn_map)
+        # print(token.tag)
+        return f"""
+        <p><table class="fndef" id="fndef:{token.tag}">
+            <tr>
+                <td class="fndef-backref"><a href="#fnref:{token.tag}">[{self.fn_map[token.tag]}]</a></td>
+                <td class="fndef-content">{inner.lstrip("<p>").rstrip("</p>")}</td>
+            </tr>
+        </table></p>
+        """
+
+    def render_document(self, token) -> str:
+        self.footnotes.update(token.footnotes)
+        inner = '\n'.join([self.render(child) for child in token.children])
+        return '{}\n'.format(inner) if inner else ''
+
+
+class HTMLInMD(BlockToken):
+    @staticmethod
+    def start(line):
+        return line.startswith("!!!")
+
+    @staticmethod
+    def read(lines):
+        first_line = next(lines)
+        delimiter = "!!!"
+        child_lines = []
+        for line in lines:
+            # print(line)
+            if line.startswith(delimiter):
+                if line[len(delimiter)] != ":":
+                    # End block found:
+                    break
+            child_lines.append(line)
+
+        children = "".join(child_lines)
+        return children
+
+    def __init__(self, match):
+        self.children = match
+
+class TripleCommaDiv(BlockToken):
+    @staticmethod
+    def start(line):
+        return line.startswith(":::")
+
+    @staticmethod
+    def read(lines):
+        first_line = next(lines)
+        # Get class of the div
+        classes = first_line.lstrip(":").strip()
+        delimiter = ":::"
+        child_lines = []
+        for line in lines:
+            if line.startswith(delimiter):
+                if line[len(delimiter)] != ":":
+                    # End block found:
+                    break
+            child_lines.append(line)
+        children = tokenize(child_lines)
+        return classes, children
+
+    def __init__(self, match):
+        self.classes, self.children = match
+
+
+class SpanFootNote(SpanToken):
+    pattern = re.compile(r'\[\^([^\]]+?)\](?!:)')
+    parse_inner = False
+    # parse_group = 2
+
+    def __init__(self, match):
+        # print(match.group(1))
+        self.tag = match.group()
+        self.label = match.group(1)
+
+class EqLabel(SpanToken):
+    pattern = re.compile(r'\\label\{(.*?)\}')
+    parse_inner = False
+
+    def __init__(self, match):
+        # print(match)
+        # print(match.group(2))
+        self.eqtag = match.group(1)
+
+class EqrefLabel(SpanToken):
+    pattern = re.compile(r'\\eqref\{(.*?)\}')
+    parse_inner = False
+    precedence = 10
+    # parse_group = 2
+
+    def __init__(self, match):
+        # print(match.group(1))
+        self.eqtag = match.group(1)
+
+
+class FootNote(BlockToken):
+    precedence = 11
+
+    @staticmethod
+    def start(line):
+        return line.startswith("[^")
+
+    @staticmethod
+    def read(lines) -> dict:
+        delimiter = "]:"
+        child_lines = {}
+        for line in lines:
+            if delimiter in line:
+                fn_tag, fn_text = line.split("]:")
+                children = tokenize([fn_text]) # Note: tokenize requires a list of strings
+
+                return (fn_tag[2:], children)
+
+    def __init__(self, match):
+        self.tag = match[0]
+        self.children = match[1]
 
 
 def parse_config(CONFIG_FILE : Path):
@@ -363,7 +547,7 @@ def render_html(file: Path, config: dict) -> None:
     html_data.update(header_data)
 
     # Convert to html content
-    html_content = mistletoe.markdown(md_content, MyHtmlRenderer)
+    html_content = mistletoe.markdown(md_content, KuttiHtmlRenderer)
 
     html_data.update({"html_content":html_content})
 
