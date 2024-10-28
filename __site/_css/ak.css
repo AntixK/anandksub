@@ -302,24 +302,6 @@ code {
     padding: 0.1em 0.2em;
 }
 
-/* .hljs-meta,
-.hljs-metas,
-.hljs-metap {
-    font-weight: bold;
-}
-
-.hljs-meta {
-    color: rgb(25, 179, 51);
-}
-
-.hljs-metas {
-    color: red;
-}
-
-.hljs-metap {
-    color: rgb(51, 131, 231);
-} */
-
 .copy-button {
     cursor: pointer;
     border: none;
@@ -709,6 +691,7 @@ hr {
     color: var(--c-4);
     font-family: var(--monospace-font);
     font-size: 1.7rem;
+    padding-left: 1rem;
     /* padding-top: 0.5rem; */
     /* line-height: 1.5; */
 }
