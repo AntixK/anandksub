@@ -347,7 +347,7 @@ img {
     height: 1.8rem;
     /* position: relative; */
     overflow: hidden;
-    /* margin-bottom: -0.3em; */
+    /* margin-bottom: -10.5rem; */
     pointer-events: none;
     min-width: 0;
 }
@@ -647,12 +647,18 @@ hr {
 /* ================================================================ */
 /* Text for date */
 .date {
+    display: inline-flexbox;
+    line-height: 2;
     color: var(--c-4);
     font-family: var(--monospace-font);
-    font-size: 1.4rem;
-    padding-top: 0.5rem;
-    line-height: 1.5;
-}
+    font-size: 1.1rem;
+
+    /* display: flex; */
+    justify-content: space-between;
+    width: 100%;
+    flex-flow: row wrap;
+    align-content: space-between;
+}}
 
 .tags {
     display: inline-flexbox;

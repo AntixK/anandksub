@@ -461,8 +461,9 @@ def dict_to_html_table(data: dict) -> str:
                     <h3>
                     <a href={post['url']}>{post['title']}</a>
                     </h3>
-                    <p class="tags">{post['description']}
+                    <p class="tags">{post['description']}</p>
                     </br>
+                    <p class="tags">
                     {" ".join(i for i in tags)}
                     </p>
                 </td>
