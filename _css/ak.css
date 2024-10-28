@@ -658,7 +658,7 @@ hr {
     width: 100%;
     flex-flow: row wrap;
     align-content: space-between;
-}}
+}
 
 .tags {
     display: inline-flexbox;
