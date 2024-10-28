@@ -12,16 +12,16 @@
 
 ## 1 : Complex Step Numerical Differentiation
 &emsp; The common naïve method for differentiating a function $f: \R \to \R$ is given by the forward difference formula
-$$ 
+$$
 f'(x) = \frac{f(x + h) - f(x)}{h} + \fO(h)
 $$\label{eq:fwd_diff}
 
-where $h$ is the real finite difference interval and $\fO(h)$ is the truncation error (from the full Taylor series of $f(x)$). The above method is not accurate or computationally efficient, but it is quite easy to implement. 
+where $h$ is the real finite difference interval and $\fO(h)$ is the truncation error (from the full Taylor series of $f(x)$). The above method is not accurate or computationally efficient, but it is quite easy to implement.
 
-The common issue with implementing the above formula is the *step-size dilemma*, the tradeoff between choosing a small step size $h$ and a small resultant error. To reduce the truncation error, $h$ should be small as possible; however, too small a step size would result in numerical errors like subtractive cancellation, deeming the result inaccurate. 
+The common issue with implementing the above formula is the *step-size dilemma*, the tradeoff between choosing a small step size $h$ and a small resultant error. To reduce the truncation error, $h$ should be small as possible; however, too small a step size would result in numerical errors like subtractive cancellation, deeming the result inaccurate.
 
 A slight numerical improvement to the equation \eqref{eq:fwd_diff} is the central difference formula.
-$$ 
+$$
 f'(x) = \frac{f(x + h/2) - f(x - h/2)}{h} + \fO(h^2/4)
 $$\label{eq:cent_diff}
 
@@ -43,7 +43,7 @@ $$
 where $h$ is real. Now, the class of functions that we are interested in are real, so $y=0, v(x) = 0$ and $f(x) = u(x)$. Substituting these in the above equation, we get
 
 $$
-\begin{aligned} 
+\begin{aligned}
 \frac{df}{dx} &= \lim_{h \to 0} \frac{\Im[f(x + ih)]}{h}\\
 f'(x) &\approx \frac{\Im[f(x + ih)]}{h}
 \end{aligned}
@@ -84,7 +84,7 @@ $$
 \Delta x_1 &= 1 &&& h_1 &= 1e-20 \\
 \Delta x_2 &= 0 &&& h_2 &= 0 \\
 f(x_1, x_2) &= x_1^2 \sin(x_2) &&& \bar{f} &= (x_1 + ih_1)^2 \sin(x_2 + ih_2) \\
-df/dx_1 &= 2x_1\sin(x_2)\Delta x_1 + x_1^2\cos(x_2)\Delta x_2 &&& \bar{f} &= (x_1^2 - h_1^2 +i2x_1h_1) \\ 
+df/dx_1 &= 2x_1\sin(x_2)\Delta x_1 + x_1^2\cos(x_2)\Delta x_2 &&& \bar{f} &= (x_1^2 - h_1^2 +i2x_1h_1) \\
 & &&& &(\sin(x_2)\cosh(h_2) + i\cos(x_2) \sinh(h_2)) \\
 df/dx_1 &= 2x_1\sin(x_2) &&& df/dx_1 &= \Im[\bar{f}]/h_1 = 2x_1 \sin(x_2)\cosh(h_2) + \\
 & &&& & \cos(x_2) \sinh(h_2) (x_1^2 - h_1^2) / h_1 \\
@@ -92,23 +92,23 @@ df/dx_1 &= 2x_1\sin(x_2) &&& df/dx_1 &= \Im[\bar{f}]/h_1 = 2x_1 \sin(x_2)\cosh(h
 \end{aligned}
 $$\label{eq:comp_cs_ad}
 
-Both methods yield the same result. The perturbations $\Delta x$ are stored in a separate variables in autodiff, while they are stored in the imaginary parts in complex-step differentiation. Compared to the forward (and reverse) mode autodiff that computes gradients based on perturbations at the level of machine precision[^2], complex-step too can produce equally accurate gradients at the level of machine precision (refer to above figure). 
+Both methods yield the same result. The perturbations $\Delta x$ are stored in a separate variables in autodiff, while they are stored in the imaginary parts in complex-step differentiation. Compared to the forward (and reverse) mode autodiff that computes gradients based on perturbations at the level of machine precision[^2], complex-step too can produce equally accurate gradients at the level of machine precision (refer to above figure).
 
-&emsp; However, complex-step differentiation is not applicable in cases where there is a complicated control flow in the computational graph of the function $f$. These control flows often result in discontinuities. Complex-step differentiation requires specific tricks to handle each of these cases[^3] while autodiff handles them in a more rigorous manner. Moreover, complex-step always performs additional computations 
+&emsp; However, complex-step differentiation is not applicable in cases where there is a complicated control flow in the computational graph of the function $f$. These control flows often result in discontinuities. Complex-step differentiation requires specific tricks to handle each of these cases[^3] while autodiff handles them in a more rigorous manner. Moreover, complex-step always performs additional computations
 compared to autodiff as shown in equation \eqref{eq:comp_cs_ad}. For these reasons, autodiff should still be preferred.
 
 ----
 
 ## 2 : Complex Momentum Stochastic Gradient Descent
 
-<!-- &emsp; 
+<!-- &emsp;
 
 
-Broadly speaking, there has been two approaches to stabilize their training - 1) shaping the loss landscape through architectural modifications ($G$ and $D$ networks) or improved loss functions (the function $f$), and 2) improving the training algorithms. The first category has been more popular - modifications like Spectral-Normalization (for Wasserstein-GAN), gradient-clipping, Hinge-loss, Non-saturating loss, least-squares loss and so on. The latter category is a bit more theoretical and will be the main focus of this section. 
+Broadly speaking, there has been two approaches to stabilize their training - 1) shaping the loss landscape through architectural modifications ($G$ and $D$ networks) or improved loss functions (the function $f$), and 2) improving the training algorithms. The first category has been more popular - modifications like Spectral-Normalization (for Wasserstein-GAN), gradient-clipping, Hinge-loss, Non-saturating loss, least-squares loss and so on. The latter category is a bit more theoretical and will be the main focus of this section.
 
 The question is - can we improve the gradient descent algorithm (or any first-order optimization technique) to stabilize the training of GANs? The usual approach for this sort of problem is to study the loss landscape of the problem, and the type of optimization that happens in it.  In practice, the objective in equation \eqref{eq:gan_loss} is optimized via alternatively optimizing the $G$ and $D$ networks. To study the effects of training dynamics, a classic example is to consider the Dirac GAN, where no architectural or regularization effects come into play. Simply put, Dirac GAN[^dirac] is a 1-parameter Generator and a linear Discriminator pair. The true data distribution consists of a Dirac distribution concentrated at $0$.
 
-It's been known empirically (at least since 2015[^rad]) that momentum actually hinders the stability of training GANs. Some have even suggested to use negative momentum[^negmom] for a stable training. 
+It's been known empirically (at least since 2015[^rad]) that momentum actually hinders the stability of training GANs. Some have even suggested to use negative momentum[^negmom] for a stable training.
 
 !!!
 <img style="width:100%;min-width:300px;" src="/assets/post_images/dirac_gan.webp" alt="Comparison of various values for momentum in SGD for GANs">
@@ -126,7 +126,7 @@ $$
 \end{aligned}
 $$\label{eq:sgd}
 
-Where $f(\theta)$ is the function whose parameter $\theta$ is being optimized at step $t+1$, $v$ is the velocity accelerated by the momentum $\nu$, and $\alpha$ is the learning rate. Usually, the momentum value is set to be positive ($\nu \geq 0$). However, one can argue that the momentum value should actually depend upon the loss landscape, just like the learning rate $\alpha$. A lot of effort has been put into automatically adapting the learning rate $\alpha$ based on the local loss landscape. SGD modifications like RMSProp, and Adam[^adam], apart from a range of learning rate schedulers have been developed to make the optimization work on a variety of different objectives and loss landscapes. 
+Where $f(\theta)$ is the function whose parameter $\theta$ is being optimized at step $t+1$, $v$ is the velocity accelerated by the momentum $\nu$, and $\alpha$ is the learning rate. Usually, the momentum value is set to be positive ($\nu \geq 0$). However, one can argue that the momentum value should actually depend upon the loss landscape, just like the learning rate $\alpha$. A lot of effort has been put into automatically adapting the learning rate $\alpha$ based on the local loss landscape. SGD modifications like RMSProp, and Adam[^adam], apart from a range of learning rate schedulers have been developed to make the optimization work on a variety of different objectives and loss landscapes.
 
 One may extend the idea to momentum as well. Indeed, it has been shown that first-order method like SGD with positive momentum do not converge for adversarial problems like GANs. GANs, given their dueling networks design, represent a zero-sum game. One player - the Generator $G: \vz \to \vx$ $-$ maximizes their chance of fooling the Discriminator $D: \vx \to \R$, while the Discriminator minimizes their chance of getting fooled. This is mathematically represented as
 
@@ -155,6 +155,7 @@ w_{t+1} &= w_t + \Re \{\alpha\, \upsilon_{t+1}\}
 $$\label{eq:complex-sgd}
 
 Where $\Re$ and $\Im$ are the real and imaginary parts respectively.
+
 !!!
 <video autoplay muted loop>
   <source src="/media/post_images/gan_opt.mp4" type='video/mp4;'>>
@@ -162,20 +163,20 @@ Where $\Re$ and $\Im$ are the real and imaginary parts respectively.
 <p class = "caption-text ">2D GAN on Toy data with complex-momentum</p>
 !!!
 
-In practice, complex-momentum SGD requires 2 momentum buffers (for the real and imaginary parts) and is quite easy to implement. 
+In practice, complex-momentum SGD requires 2 momentum buffers (for the real and imaginary parts) and is quite easy to implement.
 
 ```python
 import torch
 
 class ComplexSGD(torch.optim.Optimizer):
-    """ 
+    """
     SGD with Complex-valued Momentum
     """
 
-    def __init__(self, 
-                 params, 
-                 lr:float, 
-                 momentum:torch.cfloat, 
+    def __init__(self,
+                 params,
+                 lr:float,
+                 momentum:torch.cfloat,
                  device='cpu'):
         """
         Args:
@@ -193,8 +194,8 @@ class ComplexSGD(torch.optim.Optimizer):
         self.state = dict()
         for gr in self.param_groups:
             for p in gr['params']:
-                self.state[p] = dict(velocity = torch.zeros_like(p, 
-                                                                 dtype=torch.cfloat, 
+                self.state[p] = dict(velocity = torch.zeros_like(p,
+                                                                 dtype=torch.cfloat,
                                                                  device=device))
 
     def step(self):
@@ -215,8 +216,7 @@ Where $A, B, H$ are coefficient matrices, and $\lambda$ controls the "adversaria
 ## Conclusion
 The point of this discussion to shed some light on the usefulness of complex numbers in constructing a compact yet powerful representation of a more sophisticated procedure. In the above two examples, the complex representation did not solve any problem uniquely, but was shown to be equivalent to or a generalization of other standard procedures.
 
----- 
-
+----
 
 [^1]: Refer to this [stackexchange answer](https://math.stackexchange.com/a/888280) for a derivation.
 

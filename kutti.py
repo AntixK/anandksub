@@ -27,6 +27,9 @@ from watchdog.observers import Observer
 from jinja2 import Environment, FileSystemLoader
 from watchdog.events import FileSystemEventHandler
 
+# =================== Mistletoe Extensions ==================#
+
+
 class KuttiHtmlRenderer(HtmlRenderer, LaTeXRenderer):
     def __init__(self):
         super().__init__(TripleCommaDiv,
@@ -102,7 +105,6 @@ class KuttiHtmlRenderer(HtmlRenderer, LaTeXRenderer):
         self.footnotes.update(token.footnotes)
         inner = '\n'.join([self.render(child) for child in token.children])
         return '{}\n'.format(inner) if inner else ''
-
 
 class HTMLInMD(BlockToken):
     @staticmethod
@@ -205,6 +207,7 @@ class FootNote(BlockToken):
         self.tag = match[0]
         self.children = match[1]
 
+# ========================= Kutti =====================#
 
 def parse_config(CONFIG_FILE : Path):
     # Parse config.toml file
@@ -281,6 +284,8 @@ def render(clean: bool = False):
         "tag_cloud": create_tag_cloud(tag_list(config)),
     }
 
+    # print(posts_by_dir(CONTENT_DIR / "blog", config))
+
     html_files = gather_html_files(CONTENT_DIR)
     logger.info(f"Found {len(html_files)} html file(s).")
     for html_file in html_files:
@@ -297,6 +302,43 @@ def render(clean: bool = False):
             # print(file.relative_to(CONTENT_DIR))
             shutil.copy(file, BUILD_DIR / file.relative_to(CONTENT_DIR))
 
+    # Create tag pages
+    TAG_DIR: Path = (BUILD_DIR / "tag")
+    TAG_DIR.mkdir(exist_ok=True, parents=True)
+
+    # Create a subdir for each tag
+    all_tags = tag_list(config)
+    for tag in all_tags:
+        (TAG_DIR / tag).mkdir(exist_ok=True, parents=True)
+
+    # Get posts by tag and render the tag pages
+
+    html_template = env.get_template("tag.html")
+
+    default_header = config["site"]
+    default_header["current_year"] = current_year()
+
+    for tag in all_tags:
+        _posts = posts_by_tag(tag, config)
+
+        print(_posts)
+        _posts_table = dict_to_html_table(_posts)
+        # tag_html = TAG_DIR / tag / "index.html"
+        logger.info(f"Rendering tag page for {tag}")
+
+        hfun_inserts = {
+            **default_header,
+            "tag_name": tag,
+            "tag_posts": _posts_table,
+        }
+
+        html = html_template.render(hfun_inserts)
+        if DO_MINIFY:
+            html = do_minify_html(html)
+
+        # save_html(TAG_DIR / tag / "index.html", html)
+        with open(TAG_DIR / tag / "index.html", "w+") as f:
+            f.write(html)
 
     t1_stop = perf_counter()
     logger.success(f"Rendering complete. Elapsed time: {(t1_stop - t1_start)*100:.4f}ms")
@@ -334,8 +376,22 @@ def posts_by_tag(tag:str, config: dict) -> dict:
     for post in posts:
         # Get the header information
         header_info, _ = get_meta_info(post, config)
-        if tag in header_info["tags"]:
-            result[header_info["published"]] = post.relative_to(CONTENT_DIR).stem
+        # print(header_info["is_draft"])
+        # Only include the published posts and ignore drafts
+        if not header_info["is_draft"] and tag in header_info["tags"]:
+
+            pub_date = datetime.strptime(header_info["published"], '%d %B %Y')
+            pub_date = pub_date.strftime('%d %b %Y')
+            # print(post.relative_to(CONTENT_DIR))
+            result[pub_date] = {
+                "url":  f"/{str(post.relative_to(CONTENT_DIR)).split('.')[0]}",
+                "title": header_info["title"],
+                "tags": header_info["tags"],
+                "description": header_info["description"]
+            }
+    # print(result)
+    # Sort the posts by date
+    result = dict(sorted(result.items(), key=lambda x: datetime.strptime(x[0], '%d %b %Y'), reverse=True))
 
     return result
 
