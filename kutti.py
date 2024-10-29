@@ -29,7 +29,6 @@ from watchdog.events import FileSystemEventHandler
 
 # =================== Mistletoe Extensions ==================#
 
-
 class KuttiHtmlRenderer(HtmlRenderer, LaTeXRenderer):
     def __init__(self):
         super().__init__(TripleCommaDiv,
@@ -83,15 +82,19 @@ class KuttiHtmlRenderer(HtmlRenderer, LaTeXRenderer):
     def render_eqref_label(self, token) -> str:
         # Links to the equation label with the given tag.
 
-        # print(self.eq_map)
         eq_label = self.eq_map[token.eqtag]
         return f"<span class='eqref'>(<a href='#{token.eqtag}'>{eq_label}</a>)</span>"
 
     def render_foot_note(self, token) -> str:
-        inner = self.render_inner(token)
+        """
+        Render the footnote.
 
-        # print(self.fn_map)
-        # print(token.tag)
+        The footnote is rendered as a HTML table with two columns:
+
+            1. The numbered back reference to the footnote in the text.
+            2. The content of the footnote.
+        """
+        inner = self.render_inner(token)
         return f"""
         <p><table class="fndef" id="fndef:{token.tag}">
             <tr>
@@ -102,6 +105,9 @@ class KuttiHtmlRenderer(HtmlRenderer, LaTeXRenderer):
         """
 
     def render_document(self, token) -> str:
+        """
+        Render the document.
+        """
         self.footnotes.update(token.footnotes)
         inner = '\n'.join([self.render(child) for child in token.children])
         return '{}\n'.format(inner) if inner else ''
@@ -117,7 +123,6 @@ class HTMLInMD(BlockToken):
         delimiter = "!!!"
         child_lines = []
         for line in lines:
-            # print(line)
             if line.startswith(delimiter):
                 if line[len(delimiter)] != ":":
                     # End block found:
@@ -161,7 +166,6 @@ class SpanFootNote(SpanToken):
     # parse_group = 2
 
     def __init__(self, match):
-        # print(match.group(1))
         self.tag = match.group()
         self.label = match.group(1)
 
@@ -170,8 +174,6 @@ class EqLabel(SpanToken):
     parse_inner = False
 
     def __init__(self, match):
-        # print(match)
-        # print(match.group(2))
         self.eqtag = match.group(1)
 
 class EqrefLabel(SpanToken):
@@ -181,7 +183,6 @@ class EqrefLabel(SpanToken):
     # parse_group = 2
 
     def __init__(self, match):
-        # print(match.group(1))
         self.eqtag = match.group(1)
 
 
@@ -243,13 +244,21 @@ HTMLMINIFIER = Minifier(
         keep_pre=True,
 )
 
-def gather_md_files(dir, only_modified:bool = False) -> List:
+def gather_md_files(dir) -> List:
+    """
+    Gather all markdown files in the given directory and
+    return as a sorted list.
+    """
     return sorted(list(dir.glob("**/*.md")))
 
-def gather_html_files(dir, only_modified:bool = False) -> List:
+def gather_html_files(dir) -> List:
+    """
+    Gather all html files in the given directory and
+    return as a sorted list.
+    """
     return sorted(list(dir.glob("**/*.html")))
 
-def render(clean: bool = False):
+def render(clean: bool = False) -> None:
     t1_start = perf_counter()
     if clean and BUILD_DIR.exists():
         logger.info("Cleaning build directory...")
@@ -271,9 +280,7 @@ def render(clean: bool = False):
 
     logger.info(f"Found {len(md_files)} markdown file(s).")
     for md_file in md_files:
-        # print(md_file)
         logger.info(f"Rendering {md_file}")
-        # TODO: Only render the ones that has changed
         render_html(md_file, config)
 
     # Gather index html files
@@ -283,8 +290,6 @@ def render(clean: bool = False):
         "recent_posts": dict_to_html_table(recent_posts(5, config)),
         "tag_cloud": create_tag_cloud(tag_list(config)),
     }
-
-    # print(posts_by_dir(CONTENT_DIR / "blog", config))
 
     html_files = gather_html_files(CONTENT_DIR)
     logger.info(f"Found {len(html_files)} html file(s).")
@@ -299,7 +304,6 @@ def render(clean: bool = False):
         files = list(CONTENT_DIR.glob(f"**/*{filetype}"))
         for file in files:
             logger.info(f"Copying {file}")
-            # print(file.relative_to(CONTENT_DIR))
             shutil.copy(file, BUILD_DIR / file.relative_to(CONTENT_DIR))
 
     # Create tag pages
@@ -321,7 +325,6 @@ def render(clean: bool = False):
     for tag in all_tags:
         _posts = posts_by_tag(tag, config)
 
-        print(_posts)
         _posts_table = dict_to_html_table(_posts)
         # tag_html = TAG_DIR / tag / "index.html"
         logger.info(f"Rendering tag page for {tag}")
@@ -360,6 +363,9 @@ def tag_list(config: dict) -> dict:
     return tags
 
 def current_year() -> int:
+    """
+    Get the current year
+    """
     return datetime.now().year
 
 def recent_posts(N:int, config: dict) -> dict:
@@ -376,33 +382,31 @@ def posts_by_tag(tag:str, config: dict) -> dict:
     for post in posts:
         # Get the header information
         header_info, _ = get_meta_info(post, config)
-        # print(header_info["is_draft"])
         # Only include the published posts and ignore drafts
         if not header_info["is_draft"] and tag in header_info["tags"]:
 
             pub_date = datetime.strptime(header_info["published"], '%d %B %Y')
             pub_date = pub_date.strftime('%d %b %Y')
-            # print(post.relative_to(CONTENT_DIR))
             result[pub_date] = {
                 "url":  f"/{str(post.relative_to(CONTENT_DIR)).split('.')[0]}",
                 "title": header_info["title"],
                 "tags": header_info["tags"],
                 "description": header_info["description"]
             }
-    # print(result)
     # Sort the posts by date
     result = dict(sorted(result.items(), key=lambda x: datetime.strptime(x[0], '%d %b %Y'), reverse=True))
 
     return result
 
-def posts_by_dir(directory:Path, config: dict, get_relative_path:bool = False) -> dict:
+def posts_by_dir(directory:Path,
+                 config: dict,
+                 get_relative_path:bool = False) -> dict:
     posts = gather_md_files(directory)
 
     result = {}
     for post in posts:
         # Get the header information
         header_info, _ = get_meta_info(post, config)
-        # print(header_info["is_draft"])
         # Only include the published posts and ignore drafts
         if not header_info["is_draft"]:
 
@@ -425,7 +429,6 @@ def posts_by_dir(directory:Path, config: dict, get_relative_path:bool = False) -
             if "description" in header_info:
                 result[pub_date].update({"description":header_info["description"]})
 
-    # print(result)
     # Sort the posts by date
     result = dict(sorted(result.items(), key=lambda x: datetime.strptime(x[0], '%d %b %Y'), reverse=True))
 
@@ -526,7 +529,6 @@ def get_header_info(file: Path) -> Tuple[dict, str]:
 def get_meta_info(file, config: dict):
 
     default_header = config["post"]
-    # =============================================
 
     _header_data, md_content = get_header_info(file)
 
@@ -611,14 +613,13 @@ def render_html(file: Path, config: dict) -> None:
     html_template = env.get_template("article.html")
     html = html_template.render(html_data)
 
-    # print(html)
-
     if DO_MINIFY:
         html = do_minify_html(html)
 
     # =============================================
     save_html(file, html)
 
+# ========================= Utilities =====================#
 
 def save_html(file: Path, html: str) -> None:
     parent_dir = file.relative_to(CONTENT_DIR).parent
@@ -628,7 +629,6 @@ def save_html(file: Path, html: str) -> None:
         f.write(html)
 
 
-# ========================= Utilities =====================#
 def get_read_time(text: str) -> int:
     num_words = len(text.split())
     reading_speed = 180 # Accounting for math equations
@@ -662,16 +662,12 @@ def check_for_optimized_image_formats():
     logger.info(f"Found {len(media_files)} media assets.")
 
     un_opt = [m for m in media_files if m.suffix not in ['.webp', '.svg', '.pdf', '.mp4']]
-    # print(media_files[0].suffix)
     if len(un_opt) > 0:
         logger.warning(f"The following assets are not optimized. Consider optimizing them before publishing.{pformat(un_opt)}")
     else:
         logger.info("All media assets are optimized.")
 
-
-
 def do_minify_html(html: str) -> str:
-    # print()
     logger.info("Minifying html...")
 
     # Compute the size of the html file
@@ -695,6 +691,7 @@ class ContentMonitor(FileSystemEventHandler):
             build()
 
 # ============================ Server =========================== #
+
 class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
     SUFFIXES = [".html", "/index.html", "/"]
     JS_EXTENSIONS = (".js", ".mjs")
@@ -710,7 +707,6 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path not in self.SUFFIXES:
-            # print(self.path)
             # self.path = self.path.lstrip("/")
             if (not self.path.endswith(".html") and
                 not self.path.endswith("/") and
@@ -719,7 +715,6 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
                 not self.path.endswith(self.CSS_EXTENSIONS) and
                 not self.path.endswith(self.FONT_EXTENSIONS)):
                 self.path += ".html"
-                # print(self.path)
 
 
         server.SimpleHTTPRequestHandler.do_GET(self)
@@ -753,7 +748,6 @@ def build() -> None:
     check_for_optimized_font_files()
 
 if __name__ == "__main__":
-
 
     CONFIG_FILE: Path = Path("config.toml")
 
