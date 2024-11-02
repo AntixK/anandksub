@@ -290,6 +290,7 @@ def render(clean: bool = False) -> None:
         "all_notes": dict_to_html_table(posts_by_dir(CONTENT_DIR / "notes", config)),
         "recent_posts": dict_to_html_table(recent_posts(5, config)),
         "tag_cloud": create_tag_cloud(tag_list(config)),
+        "footer": get_footer(config),
     }
 
     html_files = gather_html_files(CONTENT_DIR)
@@ -444,6 +445,20 @@ def create_tag_cloud(tags: dict) -> str:
     tag_cloud += """</ul>"""
     return tag_cloud
 
+
+def get_footer(config:dict) -> str:
+    curr_year = current_year()
+    author = config["site"]["author"]
+    return f"""
+    <div
+        style="font-family:var(--sanserif-font); color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;">
+        &copy; {curr_year} {author} <span class="vl"></span>
+        <a href="/license">License</a> <span class="vl"></span>
+        <a href="/design">Design</a> <span class="vl"></span>
+        Built with Kutti
+        <span style="color: #e25555;">&hearts;</span>
+    </div>
+    """
 
 def dict_to_html_table(data: dict) -> str:
     html = """
