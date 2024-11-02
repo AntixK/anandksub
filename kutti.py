@@ -23,6 +23,7 @@ from mistletoe.block_token import tokenize, BlockToken
 
 from loguru import logger
 from htmlmin import Minifier
+from feedgen.feed import FeedGenerator
 from watchdog.observers import Observer
 from jinja2 import Environment, FileSystemLoader
 from watchdog.events import FileSystemEventHandler
@@ -446,9 +447,9 @@ def create_tag_cloud(tags: dict) -> str:
 
 def dict_to_html_table(data: dict) -> str:
     html = """
-    <table><colgroup>
-    <col span="1" style="width: 30%;">
-    <col span="1" style="width: 70%;">
+    <table>
+    <colgroup>
+        <col span="1" style="width:30%;">
     </colgroup>
     """
 
@@ -458,14 +459,13 @@ def dict_to_html_table(data: dict) -> str:
             html += f"""
             <tr>
                 <td>
-                    <h3 class="date">{date}</h3>
+                    <p class="date">{date}<p>
                 </td>
                 <td>
-                    <h3>
+                    <h3 style="margin-top:0.5rem;">
                     <a href={post['url']}>{post['title']}</a>
                     </h3>
                     <p class="tags">{post['description']}</p>
-                    </br>
                     <p class="tags">
                     {" ".join(i for i in tags)}
                     </p>
@@ -475,10 +475,10 @@ def dict_to_html_table(data: dict) -> str:
             html += f"""
             <tr>
                 <td>
-                    <h3 class="date">{date}</h3>
+                    <p class="date">{date}<p>
                 </td>
                 <td>
-                    <h3>
+                    <h3 style="margin-top:0.5rem;">
                     <a href={post['url']}>{post['title']}</a>
                     </h3>
                     <p class="tags">{" ".join(i for i in tags)}

@@ -19,7 +19,8 @@
     font-style: normal;
     font-weight: 200;
     font-display: swap;
-    src: url(https://cdnjs.cloudflare.com/ajax/libs/overpass/3.0.4/overpass-webfont/overpass-extralight.woff2) format("woff2");
+    src: url(https://cdnjs.cloudflare.com/ajax/libs/overpass/3.0.4/overpass-webfont/overpass-extralight.woff2)
+        format("woff2");
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
         U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122,
         U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
@@ -40,7 +41,8 @@
     font-style: normal;
     font-weight: 200;
     font-display: swap;
-    src: url(https://fonts.gstatic.com/s/nunito/v25/XRXI3I6Li01BKofiOc5wtlZ2di8HDDshdTQ3jw.woff2) format("woff2");
+    src: url(https://fonts.gstatic.com/s/nunito/v25/XRXI3I6Li01BKofiOc5wtlZ2di8HDDshdTQ3jw.woff2)
+        format("woff2");
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
         U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122,
         U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
@@ -169,6 +171,7 @@ h2 {
 
 h3 {
     font-size: 1.7rem;
+    margin-bottom: -0.5rem;
 }
 
 h4 {
@@ -209,6 +212,8 @@ p a:visited {
 /* Table */
 table {
     width: 100%;
+    border-spacing: 0 0rem;
+    /* border: 1px solid; */
 }
 
 th,
@@ -462,7 +467,7 @@ td {
     scrollbar-width: thin;
 }
 
-.katex-display>.katex {
+.katex-display > .katex {
     /* Overwrite KaTeX settings. */
     display: inline-block;
     /* width: 100%; */
@@ -648,16 +653,11 @@ hr {
 /* Text for date */
 .date {
     display: inline-flexbox;
-    line-height: 2;
+    /* line-height: 2; */
     color: var(--c-4);
     font-family: var(--monospace-font);
-    font-size: 1.1rem;
-
-    /* display: flex; */
-    justify-content: space-between;
-    width: 100%;
-    flex-flow: row wrap;
-    align-content: space-between;
+    /* font-size: 1.1rem; */
+    margin-top: 0rem;
 }
 
 .tags {
@@ -665,7 +665,7 @@ hr {
     line-height: 2;
     color: var(--c-4);
     font-family: var(--monospace-font);
-    font-size: 1.0rem;
+    font-size: 1rem;
 
     /* display: flex; */
     justify-content: space-between;

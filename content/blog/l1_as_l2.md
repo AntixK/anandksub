@@ -9,10 +9,10 @@
 @def is_draft = false
 
 
-&emsp; The $l_1$ regularized optimization problems are quite common in machine learning. They lead to a sparse solution to the modelling problem. Consider the following optimization problem with $l_1$ penalty[^lnot]. 
+&emsp; The $l_1$ regularized optimization problems are quite common in machine learning. They lead to a sparse solution to the modelling problem. Consider the following optimization problem with $l_1$ penalty[^lnot].
 
 $$
-\min_{\theta \in \R} f(\theta) := h(\theta) + \lambda |\theta| 
+\min_{\theta \in \R} f(\theta) := h(\theta) + \lambda |\theta|
 $$\label{eq:l1}
 
 Where $\theta$ are the parameters of the model $f$ to be optimized. Let us study the reparameterization $\theta = \mu \circ \nu$ for all $\theta \in \R$, where $\circ$ represents the element-wise (Hadamard) product of the vectors $\mu$ and $\nu$. This is called the *Hadamard product parameterization* (HPP) or simply the Hadamard paramterization[^hoff]. Then the equation \eqref{eq:l1} can be written as
@@ -20,7 +20,7 @@ Where $\theta$ are the parameters of the model $f$ to be optimized. Let us study
 $$
 \begin{aligned}
 \min_{\theta \in \R} f(\theta) &= h(\theta) + \lambda |\theta| \\
-% &\leq h(\theta) + \lambda \|\theta\|_2 \\
+&\leq h(\theta) + \lambda \|\theta\|_2 \\
 &=h(\mu \circ \nu) + \lambda \sum_i |\mu_i \nu_i| \\
 &= h(\mu \circ \nu) + \lambda \sum_i \sqrt{\mu_i^2 \nu_i^2} \\
 &\leq h(\mu \circ \nu) + \lambda \bigg ( \sum_i \frac{\mu_i^2 + \nu_i^2}{2}  \bigg ) && {\color{OrangeRed}\text{AM-GM Inequality}}\\

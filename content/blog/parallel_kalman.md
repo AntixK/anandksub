@@ -8,7 +8,7 @@
 @def show_info = true
 @def is_draft = false
 
-&emsp; *Parallel scan* or the *Associative scan* algorithm is a popular parallel computing technique that is used to parallelize sequential algorithms using the associative property of that algorithm. This technique is a generalization of the earlier and much more popular *prefix sum* algorithm (summing operation is associative). 
+&emsp; *Parallel scan* or the *Associative scan* algorithm is a popular parallel computing technique that is used to parallelize sequential algorithms using the associative property of that algorithm. This technique is a generalization of the earlier and much more popular *prefix sum* algorithm (summing operation is associative).
 
 Consider a sequential algorithm $\fA$ that runs in $\fO(N)$. By definition, at each step $t$, the computation $a_t$ depends on the previous result $a_{t-1}$ through some associative operation $\otimes$. The set of all the prefix-sums for $N$ steps is therefore
 
@@ -39,8 +39,8 @@ def prefix_scan(op, A: np.ndarray):
     def _up_sweep(res, i, j):
         l = j + 2 ** i - 1
         r = j + 2 ** (i + 1) - 1
-        res[r] = op(res[l], res[r]) 
-        # Order matters, as the operator 
+        res[r] = op(res[l], res[r])
+        # Order matters, as the operator
         # need not be commutative
 
     def _down_sweep(res, i, j):
@@ -61,7 +61,7 @@ def prefix_scan(op, A: np.ndarray):
         # Do in parallel (O(log N))
         for j in range(0, N, 2 ** (i + 1)):
             _down_sweep(res, i, j)
-    
+
     # Do in parallel (O(log N))
     res = op(res, A)
     return res
@@ -79,17 +79,19 @@ The logic flow of parallelizing the Kalman filter involves the following steps -
 !!!
 
 
-Kalman filtering is a special (Gaussian) case of more general class of *Bayesian filters*. Given a system with its internal(hidden) state as a set of variables $\vx_k$ and set of variables $\vy_k$ that can be observed/measured at time step $k$, we are interested in the following[^3] 
+Kalman filtering is a special (Gaussian) case of more general class of *Bayesian filters*. Given a system with its internal(hidden) state as a set of variables $\vx_k$ and set of variables $\vy_k$ that can be observed/measured at time step $k$, we are interested in the following[^3]
 - Marginal distribution $p(\vx_{k}|\vy_{1:k-1})$ of a future state given the observations $\vy_k$ until the current time step $k$. This is called as the *prediction distribution*.
 - Marginal distribution $p(\vx_k | \vy_{1:k})$ of the current state $\vx_k$ given the measurements $\vy_k$ till the time step $k$. This is called as the *filtering distribution*.
 
-The Kalman filter assumes the following model for the system 
+The Kalman filter assumes the following model for the system
+
 $$
 \begin{aligned}
 \vx_k &\sim p(\vx_k | \vx_{k-1}) &&= \fN(\vx_k; \vA_{k-1}\vx_{k-1}, \vQ_k) &&= \vA_{k-1}\vx_{k-1} + q_{k-1} &&& \color{OrangeRed} \text{State transition}\\
 \vy_k &\sim p(\vy_k | \vx_k) &&= \fN(\vy_k; \vH_{k}\vx_k, \vR_k)  &&= \vH_{k}\vx_k + r_k &&& \color{Teal} \text{Measurement model}
 \end{aligned}
 $$
+
 Where $\vA_k, \vH_k$ are the state transition and measurement model matrices respectively, and $q_k \sim \fN(\vzero, \vQ_k), r_k \sim \fN(\vzero, \vR_k)$ are the process noise and measurement noise respectively. For a sequential computation, Kalman filter assumes the *Markov property* where $\vx_k$ is independent of past $\vy_{1:k-1}$ given $\vy_k$. The Kalman filter then computes the above two distributions alternatively - called *predict* and *update* in practice. Since the assumed model is completely Gaussian, the marginal distributions are also Gaussians can be computed in closed form[^4].
 
 Consider at time step $k$, we measure $\vy_k$. The corresponding filtering and predictive distributions at $k$ are $p(\vx_k | \vy_{1:k})$ and $p(\vx_k | \vy_{1:k-1})$. From Bayes' rule,
@@ -101,7 +103,7 @@ p(\vx_k | \vy_{1:k-1}) &= \int p(\vx_k | \vx_{k-1}) p(\vx_{k-1} | \vy_{1:k-1}) d
 \end{aligned}
 $$
 
-From the above equations, it is clear that the predict and update steps can be done iteratively as they are dependent upon each other. Starting from a prior distribution $\vx_0 \sim \fN(\vm_0, \vP_0)$, predict step can be computed as 
+From the above equations, it is clear that the predict and update steps can be done iteratively as they are dependent upon each other. Starting from a prior distribution $\vx_0 \sim \fN(\vm_0, \vP_0)$, predict step can be computed as
 
 $$
 \begin{aligned}
@@ -110,7 +112,7 @@ $$
 \end{aligned}
 $$
 
-where $p(\vx_k|\vy_{1:k-1}) = \fN(\vx_k ; \vm'_k, \vP'_k)$, and the update step 
+where $p(\vx_k|\vy_{1:k-1}) = \fN(\vx_k ; \vm'_k, \vP'_k)$, and the update step
 
 $$
 \begin{aligned}
@@ -121,12 +123,13 @@ $$
 \vP_k &= \vP'_k - \vK_k \vS_k \vK_k^T
 \end{aligned}
 $$
+
 where $p(\vx_k|\vy_{1:k}) = \fN(\vx_k ; \vm_k, \vP_k)$. The above equations can be computed in closed form as all the distributions are Gaussian.
 
 If there are $N$ observations, we need $\fO(N)$ steps of the predict-update procedure to get the final filtering distribution $p(\vx_N | \vy_{1:N})$. In case of batched data, the computational complexity can be amortized to $\fO(B)$ where $B$ is the batch size.
 
 ### Bayesian Update as an Associative Operation
-Consider the filtering distribution $p(\vx_2|\vy_{1:2})$ at $k=2$. It can be rewritten as 
+Consider the filtering distribution $p(\vx_2|\vy_{1:2})$ at $k=2$. It can be rewritten as
 
 $$
 \begin{aligned}
@@ -135,16 +138,18 @@ p(\vx_2 | \vy_{1:2}) &= p(\vx_2 | \vy_1, \vy_2)\frac{p(\vy_2 | \vy_1)}{p(\vy_2 |
 &= \frac{\int p(\vx_2, \vy_2 | \vx_1, \vy_{1}) p(\vx_1 | \vy_1) d\vx_1}{\int p(\vy_2 | \vx_1, \vy_1) p(\vx_1 | \vy_1) d\vx_1} &&& \color{OrangeRed} \text{(marginalization)}\\
 &= \frac{\int p(\vx_2 | \vy_2, \vy_1, \vx_1) p( \vy_2 | \vx_1, \vy_1)  p(\vx_1 | \vy_1) d\vx_1}{\int p(\vy_2 | \vx_1, \vy_1) p(\vx_1 | \vy_1) d\vx_1} \\
 &= \frac{\int p(\vx_2 | \vy_2, \vx_1) p( \vy_2 | \vx_1)  p(\vx_1 | \vy_1) d\vx_1}{\int p(\vy_2 | \vx_1) p(\vx_1 | \vy_1) d\vx_1} &&& \color{OrangeRed} \text{(due to Markov property)} \\
-
-&= \frac{\int  p( \vy_2 | \vx_1) p(\vx_2 | \vy_2, \vx_1) p(\vx_1 | \vy_1, \vx_0) d\vx_1}{\int p(\vy_2 | \vx_1) p(\vx_1 | \vy_1, \vx_0) d\vx_1} &&& \big (p(\vx_1 | \vy_1, \vx_0) = p(\vx_1 | \vy_1) \big ) 
+&= \frac{\int  p( \vy_2 | \vx_1) p(\vx_2 | \vy_2, \vx_1) p(\vx_1 | \vy_1, \vx_0) d\vx_1}{\int p(\vy_2 | \vx_1) p(\vx_1 | \vy_1, \vx_0) d\vx_1} &&& \big (p(\vx_1 | \vy_1, \vx_0) = p(\vx_1 | \vy_1) \big )
 \end{aligned}
 $$\label{eq:filter-decomp}
 
 The above equation can be expressed as the following by grouping terms
+
 $$
 p(\vx_2 | \vy_{1:2}) = \frac{\int \lambda_2 \phi_2 \phi_1 }{\int \lambda_2 \phi_1 }
 $$
+
 Where $\lambda_k = p(\vy_k | \vx_{k-1})$ and $\phi_k = p(\vx_k | \vy_k, \vx_{k-1})$. The marginal $p(\vy_{1:2})$ can be expressed as a marginalization over $\vx_1$ as
+
 $$
 \begin{aligned}
 p(\vy_{1:2}) &= p(\vy_1, \vy_2) \\
@@ -155,12 +160,14 @@ p(\vy_{1:2}) &= p(\vy_1, \vy_2) \\
 \end{aligned}
 $$\label{eq:marginal-decomp}
 
-Equations \eqref{eq:filter-decomp} and \eqref{eq:marginal-decomp} can be combined to result 
+Equations \eqref{eq:filter-decomp} and \eqref{eq:marginal-decomp} can be combined to result
+
 $$
 \begin{pmatrix} \phi_1 \\ \lambda_1 \end{pmatrix} \otimes \begin{pmatrix} \phi_2 \\ \lambda_2 \end{pmatrix} = \begin{pmatrix} p(\vx_2 | \vy_{1:2}) \\ p(\vy_{1:2}) \end{pmatrix}
 $$\label{eq:operator-k2}
 
 The point of equations \eqref{eq:filter-decomp} to \eqref{eq:operator-k2} is to sever the dependence of the filtering update on the previous hidden state $\vx$ as they depend only upon $\vx_1$. For instance,
+
 $$
 \begin{aligned}
 p(\vx_2 | \vy_{1:k}) &= \frac{\int  p( \vy_{2:k} | \vx_1) p(\vx_k | \vy_{2:k}, \vx_1) p(\vx_1 | \vy_1) d\vx_1}{\int p(\vy_{2:k} | \vx_1) p(\vx_1 | \vy_1) d\vx_1} \\
@@ -168,7 +175,7 @@ p(\vy_{1:k}) &= p(\vy_1) \int p(\vy_{2:k} | \vx_1) p(\vx_1 | \vy_1) d\vx_1
 \end{aligned}
 $$
 
- In fact, this can be generalized to dependence upon any of the previous states $\vx_{k-l}$ for filtering at state $\vx_k$ [^5]. By induction, we can generalize equation \eqref{eq:operator-k2} to
+In fact, this can be generalized to dependence upon any of the previous states $\vx_{k-l}$ for filtering at state $\vx_k$ [^5]. By induction, we can generalize equation \eqref{eq:operator-k2} to
 
 $$
 \begin{pmatrix} \phi_1 \\ \lambda_1 \end{pmatrix} \otimes \begin{pmatrix} \phi_2 \\ \lambda_2 \end{pmatrix} \otimes \cdots \otimes \begin{pmatrix} \phi_k \\ \lambda_k \end{pmatrix} = \begin{pmatrix} p(\vx_k | \vy_{1:k}) \\ p(\vy_{1:k}) \end{pmatrix}
@@ -194,16 +201,19 @@ Where $\eta_k = \vP_k^{-1}\vm_k$ and $\vJ_k = \vP_k^{-1}$. $\fN_I$ is the *infor
 
 The equations for $\phi_k$ are
 For $k > 1$
+
 $$
 \begin{aligned}
 \vS_k &= \vH_k \vQ_{k-1} \vH_k^T + \vR_k \\
 \vK_k &= \vQ_{k-1} \vH_k^T \vS_k^{-1} \\
 \vF_k &= \big (\vI - \vK_k \vH_k \big )\vA_{k-1}\\
 \vb_k &= \vK_k\vy_k \\
-\vC_k &= \big (\vI - \vK_k \vH_k \big ) \vQ_{k-1} 
+\vC_k &= \big (\vI - \vK_k \vH_k \big ) \vQ_{k-1}
 \end{aligned}
 $$
+
 with initial state $k=1$ as
+
 $$
 \begin{aligned}
 \vm_1^- &= \vA_0 \vm_0 \\
@@ -213,10 +223,11 @@ $$
 \vF_1 &= \vzero \\
 \vb_1 &= \vm_1^- + \vK_1 \big (\vy_1 - \vH_1 \vm_1^- \big ) \\
 \vC_1 &= \vP_1^- - \vK_1 \vS_1 \vK_1^T
-
 \end{aligned}
 $$
+
 And the equations for $\lambda_k$ are
+
 $$
 \begin{aligned}
 \eta_k &= \vA_{k-1}^T \vH_k^T \vS_k^{-1} \vy_k \\
@@ -224,7 +235,7 @@ $$
 \end{aligned}
 $$
 
-In practice, operand for the associative operator $\otimes$ is the tuple $\va_k = \big ( \vF_k, \vb_k, \vC_k, \eta_k, \vJ_k \big )$, also called the filtering element. 
+In practice, operand for the associative operator $\otimes$ is the tuple $\va_k = \big ( \vF_k, \vb_k, \vC_k, \eta_k, \vJ_k \big )$, also called the filtering element.
 
 The operator $\otimes$ can be computed as
 $$
@@ -262,7 +273,7 @@ StateSpaceModel = namedtuple("StateSpaceModel", [
                              'A','H','Q','R',,'m0','P0','x_dim', 'y_dim'])
 
 @jit
-def sequential_kalman(model: NamedTuple, 
+def sequential_kalman(model: NamedTuple,
                       observations: jnp.array) -> Tuple:
     """
     Implements sequential Kalman filter in O(N).
@@ -280,26 +291,26 @@ def sequential_kalman(model: NamedTuple,
         # Update - Equation (5)
         S = model.H @ P @ model.H.T + model.R
         # More efficient than jsc.lingalg.inv(S)
-        K = jsc.linalg.solve(S, model.H @ P, sym_pos=True).T  
+        K = jsc.linalg.solve(S, model.H @ P, sym_pos=True).T
         m = m + K @ (y - model.H @ m)
         P = P - K @ S @ K.T
 
         return (m, P), (m, P)   # carry is basically the previous state
-    
+
     # Perform predict and update alternatively from
     # the initial state (prior) and the observations.
-    _, (fms, fPs) = scan(predict_update, 
-                         (model.m0, model.P0), 
+    _, (fms, fPs) = scan(predict_update,
+                         (model.m0, model.P0),
                          observations)
     return fms, fPs
-    
+
 @jit
 def parallel_kalman(model: NamedTuple, y: jnp.array) -> Tuple:
     """
     Implements the parallel Kalman filter in O(log N).
     """
     # Filtering elements for k=1
-    def first_filtering_element(model: NamedTuple, 
+    def first_filtering_element(model: NamedTuple,
                                 y_0: jnp.array) -> Tuple:
         """
         Computes the first filtering element (k = 1).
@@ -317,9 +328,9 @@ def parallel_kalman(model: NamedTuple, y: jnp.array) -> Tuple:
         # Equation (15)
         S = model.H @ model.Q @ model.H.T + model.R
         CF, low = jsc.linalg.cho_factor(S)
-        eta = model.A.T @ model.H.T @ jsc.linalg.cho_solve((CF, low), 
+        eta = model.A.T @ model.H.T @ jsc.linalg.cho_solve((CF, low),
                                                             y_0)
-        J = model.A.T @ model.H.T @ jsc.linalg.cho_solve((CF, low), 
+        J = model.A.T @ model.H.T @ jsc.linalg.cho_solve((CF, low),
                                                           model.H @ model.A)
 
         return (F, b, C, eta, J)
@@ -340,7 +351,7 @@ def parallel_kalman(model: NamedTuple, y: jnp.array) -> Tuple:
 
         # Equation (15)
         eta = model.A.T @ model.H.T @ jsc.linalg.cho_solve((CF, low), y)
-        J = model.A.T @ model.H.T @ jsc.linalg.cho_solve((CF, low), 
+        J = model.A.T @ model.H.T @ jsc.linalg.cho_solve((CF, low),
                                                          model.H @ model.A)
 
         return (F, b, C, eta, J)
@@ -387,11 +398,11 @@ def parallel_kalman(model: NamedTuple, y: jnp.array) -> Tuple:
 
 ```
 
-The above parallelizing technique is applicable in a range of problems - wherever the Bayesian update is done over a sequence of measurements. The Gaussian version of the Bayesian smoother (Kalman filter being the Gaussian version of the Bayesian filter), called as the Rauch-Tung-Stribel (RTS) smoother, can similarly be parallelized. 
+The above parallelizing technique is applicable in a range of problems - wherever the Bayesian update is done over a sequence of measurements. The Gaussian version of the Bayesian smoother (Kalman filter being the Gaussian version of the Bayesian filter), called as the Rauch-Tung-Stribel (RTS) smoother, can similarly be parallelized.
 
 **Note:** A question needs to be addressed here - *Should you parallelize Kalman filter as discussed?* The honest answer is NO. There are some practical concerns with this method. The filtering operator and the computation of the elements themselves are computationally more intensive than the original Kalman filter. In parallel-programming parlance, it is not *work-efficient*. So, this computational overhead (a constant factor) needs to be considered. The above vectorization may not be suitable for all computer architectures and actual parallelization should depend on the architecture. Finally, the JAX's JIT compilation (or any other JIT compilation) poses a considerable overhead, although this is only a one-time overhead. The sequential implementation in $\fO(N)$ is already fast enough for most practical purposes.
 
-That being said, the implications of this parallelization are quite significant. For problems of high computational complexity, this parallelization may be of great help. An example of such an application is to [speed up temporal Gaussian processes](https://arxiv.org/abs/2102.09964)  (they can be shown to be directly related to Kalman filters). 
+That being said, the implications of this parallelization are quite significant. For problems of high computational complexity, this parallelization may be of great help. An example of such an application is to [speed up temporal Gaussian processes](https://arxiv.org/abs/2102.09964)  (they can be shown to be directly related to Kalman filters).
 
 
 ----
@@ -405,6 +416,6 @@ That being said, the implications of this parallelization are quite significant.
 
 [^4]: Highly recommend Simo Särkkä's book *Bayesian Filtering and Smoothing* for a detailed discussion of Kalman filter and other Bayesian filtering techniques. The book can be freely accessed [here](https://users.aalto.fi/~ssarkka/#publications). The derivation for the equations provided here can be found in the book in Chapter 4, section 4.3.
 
-[^5]: This is possible mainly due to the Markov property. 
+[^5]: This is possible mainly due to the Markov property.
 
 [^6]: The proof of the associativity can be found in the appendix of [this paper](https://arxiv.org/abs/1905.13002).

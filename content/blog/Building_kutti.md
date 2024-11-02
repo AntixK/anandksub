@@ -18,6 +18,13 @@ After procrastinating for a year, I finally decided to build my own static site 
 2. It should be blazing fast - my target was a build time of less than 50ms. Additionally, it should have hot-reloading capability.
 3. It should have minimal dependencies, and a small codebase. My ideal requirement was to write content on my Ipad Pro, and deploy the site.
 
+Writing a static site generator is fairly straight-forward. For my needs, I have to implement the following -
+1. Read the markdown files and render them into HTML with the same directory structure as the `content` directory.
+2. Write a template that includes the basic JS libraries and the CSS files. I do not use SCSS, so there is no need for compilation.
+3. Helper functions for "recent posts", "all blog posts", "all notes", "all tags", and "articles by tags", etc and render them as HTML. These will later be plugged into the templates.
+4. Generate sitemap and RSS feeds.
+4. A simple server with hot-reloading capability.
+
 
 ## Introducing Kutti
 
