@@ -345,6 +345,29 @@ def render(clean: bool = False) -> None:
         with open(TAG_DIR / tag / "index.html", "w+") as f:
             f.write(html)
 
+    # Crawl and generate sitemap
+    logger.info("Generating sitemap...")
+    _all_pages = sorted(list(BUILD_DIR.glob("**/*.html")))
+    logger.info(f"Found {len(_all_pages)} pages.")
+
+    sitemap_str = """<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">"""
+
+    for page in _all_pages:
+        page = page.relative_to(BUILD_DIR)
+        sitemap_str += f"""
+    <url>
+        <loc>{config["site"]["url"]}/{page}</loc>
+        <lastmod>{datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+        """
+
+    sitemap_str += """</urlset>"""
+
+    with open(BUILD_DIR / "sitemap.xml", "w+") as f:
+        f.write(sitemap_str)
+
     t1_stop = perf_counter()
     logger.success(f"Rendering complete. Elapsed time: {(t1_stop - t1_start)*100:.4f}ms")
 # =============================================
@@ -506,6 +529,7 @@ def dict_to_html_table(data: dict) -> str:
 
 # =============================================
 def insert_hfun(file: Path, inserts: dict):
+
     default_header = config["site"]
     default_header["current_year"] = current_year()
 
@@ -710,6 +734,7 @@ class ContentMonitor(FileSystemEventHandler):
 class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
     SUFFIXES = [".html", "/index.html", "/"]
     JS_EXTENSIONS = (".js", ".mjs")
+    XML_EXTENSIONS = (".xml", ".rss", ".atom")
     CSS_EXTENSIONS = (".css", ".scss")
     MEDIA_EXTENSIONS = (".webp", ".svg", ".pdf", ".mp4", ".png", ".jpg", ".jpeg", ".gif")
     FONT_EXTENSIONS = (".woff", ".woff2", ".ttf", ".otf")
@@ -728,6 +753,7 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
                 not self.path.endswith(self.MEDIA_EXTENSIONS) and
                 not self.path.endswith(self.JS_EXTENSIONS) and
                 not self.path.endswith(self.CSS_EXTENSIONS) and
+                not self.path.endswith(self.XML_EXTENSIONS) and
                 not self.path.endswith(self.FONT_EXTENSIONS)):
                 self.path += ".html"
 

@@ -26,12 +26,15 @@ minify_html = true
 [site]
 # Name of your website
 name = "Anand K Subramanian"
+# Website URL
+url = "http://anandksub.dev"
 # Author's name
 author = "Anand K Subramanian"
 # Author's email
 email = "anandkrish894@gmail.com"
 # Encoding
 encoding = "UTF-8"
+
 
 # Defaults for posts
 [post]
