@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# 
+# Author: Anand K Subramanian
+# License: Apache 2.0 License
+# 
+
 import os
 import re
 import shutil
@@ -247,8 +253,13 @@ HTMLMINIFIER = Minifier(
 
 def gather_md_files(dir) -> List:
     """
-    Gather all markdown files in the given directory and
-    return as a sorted list.
+    Gather all markdown files in the given directory.
+
+    Args:
+        directory (str): The directory to search for markdown files.
+
+    Returns:
+        list: List of markdown file paths.
     """
     return sorted(list(dir.glob("**/*.md")))
 
@@ -549,6 +560,15 @@ def insert_hfun(file: Path, inserts: dict):
 
 
 def get_header_info(file: Path) -> Tuple[dict, str]:
+    """
+    Extract header information and content from a markdown file.
+
+    Args:
+        file (Path): Path to the markdown file.
+
+    Returns:
+        Tuple[dict, str]: A tuple containing the header information as a dictionary and the content as a string.
+    """
      # Read markdown content
     with open(file, "r") as f:
         content = f.read()
@@ -566,7 +586,16 @@ def get_header_info(file: Path) -> Tuple[dict, str]:
 
 
 def get_meta_info(file, config: dict):
+    """
+    Extract metadata information from a markdown file and merge it with default configuration.
 
+    Args:
+        file (Path): Path to the markdown file.
+        config (dict): Configuration dictionary.
+
+    Returns:
+        Tuple[dict, str]: A tuple containing the merged header information and the content of the file.
+    """
     default_header = config["post"]
 
     _header_data, md_content = get_header_info(file)
