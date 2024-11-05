@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-# 
+#
 # Author: Anand K Subramanian
 # License: Apache 2.0 License
-# 
+#
 
 import os
 import re
@@ -383,6 +383,14 @@ def render(clean: bool = False) -> None:
     logger.success(f"Rendering complete. Elapsed time: {(t1_stop - t1_start)*100:.4f}ms")
 # =============================================
 ## HELPER FUNCTIONS
+
+def seo_meta_info(meta_info: dict) -> str:
+    return f"""
+    <meta name="description" content="{meta_info['description']}">
+    <meta name="keywords" content="{meta_info['keywords']}">
+    <meta name="author" content="{meta_info['author']}">
+    <link rel="canonical" href="{meta_info['site']['url']}" />
+    """
 
 def tag_list(config: dict) -> dict:
     posts = gather_md_files(CONTENT_DIR)
@@ -797,12 +805,12 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
 
         server.SimpleHTTPRequestHandler.send_error(self, code, message)
 
-    # WARNING: This is a hack to prevent caching of files
-    def end_headers(self):
-        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
-        self.send_header("Pragma", "no-cache")
-        self.send_header("Expires", "0")
-        super().end_headers()
+    # # WARNING: This is a hack to prevent caching of files
+    # def end_headers(self):
+    #     self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+    #     self.send_header("Pragma", "no-cache")
+    #     self.send_header("Expires", "0")
+    #     super().end_headers()
 
 
 class SSGHTTPServer(server.HTTPServer):
