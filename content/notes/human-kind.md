@@ -1,4 +1,5 @@
 @def title = "Human Kind, A Hopeful History - Rutger Bregman"
+@def description = "Notes on the book Human Kind, A Hopeful History by Rutger Bregman"
 @def published = "10 February 2022"
 @def tags = ["anthropology", "socio-political"]
 @def is_draft = false

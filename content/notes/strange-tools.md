@@ -1,4 +1,5 @@
 @def title = "Strange Tools: Art and Human Nature - Alva Noë"
+@def description = "Notes on the book 'Strange Tools: Art and Human Nature' by Alva Noë"
 @def published = "24 July 2021"
 @def tags = ["art", "philosophy", "technology", "aesthetics"]
 @def is_draft = false

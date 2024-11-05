@@ -1,4 +1,5 @@
 @def title = "Spirit of Enquiry - T.M. Krishna"
+@def description = "Notes on the essay collection by T.M. Krishna"
 @def published = "30 May 2022"
 @def tags = ["art", "philosophy", "aesthetics",  "socio-political", "karnatik-music"]
 @def is_draft = false

@@ -1,4 +1,5 @@
 @def title = "The Forgetting Machine - Rodrigo Quian Quiroga"
+@def description = "Notes on the book 'The Forgetting Machine' by Rodrigo Quian Quiroga"
 @def published = "2 January 2022"
 @def tags = ["neuroscience", "memory"]
 @def is_draft = false

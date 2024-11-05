@@ -1,4 +1,5 @@
 @def title = "Gödel's Proof - Ernest Nagel & James Newman"
+@def description = "Notes on the book 'Gödel's Proof' by Ernest Nagel and James Newman"
 @def published = "28 July 2021"
 @def tags = ["math", "philosophy", "self-referential"]
 @def is_draft = false

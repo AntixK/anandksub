@@ -1,4 +1,5 @@
 @def title = "Against Interpretation - Susan Sontag"
+@def description = "Notes on Susan Sontag's essay 'Against Interpretation'"
 @def published = "17 July 2021"
 @def tags = ["art", "philosophy"]
 @def is_draft = false

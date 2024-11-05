@@ -1,4 +1,5 @@
 @def title = "In Praise of Shadows - Junichiro Tanizaki"
+@def description = "Notes on the short essay on Japanese aesthetics by Junichiro Tanizaki"
 @def published = "16 July 2021"
 @def tags = ["art", "culture", "japanese", "aesthetics"]
 @def is_draft = false
