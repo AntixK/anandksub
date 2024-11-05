@@ -379,6 +379,10 @@ def render(clean: bool = False) -> None:
     with open(BUILD_DIR / "sitemap.xml", "w+") as f:
         f.write(sitemap_str)
 
+    # Transfer the robots.txt file
+    if (CONTENT_DIR / "robots.txt").exists():
+        shutil.copy(CONTENT_DIR / "robots.txt", BUILD_DIR / "robots.txt")
+
     t1_stop = perf_counter()
     logger.success(f"Rendering complete. Elapsed time: {(t1_stop - t1_start)*100:.4f}ms")
 # =============================================
@@ -772,6 +776,7 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
     SUFFIXES = [".html", "/index.html", "/"]
     JS_EXTENSIONS = (".js", ".mjs")
     XML_EXTENSIONS = (".xml", ".rss", ".atom")
+    TXT_EXTENSIONS = (".txt")
     CSS_EXTENSIONS = (".css", ".scss")
     MEDIA_EXTENSIONS = (".webp", ".svg", ".pdf", ".mp4", ".png", ".jpg", ".jpeg", ".gif")
     FONT_EXTENSIONS = (".woff", ".woff2", ".ttf", ".otf")
@@ -791,6 +796,7 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
                 not self.path.endswith(self.JS_EXTENSIONS) and
                 not self.path.endswith(self.CSS_EXTENSIONS) and
                 not self.path.endswith(self.XML_EXTENSIONS) and
+                not self.path.endswith(self.TXT_EXTENSIONS) and
                 not self.path.endswith(self.FONT_EXTENSIONS)):
                 self.path += ".html"
 
