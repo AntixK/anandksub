@@ -811,12 +811,12 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
 
         server.SimpleHTTPRequestHandler.send_error(self, code, message)
 
-    # # WARNING: This is a hack to prevent caching of files
-    # def end_headers(self):
-    #     self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
-    #     self.send_header("Pragma", "no-cache")
-    #     self.send_header("Expires", "0")
-    #     super().end_headers()
+    # WARNING: This is a hack to prevent caching of files
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
 
 
 class SSGHTTPServer(server.HTTPServer):

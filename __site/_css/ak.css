@@ -99,7 +99,7 @@
     DEFAULT HTML ELEMENTS
 ================================================================== */
 html {
-    font-size: clamp(0.8rem, 1.5vw, 1.0rem);
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
     scrollbar-color: var(--scrollbar-thumb) var(--background-body);
     scrollbar-width: thin;
 }
@@ -590,8 +590,14 @@ input[type="range"]::-webkit-slider-thumb:active {
 /* Cards */
 .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     grid-gap: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-gap: 2rem;
 }
 
 .card {
@@ -599,7 +605,7 @@ input[type="range"]::-webkit-slider-thumb:active {
     grid-template-rows: auto;
     padding: 15px;
     border-radius: 10px;
-    border: 1px solid var(--c-3);
+    border: 1.5px solid var(--c-1);
 }
 
 .card:hover,
@@ -695,7 +701,7 @@ hr {
 .social-links {
     color: var(--c-4);
     font-family: var(--monospace-font);
-    font-size: 1rem;
+    font-size: 1.3rem;
     padding-left: 1rem;
     /* padding-top: 0.5rem; */
     /* line-height: 1.5; */
@@ -704,5 +710,7 @@ hr {
 .social-links:hover #hide {
     max-width: 80%;
 }
+
+
 
 /* ================================================================ */

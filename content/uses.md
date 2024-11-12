@@ -7,7 +7,6 @@
 
 
 # Life
-
 - Fujifilm XS-20
 - GoPro Black 10
 - Sony Xperia 5 IV
@@ -15,10 +14,11 @@
 - Silver Kaapu (காப்பு)
 - Senheiser Momentum 4
 
-# Hardware
+# Computer
 - Minisforum NUCi7
 - M1 IPad Pro 12.9
 - Logi MX Master 3
+
 
 # Development
 - Kitty Terminal Emulator

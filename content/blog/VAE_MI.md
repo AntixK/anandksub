@@ -82,6 +82,8 @@ The ELBO objective is to maximize the first term and minimize the last term. Thi
 <p class = "caption-text ">Illustration of some training issues with VAEs - especially with the mapping from data (black dots) to the prior distribution (black ellipses) by the amortized variational posterior (purple circles). Either the posterior can overlap (right) or can be disentangled but without learning any stochastic dependencies (left). Both results in a low mutual information between data and the latent variables.</p>
 !!!
 
+TODO: Write more about posterior collapse.
+
 Clearly, the ELBO contains two contrasting terms that work against each other. One often comes across the term *disentanglement* in VAE literature. This simply means that the latent variables are close to being independent of each other and that each latent variable generates a specific data sample. In simpler terms, the latent space, idealy, should be a compressed representation of the data.
 
 There are many approaches that address this issue[^vaeprior], and one very popular and simple approach is to bias the KL term in equation \eqref{eq:elbo_vae}, and hence the mutual information, to limit the posterior collapse. This is called the $\beta$-VAE.
@@ -92,10 +94,33 @@ $$
 \end{aligned}
 $$\label{eq:beta_vae}
 
+### Hierarchical VAEs
+Before we delve into diffusion models, there is another extension of VAEs called Hierarchical VAEs (HVAEs). Instead of having a single latent distribution, HVAEs have a hierarchy of latent distributions. The idea is that the prior distribution can be more complex, as the prior at each level is
+
+!!!
+<img  style="width:50%;min-width:300px;"  src="/media/post_images/lvae.svg" alt="VAE with Hierarchical Priors">
+<p class = "caption-text">VAE with Hierarchical Priors</p>
+!!!
+
 
 ## Diffusion Models
 So, how do diffusion models address this problem?
-Remember when we mentioned that the choice of $p(\vz)$ can be quite complex? Diffusion models take it to an extreme.
+Remember when we mentioned that the choice of $p(\vz)$ can be quite complex? If HAVEs extend the prior distribution hierarchicaly, diffusion models extend the priors sequentially (or temporally).
+
+if you think about it, the latent space is no different from that of the data space. Both are metric spaces. We would like to assume that the latent space is a compressed representation of the data space. What if we can move away from this idea and think of the latent space as simple the data space but just at a different time step? The data space itselv evolves  over time.
+
+The ELBO for diffusion models can be written as
+
+$$
+\begin{aligned}
+\E_{p_{\fX}(\vx)}\left [\log p(\vx) \right ] &\geq \E_{p_{\fX}(\vx)}\E_{q(\vx_{1:T}|\vx_0)}\left [ \log \frac{p(\vx_{0:T})}{q(\vx_{1:T}|\vx_0)} \right ]\\
+&=\E_{p_{\fX}(\vx)}\E_{q(\vx_{1:T}|\vx_0)} \left [ \log \frac{p(\vx_T)p(\vx_0|\vx_1)}{q(\vx_T|\vx_{T-1})} \right ] + \E_{p_{\fX}(\vx)}\E_{q(\vx_{1:T}|\vx_0)} \left [ \log \prod_{t=1}^{T-1} \frac{p(\vx_t|\vx_{t+1})}{q(\vx_t|\vx_{t-1})} \right ]
+\end{aligned}
+$$
+
+:::important
+How are diffusion models different from flow-based priors?
+:::
 
 
 Thesis: VAE's ELBO minimizes the MI. There has been a lot of effort in addressing this problem. How about diffusion models? Diffusion models are very similar to VAEs, and yet they produce images with very high fidelity and less prone to posterior collapse.
@@ -121,6 +146,8 @@ Diffusion Models and Mutual Information (https://openreview.net/pdf?id=UvmDCdSPD
 
 
 https://openreview.net/pdf?id=X6tNkN6ate
+
+https://sander.ai/2023/07/20/perspectives.html
 
 
 ------
