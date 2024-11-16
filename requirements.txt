@@ -4,3 +4,4 @@ mistletoe
 htmlmin
 loguru
 feedgen
+feedgenerator

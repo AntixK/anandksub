@@ -40,10 +40,10 @@ $$
 \end{aligned}
 $$
 
-Where $\mathbf{F}$ is the Fisher Information matrix. The gradient scaled by the corresponding Fisher information is called as the natural gradient. 
+Where $\mathbf{F}$ is the Fisher Information matrix. The gradient scaled by the corresponding Fisher information is called as the natural gradient.
 
 #### Proximity Function
-In equation (2), the Euclidean norm is actually a *proximity function* that measures the discrepancy of the loss function and its linear approximation with respect to the local geometry. This is quadratic term is exact for convex landscapes while provides a somewhat decent approximation for others. 
+In equation (2), the Euclidean norm is actually a *proximity function* that measures the discrepancy of the loss function and its linear approximation with respect to the local geometry. This is quadratic term is exact for convex landscapes while provides a somewhat decent approximation for others.
 
 From a different perspective, the proximity function can also be viewed as a prior belief about the loss landscape. Second order methods like that of Newton's, directly employ the Hessian to obtain the local quadratic curvature (which is still an approximation) and scale the gradients accordingly. Natural gradients, on the other hand, use the Riemannian curvature tensor (Represented here by the Fisher Information) to capture the exact local geometry of the landscape.
 
@@ -57,10 +57,10 @@ $$
  \end{aligned}
  $$
 
-Instead of performing the parameter update on the natural parameter space, we are updating its *dual* - the expectation parameters. The now, interesting the connection is that the above mirror descent update on the mean parameters, is equivalent to performing natural gradient update on the natural parameters. 
+Instead of performing the parameter update on the natural parameter space, we are updating its *dual* - the expectation parameters. The now, interesting the connection is that the above mirror descent update on the mean parameters, is equivalent to performing natural gradient update on the natural parameters.
 
 #### Why Mirror Descent?
-Mirror descent is a framework that accounts for the geometry of the optimization landscape. It is a generalized framework that incorporates almost all optimization algorithms and over high dimensions. For example, in high dimensions, the local linear or quadratic approximation of the loss surface usually fails. Therefore, it is desirable to employ the actual local geometry of the loss landscape, and mirror descent framework provides an elegant way to exactly that! The second term in the above two maximization formulations (a.k.a proximity function) $-$ the Euclidean norm and the KL divergence $-$ represents the movement of the parameters taking into account the geometry of the landscape. 
+Mirror descent is a framework that accounts for the geometry of the optimization landscape. It is a generalized framework that incorporates almost all optimization algorithms and over high dimensions. For example, in high dimensions, the local linear or quadratic approximation of the loss surface usually fails. Therefore, it is desirable to employ the actual local geometry of the loss landscape, and mirror descent framework provides an elegant way to exactly that! The second term in the above two maximization formulations (a.k.a proximity function) $-$ the Euclidean norm and the KL divergence $-$ represents the movement of the parameters taking into account the geometry of the landscape.
 
 <!-- For a more detailed description of the mirror descent method, refer [this document](http://www.princeton.edu/~yc5/ele538_optimization/lectures/mirror_descent.pdf). -->
 
@@ -97,17 +97,51 @@ $$
 ### Summing Up
 
 
-|                         | **Gradient Descent**                    | **Natural Gradient Descent**               |
-| ----------------------- | --------------------------------------- | ------------------------------------------ |
-| **Geometry**            | Euclidean Geometry                      | Statistical Manifold (Riemannian Geometry) |
-| **Proximity Function**  | Euclidean Norm                          | Bergman Divergence (Ex. KL Divergence)     |
-| **Gradient Parameters** | Natural Parameters $\boldsymbol \theta$ | Mean Parameters $\boldsymbol{\mu}$         |
+!!!
+<br>
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-0lax"></th>
+    <th class="tg-0lax">Gradient Descent</th>
+    <th class="tg-0lax">Natural Gradient Descent</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax"><b>Geometry</b></td>
+    <td class="tg-0lax">Euclidean Geometry</td>
+    <td class="tg-0lax">Statistical Manifold (Riemannian Geometry</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax"><b>Proximity Function</b></td>
+    <td class="tg-0lax">Euclidean Norm</td>
+    <td class="tg-0lax">Divergence (Ex. KL Divergence)</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax"><b>Gradient parameters</b></td>
+    <td class="tg-0lax">Natural parameters $\boldsymbol{\theta}$ </td>
+    <td class="tg-0lax">Mean parameters $\boldsymbol{\mu}$</td>
+  </tr>
+</tbody>
+</table>
+
+<br>
+
+<br>
+!!!
 
 
 :::important
-**Equivalence** : Natural Gradient in $\boldsymbol{\theta}$ $\Leftrightarrow$ Gradient in $\boldsymbol{\mu}$ 
+**Equivalence** : Natural Gradient in $\boldsymbol{\theta}$ $\Leftrightarrow$ Gradient in $\boldsymbol{\mu}$
 :::
- 
+
 ----
 
 [^3]: Khan, Mohammad Emtiyaz, et al. "Fast and Scalable Bayesian Deep Learning by Weight-Perturbation in Adam." arXiv preprint arXiv:1806.04854 (2018).
