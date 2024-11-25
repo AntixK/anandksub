@@ -67,7 +67,7 @@ class KuttiHtmlRenderer(HtmlRenderer, LaTeXRenderer):
 
     def render_triple_comma_div(self, token) -> str:
         inner = self.render_inner(token)
-        return f'<div class="{token.classes}">{inner}</div>'
+        return f'<br><div class="{token.classes}">{inner}</div>'
 
     def render_html_in_md(self, token):
         return token.children
