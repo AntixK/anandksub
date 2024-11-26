@@ -1,8 +1,8 @@
 @def title = "Extending Discrete Laplacian to Non-Manifold Structures"
 @def published = "25 November 2024"
 @def description = "A simple way to construct the discrete Laplacian operator for messy point clouds and non-manifold meshes."
-@def tags = ["math", "geometry", "point-clouds", "graphs", "mesh"]
-@def is_draft = true
+@def tags = ["math", "geometry", "point-clouds", "graph", "mesh"]
+@def is_draft = false
 @def show_info = true
 @def has_code = false
 @def has_chart = false
@@ -25,7 +25,7 @@ When working on discrete structures, the following are some crucial properties w
 4. **Linear Precision** - The Laplacian *action* $Lu$ must be zero whenever the mesh $\fG$ is line embedded into the Euclidean plane and $u$ is any linear function on the plane. This means that both the tangential and normal components of the Laplacian at a planar surface must be exactly zero. This is important for preserving the planar regions under parameterization.
 
 
-&emsp; The above properties are so chosen as to reflect those properties of the continuous Laplace-Beltrami operator that make it so useful in geometric processing. For example, the Linear precision property is highly useful in denoising and smoothing operations. The Symmetry and the Positive properties are the sufficient conditions for a PSD Laplacian and one that satisfies the *Maximum Principle*[^max]. The Locality and Positive properties ensure that the discrete Laplacian follows the diffusion process just like the continuous Laplace-Beltrami operator $\Delta$.
+&emsp; The above properties are so chosen as to reflect those properties of the continuous Laplace-Beltrami operator that make it so useful in geometric processing. For example, the Linear precision property is highly useful in denoising and smoothing operations. The Symmetry and the Positive properties are the sufficient conditions for a positive semi-definite (PSD) Laplacian and one that satisfies the *Maximum Principle*[^max]. The Locality and Positive properties ensure that the discrete Laplacian follows the diffusion process just like the continuous Laplace-Beltrami operator $\Delta$.
 
 Satisfying all the above syncretic properties is hard. In fact, Wardetzky et. al proved a No-Free-Lunch theorem[^nfl] showing that it is impossible to satisfy all the above properties simultaneously for any discretized Laplacian. Imagine a world where DFTs do not satisfy the orthogonality property! The Horror!
 
@@ -59,14 +59,14 @@ $$
 \end{aligned}
 $$
 
-Where $\theta_k^{ij}$ is the interior angle at vertex $k$ of the triangle $ijk$. As evident from above, under this intrinsic triangulation, the Cotan Laplacian becomes Positive. Furthermore, any given triangulation can be converted to *intrinsic delaunay* via finite number of edge flips. As fated by the previously mentioned No-Free-Lunch theorem, the Intrinsic Laplacian loses the Locality property.
+Where $\theta_k^{ij}$ is the interior angle at vertex $k$ of the triangle $ijk$. As evident from above, under this intrinsic triangulation, the Cotan Laplacian becomes Positive. Furthermore, any given triangulation can be converted to *intrinsic delaunay* via finite number of edge flips.
 
 !!!
 <img  style="width:80%;min-width:300px;"  src="/media/post_images/edge_flip.svg" alt="Edge-Flips-Delaunay">
 <p class = "caption-text">Obtuse triangles lead to negative Cotan weights.  A simple edge flip can resolve this issue and lead to intrinsic Delaunay triangulation with positive weights.</p>
 !!!
 
-The intrinsic Laplacian generally satisfies geometric locality - every vertex of a Delaunay triangulation is guaranteed to be connected to its closes neighbours. Although the it does not satisfy the *combinatorial* locality, the geometric locality is often sufficient for many applications. Nonetheless, the intrinsic Laplacian is not as sparse and may fail in cases where the local neighbourhood may be different from the input mesh.
+&emsp; As fated by the previously mentioned No-Free-Lunch theorem, the Intrinsic Laplacian loses the Locality property. The intrinsic Laplacian generally satisfies geometric locality - every vertex of a Delaunay triangulation is guaranteed to be connected to its closes neighbours. Although the it does not satisfy the *combinatorial* locality, the geometric locality is often sufficient for many applications. Nonetheless, the intrinsic Laplacian is not as sparse and may fail in cases where the local neighbourhood may be different from the input mesh.
 
 
 ## Extending the Laplacian to Non-Manifold Structures
@@ -82,7 +82,7 @@ A quick refresher on the manifold property: An interior vertex $i$ is manifold i
 !!!
 :::
 
-A recent paper by Sharp et. al.[^sharp] introduces an elegant technique to convert the non-manifold mesh into edge-manifold mesh. They observe that the edge flips still work for cases where the mesh has non-manifold vertices, but is edge-manifold. From this, the idea is to add duplicate faces at edges where the mesh is non-manifold. This makes it an edge-manifold, but makes the interior edges non-manifold. Yet, we can still perform edge flips on these duplicate faces (called tufted covers) to get a proper intrinsic Delaunay triangulation. Thus, by adding a tufted cover, any non-manifold edge can be converted to an edge-manifold as the previously shared face is now two separate faces.
+A recent paper by Sharp et. al.[^sharp] introduces an elegant technique to convert the non-manifold mesh into edge-manifold mesh. They observe that the edge flips still work for cases where the mesh is edge-manifold but has non-manifold vertices. From this, the idea is then to add duplicate faces at edges where the mesh is non-manifold. This makes it an edge-manifold, but makes the interior vertices non-manifold. Yet, we can still perform edge flips on these duplicate faces (called tufted covers) to get a proper intrinsic Delaunay triangulation. Thus, by adding a tufted cover, any non-manifold edge can be converted to an edge-manifold as the previously shared face is now two separate faces.
 
 
 !!!
@@ -91,7 +91,12 @@ A recent paper by Sharp et. al.[^sharp] introduces an elegant technique to conve
 
 The important aspect of the above tufted cover [^video] procedure is that the vertex set is preserved - we are only adding superficial faces (tufted cover) to the vertices to get an intrinsic Delaunay triangulation from which we can obtain the Cotan Laplacian. Recall that the Laplacian is a $|V| \x |V|$ matrix, where $|V|$ is the number of vertices.
 
-The above procedure is more attractive for point clouds as traditional Laplacians for point clouds try to approximate a local manifold using a $k$-NN graph. The neighbourhood size is usually chosen based on the local density of the point cloud, in-turn increasing the computational complexity. Furthermore, such sampling may result in loss of small or thin features in the point cloud, which are often the case for real-world data. The tufted-cover procedure is more likely to preserve these features - with just local triangulations we can just compute the Laplacian albeit with irregular connectivity and non-manifold structures, with reduced computational complexity.
+&emsp; Therefore for given any triangulated mesh, manifold or not, it is possible to compute an *approximate* discrete Laplacian. A library for computing the tufted-cover Laplacian is available from the authors [here](https://github.com/nmwsharp/robust-laplacians-py/tree/master).
+
+&emsp; The above procedure is more attractive for point clouds as traditional point cloud Laplacians try to approximate a local manifold using a $k$-NN graph. The neighbourhood size is usually chosen based on the local density of the point cloud, in-turn increasing the computational complexity. Furthermore, such sampling may result in loss of small or thin features in the point cloud, which are often found in real-world data. To reduce the computational complexity, a mesh Laplacian if often preferred - the point cloud is converted to a mesh and then the Laplacian is computed. The tufted-cover procedure improves upon this with just local triangulations[^knn] (may have irregular connectivity and non-manifold structures) over the input point cloud.
+
+&emsp; As with any procedure, the result is only as good as its input data. The authors suggest that the input mesh/point cloud be free of topological noise, defective meshes, and isolated vertices before applying the tufted-cover procedure.
+
 
 ----
 
@@ -106,3 +111,5 @@ The above procedure is more attractive for point clouds as traditional Laplacian
 [^sharp]: Sharp, Nicholas, and Keenan Crane. "A laplacian for nonmanifold triangle meshes." Computer Graphics Forum. Vol. 39. No. 5. 2020. [Link](https://www.cs.cmu.edu/~kmcrane/Projects/NonmanifoldLaplace/index.html)
 
 [^video]: Highly recommend Nicholas Sharp's [presentation](https://www.youtube.com/watch?v=JY0kozIdIQo) where he shows a beautiful video of the tufted cover + intrinsic Delaunay triangulation (edge flip) process.
+
+[^knn]: For local triangulation, we still need to compute the $k$-NN graph. However, this is a fixed overhead to get a local triangulation as the actual Laplacian computation relies only the neighbourhood edges and vertices.
