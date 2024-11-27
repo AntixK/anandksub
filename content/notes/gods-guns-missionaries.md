@@ -1,6 +1,6 @@
 @def title = "Gods, Guns and Missionaries - Manu S. Pillai"
-@def description = "Notes on the book Gods, Guns and Missionaries by Manu S. Pillai"
-@def published = "10 February 2022"
+@def description = "Extensive notes on the book Gods, Guns and Missionaries by Manu S. Pillai"
+@def published = "10 December 2024"
 @def tags = ["religion", "india", "history", "colonialism"]
 @def is_draft = true
 @def show_info = true
@@ -33,7 +33,11 @@ Saiva poetry, thus, presents Vishnu as a subject to Siva, as one who cannot pres
 :::
 
 
-The equivalence created by the people between Rudra and Shiva, Vishnu and Vasudeva, Vishnu and Avalotiksvara, the various forms of the same god—like Pandurang Vithala and Krishna, even Buddha being an avatar of Vishnu in some cases—are all some interesting examples.
+The equivalence created by the people between Rudra and Shiva, Vishnu and Vasudeva, Vishnu and Avalotiksvara, the various forms of the same god—like Pandurang Vithala and Krishna, even Buddha being an avatar of Vishnu in some cases—are all some interesting examples. Stotras - containing only the "leela" of Gods and their physical forms - became the predominant form of everyday worship. At times, when the Puranic ideas and Bhakti stotras became more predominant, Acharyas went to great lengths to argue that the Puranic ideas were an encapsulation of the Vedas. Nammalvar's *thiruvaimozhi* became a "Tamil Veda". Although the Vedic people adapted themselves to local religions, the primacy and superiority of the Vedas needed to be maintained. Even now, tremendous effort is being put into showing that that the *Thirukkural* is essentially an encapsulation of the Vedas.
+
+:::multilinequote
+Alter all, Hinduism was an 'amoeba-like cluster of practices and beliefs', stitching up countelss groups, ideologies, gods and identities in various periods across vast geographies. Each thread in this evolving web has a personality; each could inform and alter others while retaining its distinctness. Of course, there were links but by design, it was feasible for one book to authoritatively represent a bottom-up order like Hinduism. And in more real terms, the religion's outlines were fixed not so much by the Vedas but by the epics-theMahabharata and the Ramayana - along with orally transmitted Puranic tales. It is these that most Hindus identify with even today, the Vedas being primarily a restrcted Brahmin concern.
+:::
 
 
 The scene changed with the advent of Europeans. In and around the 16th and 17th centuries, Italian, Portuguese, and Dutch missionaries wrote misunderstood, exaggerated, and often maligned accounts of Hinduism. As in everything, these early accounts became the standard for understanding about India for their countrymen back home. While the Vedic people practiced inclusivism and pluralism, incorporating all kinds of local gods and customs, these missionaries saw a land of eerie customs and superstitions and wanted to "cleanse" the land of these "pagan" practices.
@@ -47,7 +51,7 @@ But as the white man's political power grew in the country, his skewed narrative
 :::
 
 
-Interestingly, not all Eurpoeans were initially prejudiced. Vasco De Gama and his men, reportedly, even presumed that a local Hindu temple in Kerala was a shrine to Mary, imagined differently by the local people. It was only when the trade deals went sour (which didn't take that long) and the arrival of the zealous missionaries that the Europeans began to see the Hindus as devil-worshippers. More and more Portuguese missionaries grew hostile with the ongoing eighty-year war in their homeland.
+Interestingly, not all Europeans were initially prejudiced. Vasco De Gama and his men, reportedly, even presumed that a local Hindu temple in Kerala was a shrine to Mary, imagined differently by the local people. It was only when the trade deals went sour (which didn't take that long) and the arrival of the zealous missionaries that the Europeans began to see the Hindus as devil-worshippers. More and more Portuguese missionaries grew hostile with the ongoing eighty-year war in their homeland.
 
 
 :::multilinequote
@@ -122,6 +126,27 @@ Learning more about the Hindu reglion and it's various aspects of it, dismantled
 
 :::multilinequote
 Ziegenbalg slid from learning '*about* India to proposing that perhaps there was something to pick up '*from* India. That 'natives' were a thinking people, not fools flitting around malicious devils, also became clear through an 'interreligious dialogue' with Hindus.
+:::
+
+
+In a fascinating turn of events, as the missionaries converged on the *Vedas* as the alleged definitive guide of the Hindus and translated them (to their advantage), these same texts were used *against* the Church back in their home. People of the Age of Enlightenment like Voltaire used (dubious) translations of vedas to argue that the Christian religion was a miserable copy of these ancient Hindu theology. As the Jesuits accussed of the Brahmins keeping their sacred texts and "hidden truths" among themselves, the Catholic church was similarly blamed during the Protestant Reformation and subsequently the age of Enlightenment.
+
+:::multilinequote
+Simply put, white intellectuals, dismissive of the Hindu society in the *present*, began to romanticise its past (a formula Hindus would in time also amplify).... They preferred Hinduism's hazy antiquity-where they could fill in the blanks as suited them-to its living reality.
+:::
+
+These intellectuals presumed a Christian-style development of Hinduism - every written (Vedas mainly) was to be taken literally and everything else being practiced as a gross corruption or a perversion. We now know that Puranic Hinduism developed through interaction and now representative of Hindus at large. Hinduism was a "hybrid culture of overlapping theological encounters". The vedas themselves reflect this - the older portions (*karma-kanda*) dealing mainly with the rituals, sacrifices, invocations, while the later portions deal with more philosophical and metaphysical aspects (*Upanishads*). As much as 200 Upanishads (although only 108 *mukhya* upanishads are recognized as the core) have been catalogued - some written in as late as "medieval times".
+
+:::multilinequote
+Hindus, in the past as today, show no anxiety to gain direct access to the Vedas; Based on family, caste and regional traditions, faith remains available in a variety of formats, leaving scriptural concerns to Brahmins and philosophers.
+:::
+
+Although the 'pure' Hinduism where every Hindu was a rigit votary of the Vedas never existed, it did find validation in the later rise of Hindu Nationalism. The western lament of the decline of the ancient pure Hinduism even found a place in the Brahmin concept of the "Kali Yuga", the dark age of corruption. Nonetheless, the white man's rule gave white men's ideas the muscle to remake reality.
+
+:::multilinequote
+Indeed, by the 1860s, it would be entirely normal for British judges in India, citing white scholars of Hinduism along with Protestant-style Hindu reformers, to decalre centiries old sects as 'contrary to ... the ancient [and thus, "real"] Hindu religion'.
+
+But even in battling colonialism, and its ideological filters-shaped by Christianity, Western contests, the Enlightenment, and plain misreading-certain European filters were, nontheless coopted. Wedding to matching indigenous ideas, these would be recast as, in fact, Indian. It was in these circumstances that Hinduism's current avatar emerged-with one foot in tradition, the other in European sensibilities and confusion.
 :::
 
 

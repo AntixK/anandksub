@@ -62,7 +62,7 @@ $$
 Where $\theta_k^{ij}$ is the interior angle at vertex $k$ of the triangle $ijk$. As evident from above, under this intrinsic triangulation, the Cotan Laplacian becomes Positive. Furthermore, any given triangulation can be converted to *intrinsic delaunay* via finite number of edge flips.
 
 !!!
-<img  style="width:80%;min-width:300px;"  src="/media/post_images/edge_flip.svg" alt="Edge-Flips-Delaunay">
+<img  style="width:80%;min-width:300px;"  src="/media/post_images/edge_flip.webp" alt="Edge-Flips-Delaunay">
 <p class = "caption-text">Obtuse triangles lead to negative Cotan weights.  A simple edge flip can resolve this issue and lead to intrinsic Delaunay triangulation with positive weights.</p>
 !!!
 
@@ -78,7 +78,7 @@ A quick refresher on the manifold property: An interior vertex $i$ is manifold i
 
 
 !!!
-<img  style="width:70%;min-width:300px;"  src="/media/post_images/non-manifold.svg" alt="Manifold Definition">
+<img  style="width:70%;min-width:300px;"  src="/media/post_images/non-manifold.webp" alt="Manifold Definition">
 !!!
 :::
 
@@ -86,7 +86,7 @@ A recent paper by Sharp et. al.[^sharp] introduces an elegant technique to conve
 
 
 !!!
-<img  style="width:100%;min-width:400px;"  src="/media/post_images/tufted.svg" alt="Tufted Laplacian procedure">
+<img  style="width:100%;min-width:400px;"  src="/media/post_images/tufted.webp" alt="Tufted Laplacian procedure">
 !!!
 
 The important aspect of the above tufted cover [^video] procedure is that the vertex set is preserved - we are only adding superficial faces (tufted cover) to the vertices to get an intrinsic Delaunay triangulation from which we can obtain the Cotan Laplacian. Recall that the Laplacian is a $|V| \x |V|$ matrix, where $|V|$ is the number of vertices.

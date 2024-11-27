@@ -1,0 +1,251 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        throwOnError: false,
+        // output: "html",
+        // customised options
+        // • auto-render specific keys, e.g.:
+        delimiters: [
+          { left: '$$', right: '$$', display: true }, // block
+          { left: '$', right: '$', display: false }, // Inline
+          { left: "\begin{align}", right: "\end{align}", display: true }, // block
+          { left: "\begin{aligned}", right: "\end{aligned}", display: true }, // block
+        ],
+        ignoredTags: [
+          "pre",
+          "code",
+          "script",
+          "style",
+        ],
+        macros: {
+          "\\A": "\\mathbb{A}",
+          "\\B": "\\mathbb{B}",
+          "\\C": "\\mathbb{C}",
+          "\\D": "\\mathbb{D}",
+          "\\E": "\\mathbb{E}",
+          "\\F": "\\mathbb{F}",
+          "\\G": "\\mathbb{G}",
+          "\\H": "\\mathbb{H}",
+          "\\I": "\\mathbb{I}",
+          "\\J": "\\mathbb{J}",
+          "\\K": "\\mathbb{K}",
+          "\\L": "\\mathbb{L}",
+          "\\M": "\\mathbb{M}",
+          "\\N": "\\mathbb{N}",
+          "\\O": "\\mathbb{O}",
+          "\\P": "\\mathbb{P}",
+          "\\Q": "\\mathbb{Q}",
+          "\\R": "\\mathbb{R}",
+          "\\S": "\\mathbb{S}",
+          "\\T": "\\mathbb{T}",
+          "\\U": "\\mathbb{U}",
+          "\\V": "\\mathbb{V}",
+          "\\W": "\\mathbb{W}",
+          "\\X": "\\mathbb{X}",
+          "\\Y": "\\mathbb{Y}",
+          "\\Z": "\\mathbb{Z}",
+
+          "\\fA": "\\mathcal{A}",
+          "\\fB": "\\mathcal{B}",
+          "\\fC": "\\mathcal{C}",
+          "\\fD": "\\mathcal{D}",
+          "\\fE": "\\mathcal{E}",
+          "\\fF": "\\mathcal{F}",
+          "\\fG": "\\mathcal{G}",
+          "\\fH": "\\mathcal{H}",
+          "\\fI": "\\mathcal{I}",
+          "\\fJ": "\\mathcal{J}",
+          "\\fK": "\\mathcal{K}",
+          "\\fL": "\\mathcal{L}",
+          "\\fM": "\\mathcal{M}",
+          "\\fN": "\\mathcal{N}",
+          "\\fO": "\\mathcal{O}",
+          "\\fP": "\\mathcal{P}",
+          "\\fQ": "\\mathcal{Q}",
+          "\\fR": "\\mathcal{R}",
+          "\\fS": "\\mathcal{S}",
+          "\\fT": "\\mathcal{T}",
+          "\\fU": "\\mathcal{U}",
+          "\\fV": "\\mathcal{V}",
+          "\\fW": "\\mathcal{W}",
+          "\\fX": "\\mathcal{X}",
+          "\\fY": "\\mathcal{Y}",
+          "\\fZ": "\\mathcal{Z}",
+
+          "\\x": "\\times",
+          "\\vA": "\\mathbf{A}",
+          "\\vB": "\\mathbf{B}",
+          "\\vC": "\\mathbf{C}",
+          "\\vD": "\\mathbf{D}",
+          "\\vE": "\\mathbf{E}",
+          "\\vF": "\\mathbf{F}",
+          "\\vG": "\\mathbf{G}",
+          "\\vH": "\\mathbf{H}",
+          "\\vI": "\\mathbf{I}",
+          "\\vJ": "\\mathbf{J}",
+          "\\vK": "\\mathbf{K}",
+          "\\vL": "\\mathbf{L}",
+          "\\vM": "\\mathbf{M}",
+          "\\vN": "\\mathbf{N}",
+          "\\vO": "\\mathbf{O}",
+          "\\vP": "\\mathbf{P}",
+          "\\vQ": "\\mathbf{Q}",
+          "\\vR": "\\mathbf{R}",
+          "\\vS": "\\mathbf{S}",
+          "\\vT": "\\mathbf{T}",
+          "\\vU": "\\mathbf{U}",
+          "\\vV": "\\mathbf{V}",
+          "\\vW": "\\mathbf{W}",
+          "\\vX": "\\mathbf{X}",
+          "\\vY": "\\mathbf{Y}",
+          "\\vZ": "\\mathbf{Z}",
+
+          "\\va": "\\mathbf{a}",
+          "\\vb": "\\mathbf{b}",
+          "\\vc": "\\mathbf{c}",
+          "\\vd": "\\mathbf{d}",
+          "\\ve": "\\mathbf{e}",
+          "\\vf": "\\mathbf{f}",
+          "\\vg": "\\mathbf{g}",
+          "\\vh": "\\mathbf{h}",
+          "\\vi": "\\mathbf{i}",
+          "\\vj": "\\mathbf{j}",
+          "\\vk": "\\mathbf{k}",
+          "\\vl": "\\mathbf{l}",
+          "\\vl": "\\mathbf{l}",
+          "\\vm": "\\mathbf{m}",
+          "\\vn": "\\mathbf{n}",
+          "\\vo": "\\mathbf{o}",
+          "\\vp": "\\mathbf{p}",
+          "\\vq": "\\mathbf{q}",
+          "\\vr": "\\mathbf{r}",
+          "\\vs": "\\mathbf{s}",
+          "\\vt": "\\mathbf{t}",
+          "\\vu": "\\mathbf{u}",
+          "\\vv": "\\mathbf{v}",
+          "\\vw": "\\mathbf{w}",
+          "\\vx": "\\mathbf{x}",
+          "\\vy": "\\mathbf{y}",
+          "\\vz": "\\mathbf{z}",
+
+          "\\vmu": "\\boldsymbol \\mu",
+          "\\vnu": "\\boldsymbol \\nu",
+          "\\veps": "\\boldsymbol \\epsilon",
+          "\\vtheta": "\\boldsymbol \\theta",
+          "\\vomega": "\\boldsymbol \\omega",
+          "\\vlambda": "\\boldsymbol \\lambda",
+          "\\vzero": "\\mathbf{0}",
+          "\\vone": "\\mathbf{1}",
+          "\argmin": "\mathop{\mathrm{argmin}} \;",
+          "\argmax": "\mathop{\mathrm{argmax}} \;",
+          "\\KL": "\\mathop{D_{\\mathrm{KL}}} \\;",
+
+        },
+        globalGroup: true,
+      });
+    });
+  </script><link rel=stylesheet href=/_libs/katex/katex.min.css><script defer src=/_libs/algorithm/algotype.js crossorigin=anonymous></script><script defer src=/_libs/katex/katex.min.js crossorigin=anonymous>
+  </script></script><script defer src=/_libs/katex/auto-render.min.js crossorigin=anonymous onload=renderMathInElement(document.body);></script><link rel=stylesheet href=/_css/ak.css><link rel=icon href=/assets/icons/favicon.ico type=image/x-icon><title>Differentiating Straight-Through Combinatorial Solvers</title></head><body><header><h1><a href=/ >Anand K Subramanian</a><br><br></h1></header><nav class=navbar><span><a href=/blog/ >Blog</a><span class=vl></span></span><span><a href=/notes/ >Notes</a> <span class=vl></span></span><span><a href=/art/ >Art</a> <span class=vl></span></span><span><a href=/CV>CV</a> <span class=vl></span></span><span><a href=/tags>Tags</a></nav><p class=tags><img class=icon-image src=/assets/icons/bookmark.svg alt=clock-icon>&ensp;<span class=pound>#</span>math <span class=pound>#</span>ml <span class=pound>#</span>code <span class=pound>#</span>gradient <span class=pound>#</span>deep-learning <span class=pound>#</span>combinatorial-solver </p><p class=tags><img class=icon-image src=/assets/icons/calendar.svg alt=clock-icon>&ensp;2 August 2024 </p><p class=tags><img class=icon-image src=/assets/icons/timer.svg alt=clock-icon>&ensp;3 mins </p><h1>Differentiating Straight-Through Combinatorial Solvers</h1><p class=tldr>Naive zeroth-order gradient estimation for backpropagating through combinatorial solvers.</p><main><p>  Many of the common real-world problems have been well-defined and have efficient solvers. For example, the bin packing problem, Travelling Salesman Problem (TSP), shortest path in a graph etc, have been well-studied. Some other problems may be reduced to one of these NP-complete problems and any of the many off-the-shelf solvers can be used to solve them. Tremendous effort have been put into building efficient solvers and many of them are publicly available.</p><p>  A curiosity may arise - to employ neural networks or any gradient-based learners with a combinatorial layer in their midst. For example, a simple path finding task may be given, but with unknown graph weights that must be inferred from the problem (say, a 2D image). These kind of obfuscations are far more common in real-world scenarios. In such cases, machine learning (gradient-based) models may be used to cast the problem suitable for the combinatorial solver.</p><img style=width:70%;min-width:300px; src=/media/post_images/blackbox_diff.webp alt="Smoothing Shortest Path Loss Landscape"><p class=caption-text>Two ways of combining gradient-based models with combinatorial solvers.</p><p>The issue with combinatorial solvers is that the input-output relationship is piecewise constant. Although the gradient exists <em>almost everywhere</em>, it is a constant zero almost everywhere and undefined at the discontinuities. It is thus, not sufficient to handle just the discontinuities, but also the piecewise constant nature of the solver.</p><p>Observe that the it is not necessary to relax the contraints of the solver to make it differentiable. The solver itself is discrete and can handle the discrete input. We only need to relax the output of the solver to get a gradient estimate. The combinatorial solver can be a black-box and the gradient estimate can be obtained by backpropagating through the relaxed output.</p><p>The perturbation essentially converts the piecewise constant input-output mapping to piecewise <em>affine</em>.</p><img style=width:100%;min-width:300px; src=/media/post_images/shortest_path_smoothing.webp alt="Smoothing Shortest Path Loss Landscape"><p class=caption-text>The Input-Output mapping for the Shortest-Path solver can be made piecewise affine by perturbation.</p><p>Take the case of shortest path problem. It is well known as we have efficient solutions given a graph with edge weights between its nodes. Dijkstra's algorithm is a popular one that is provably optimal for this class of problems (graph with non-negative weights). This, however, is a combinatorial solver and has the characteristic issues discussed above.</p><p>Say, we use some model $f$ to predict the edge weights of a graph as $\hat{w}$. This can be used to solve for the shortest path $y$ using the Dijkstra solver $\hat{y} = \texttt{Dijkstra}(\hat{w})$.</p><p>The gradient across the solver can be computed as a finite difference between the original output $\hat{y}$ and the perturbed output $y_\lambda$.</p><p>$$ \nabla_w f(\hat{w}) = -\frac{1}{\lambda} \left [\hat{y} - y_\lambda \right ] $$</p><p>However, since the solver is piecewise constant, the perturbation $\lambda$ should be applied to the <em>input</em> of the solver rather than its output. Mathematically,</p><p>$$ \begin{aligned} w_\lambda &amp;= \hat{w} + \lambda \nabla_y L(\hat{y}) \\ y_\lambda &amp;= \texttt{Dijkstra}(w_\lambda) \end{aligned} $$</p><p>The above technique is general enough to be used with any combinatorial solver , replacing the $\texttt{Dijkstra}$.</p><h2>Code</h2><pre><code class=language-python>import torch
+from typing import Tuple
+
+def solver_func(inputs):
+    """
+    Combinatorial solver function.
+    """
+    ...
+
+
+class Solver(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, weights: torch.Tensor, lambda_val:float):
+        """
+        Forward pass of the combinatorial solver layer.
+
+        Args:
+            ctx: context for backpropagation
+            weights (torch.Tensor): input for the solver
+            lambda_val: perturbation parameter
+
+        Returns:
+            Result of the solver.
+        """
+        ctx.weights = weights.detach().cpu().numpy()
+        ctx.lambda_val = lambda_val
+        ctx.solver_result = np.asarray([solver_func(arg) for arg in list(ctx.weights)])
+        return torch.from_numpy(ctx.solver_result).float().to(weights.device)
+
+    @staticmethod
+    def backward(ctx, grad_output: torch.Tensor) -&gt; Tuple:
+        assert grad_output.shape == ctx.solver_result.shape
+
+        # Get the gradient output of the previous layer
+        grad_output_numpy = grad_output.detach().cpu().numpy()
+
+        # Get perturbed inputs for the combinatorial solver
+        weights_pert = np.maximum(ctx.weights + ctx.lambda_val * grad_output_numpy, 0.0)
+
+        # Pass the perturbed weights through the solver to get corresponding results
+        solver_result_pert = np.asarray([solver_func(arg) for arg in  list(weights_pert)])
+
+        # Compute the gradient estimate
+        gradient = -(ctx.solver_result - solver_result_pert) / ctx.lambda_val
+        return torch.from_numpy(gradient).to(grad_output.device), None
+</code></pre></main><div style="font-size:1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;"> &copy; 2024 Anand K Subramanian <span class=vl></span><a href=/license>License</a> <span class=vl></span><a href=/design>Design</a> <span class=vl></span> Built with Kutti <span style="color: #e25555; font-size: 24px;">&hearts;</span></div><script src=/_libs/highlight/highlight.min.js></script><script>hljs.highlightAll(); hljs.configure({ tabReplace: '    ' });</script><link rel=stylesheet href=/_libs/highlight/decaf.css><script src=/_libs/clipboard/clipboard.min.js></script><script>
+    (function () {
+
+      // Get the elements.
+      // - the 'pre' element.
+      // - the 'div' with the 'paste-content' id.
+
+      var pre = document.getElementsByTagName('pre');
+
+      // Add a copy button in the 'pre' element.
+      // which only has the className of 'language-'.
+
+      for (var i = 0; i < pre.length; i++) {
+        var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+        if (isLanguage === 0) {
+          var button = document.createElement('button');
+          button.className = 'copy-button';
+          button.textContent = 'Copy';
+
+          pre[i].appendChild(button);
+        }
+      };
+
+      // Run Clipboard
+
+      var copyCode = new Clipboard('.copy-button', {
+        target: function (trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+
+      // On success:
+      // - Change the "Copy" text to "Copied".
+      // - Swap it to "Copy" in 2s.
+      // - Lead user to the "contenteditable" area with Velocity scroll.
+
+      copyCode.on('success', function (event) {
+        event.clearSelection();
+        event.trigger.textContent = 'Copied';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 2000);
+
+      });
+
+      // On error (Safari):
+      // - Change the  "Press Ctrl+C to copy"
+      // - Swap it to "Copy" in 2s.
+
+      copyCode.on('error', function (event) {
+        event.trigger.textContent = 'Press "Ctrl + C" to copy';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 5000);
+      });
+
+    })();
+  </script></body></html>

@@ -20,7 +20,7 @@ Theatre, சினிமாக்களுக்கு தானே? என்�
 
 
 !!!
-<img class="genart-image" style="width:100%;mind-width:300px" src="/media/post_images/vanya.png">
+<img class="genart-image" style="width:100%;mind-width:300px" src="/media/post_images/vanya.webp">
 <p class = "caption-text ">Screening of Anton Chekov's <i>Vanya</i> in Ikebukuro, Tokyo (2024)</p>
 !!!
 
