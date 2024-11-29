@@ -6,6 +6,7 @@
 
 import os
 import re
+import math
 import shutil
 import tomllib
 import itertools
@@ -712,7 +713,7 @@ def save_html(file: Path, html: str) -> None:
 def get_read_time(text: str) -> int:
     num_words = len(text.split())
     reading_speed = 180 # Accounting for math equations
-    return num_words // reading_speed
+    return math.ceil(num_words / reading_speed)
 
 # ============================ Sanity Checks =========================== #
 # Check for woff/woff2 font files
