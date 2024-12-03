@@ -62,7 +62,9 @@ In 1540–41, hundreds of temples were razed, their assets appropriated for Chri
 :::multilinequote
 The irony, of course, as the scholar Alexander Henn reminds us, is that Catholics were stricking at Goa's idols—and idolator—in the same period that Protestants attacked their icons in Europe under the charge of idolatry. But precisely for this reason, there was no sympathy; the Portuguese had to demonstrate with fire and blood that they were authentic Christians. And Hindus suffered in the process.
 :::
-
+ranam:
+Soma Sundaresvara Sukha Sphurti Rupini
+Syame Sankari Digvija
 
 In fact, even the ancient Christians living in Kerala—the Nasranis—, supposedly converted by St. Thomas the Apostle in 52CE, were not spared by the Portuguese. Although they were indeed Christians, they weren't Catholic. These Nasranis were polluted by being around the Heathens, adopting Heathen customs, and living under a Heathen king. The following quip suggests that the ability to adapt one's faith is unique not to Vedic people but to Indians.
 
@@ -150,9 +152,45 @@ But even in battling colonialism, and its ideological filters-shaped by Christia
 :::
 
 
+The late 17th century saw the begining of Brahmin domination in the political and juidicial affairs of the land - across various overlords - be it the Hindu Marathas, Muslim Nawabs, or Christian Governor Generals. The identification of Brahmins as the defenders and upholders of the land's culture and traditions by the missionaries was being used by the British to pose a continuation of the status quo to the Indian people. As such, Governor generals often received paens for their victory or for following the *Brahmin shastras* or local *sampradayas* (traditions) in various judicial matters [^note]. Slowly, Brahmins were exployed by the British in various administrative positions. The puppet states followed suit in employing Brahmins in administrative positions.
+
+:::multilinequote
+For as anthropologist Bernard Cohn observed, the conquest of India was as much a 'conquest of knowledge' as it was of land and goods. As to pull on under colonial rule, Indian internalized even error, shrewdly learning to exploit it for their own purposes.
+:::
+
+The administrative and judicial coersion of the British rule, cajoled the majority population to identitfy overwhelmingly based on religion.
+
+:::multilinequote
+Now, though, Hindu thinkers could focus more and more on what made them a single grouping; to construct unity despite diversity. History, knowledge and even the English language, would grow key to this. So much so that if Portuguese persecution in Goa had been a local affair, it would eventually be perceived in national accounts as an attack on subcontinental Hindus as a whole-as a people.
+:::
+
+With the influence of western medicine and technological developments, a small renaissance also occurred in some Hindu puppet states. Rajas like Serfoji II Bhonsle of Thanjavur, Jai Singh of Jaipur, and some Travancore Rajas encouraged and promoted western sciences, arts, literature in conjuction with a revival of local arts and sciences. This, to the admiration and surprise of the British, did not go against the notion of being a Hindu. Scientific investigation was part of Hindu way of life argued Serfoji II, for instance. While the missionaries could only view Hindu religion with their Christian blinkers, the British were open to actually *studying* the religion and culture in a zeal to *rule* over it.
+
+:::multilinequote
+As the historial Richard Drayton notes, 'Service to the cause of Knowledge lent dignity to an enterprise which might have appeared otherwise as mere plunder and rapine.'
+:::
+
+On the otherside, the white men, from the late 18th and 19th centuries, started discovering Sanskrit texts - initially to understand the Hindu law and religion, but eventually the literature and poetry. Their translation to English (and later German, and French), albeit censored and "purified", gave rise to tremendous interest in Sanskrit. Sanskrit was hailed as a wonderful language, even superior to Greek and Latin. This, coupled with the rising idea that Sanskrit was "mother of all subcontinental languages"[^drav], lead to a disdain of other vernacular languages, like Bengali, as a mere corruption due to Islamic and Persian influence. This would, again, in time, be amplified by Hindu nationalists.
+
+:::multilinequote
+F. Max Muller, the celebrated Vedic expert, wrote of the Vedas as 'the root of Hinduism'. But while superior to living, Puranic traditions, this was, he added nontheless, 'childish and crude'-to show Hindus 'what that root is, is, I feel surel, the only way of uprooting all that has sprung from it during the last 3000 years'.... Or a collegue wrote to Muller, 'Your work will form a new era in the efforts for the conversion of India...by enabling us to compare that early false religion [of the Vedas] with the true.
+:::
+
+Hindus too, in their own way, started to take part in and influenced this rise of subcontinental Orientalism. The associates to the British (now increasingly Brahmin), say what the British esteemed and pointed out Hindu parallels, prejudiced against Buddhist and Jain thought. Ironically, this orientalism  enabled the Indians to viewe themselves as not inferior to the British and would slowly give rise to the Indian resistance. Even as early as 1857, the British sensed the use of Indian texts that they treasured like the *Gita* were begining to be used as motive for resistance.
+
+:::multilinequote
+If on the British side, powerful interests wished to use Sanskrit, impart Western ideas to lites through this medium and leave them to filter dowm, influencial 'natives' wanted direct access to English.
+:::
+
 ----
 
 All the above excerpts are attributed to their original author(s). Book info -
 
-
 > Manu S. Pillai, *Gods, Guns and Missionaries*, 2024. Penguin Random House, India. ISBN-13: 9780670093656
+
+----
+
+[^note]: In fact, the British judges walked the fine line between following ancient *Shastras* or the local traditions and customs. Often, in their understanding of "Hindu Law", local and family traditions take precedence over old written *Shastras*.
+
+
+[^drav]: Conveniently omitting the Dravidian languages and their independent evolution.
