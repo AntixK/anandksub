@@ -34,7 +34,7 @@ Also, note that $d_E(\vmu_1, \vp) = d_M(\vmu_1, \vp)$. This indicates that the e
 ## Extending to GMMs
 &emsp; How about a mixture of Gaussians? The Gaussian Mixture Model (GMM) is simple a weighted sum of independent Gaussian distributions. It can capture more complex distributions compared to simple Gaussian distribution without needing sophisticated computations.
 
-Consider the GMM defined as 
+Consider the GMM defined as
 
 $$
 \begin{aligned}
@@ -43,11 +43,11 @@ p(\vx) &= \sum_{k} \lambda_k p(\vx|k)
 \end{aligned}
 $$
 
-Where $p(\vx|k)$ is the $k^{th}$ Gaussian distribution with parameters $\vmu_k, S_k$ and $\lambda_k$ is the coefficient of the $k^{th}$ Gaussian. 
+Where $p(\vx|k)$ is the $k^{th}$ Gaussian distribution with parameters $\vmu_k, S_k$ and $\lambda_k$ is the coefficient of the $k^{th}$ Gaussian.
 
 To extend the idea of Mahalanobis distance to GMMs, we first need a concrete and a general idea about the distance metric - one that generalizes to any given manifold or distribution and not just a Gaussian. Such a distance is called *Riemannian distance*.
 
-The local distance between two points $\vx_i$ and $\vx_j$ is determined by the space that it lies in. The data always lies on a manifold. The manifold might be of the same dimension as the ambient space itself, or may even have a lower dimension. This manifold is determined by the data-generating distribution $q(\vx)$. The data is sampled from this data distribution which defines the manifold in which the data exists[^1]. Therefore, the Riemannian distance $d_R$ is given by the path integral between $\vx_i \to \vx_j$ along the manifold, weighted by the local Riemannian metric $G$.  
+The local distance between two points $\vx_i$ and $\vx_j$ is determined by the space that it lies in. The data always lies on a manifold. The manifold might be of the same dimension as the ambient space itself, or may even have a lower dimension. This manifold is determined by the data-generating distribution $q(\vx)$. The data is sampled from this data distribution which defines the manifold in which the data exists[^1]. Therefore, the Riemannian distance $d_R$ is given by the path integral between $\vx_i \to \vx_j$ along the manifold, weighted by the local Riemannian metric $G$.
 
 $$
 \begin{aligned}
@@ -59,15 +59,15 @@ $$\label{eq:riemann}
 Where $G(\vx)$ is the local Riemannian metric induced by the data generating distribution $p(\vx)$. You can think of it being a generalization of the covariance matrix to arbitrary distributions. In fact, the above matrix $G$ is called as a *Fisher-Rao metric*. The Fisher-Rao metric is a Riemannian metric on finite-dimensional statistical manifolds. The Riemannian metric is rather far more general.
 
 ### Simplifying Riemannian Distance
-The above Riemannian distance is generally intractable and the Fisher-Rao metric is also computationally expensive. There is, however, an alternate way proposed by Michael E. Tipping[^2]. Instead of the above Fisher-Rao metric, we can construct an alternate Riemannian metric for GMMs as 
+The above Riemannian distance is generally intractable and the Fisher-Rao metric is also computationally expensive. There is, however, an alternate way proposed by Michael E. Tipping[^2]. Instead of the above Fisher-Rao metric, we can construct an alternate Riemannian metric for GMMs as
 
 $$
-G(\vx) = \sum_{k} p(k|\vx)S_k^{-1} 
+G(\vx) = \sum_{k} p(k|\vx)S_k^{-1}
 $$
 Which is simply the average of the individual inverse covariance matrices. To circumvent the intractability of equation \eqref{eq:riemann}, Tipping offers a tractable approximation that yields a distance metric of the same *form* as \eqref{eq:mahalanobis}.
 
 $$
-d_{GMM}(\vx_i, \vx_j) = \sqrt{(\vx_i - \vx_j)^TG(\vx)(\vx_i - \vx_j)} 
+d_{GMM}(\vx_i, \vx_j) = \sqrt{(\vx_i - \vx_j)^TG(\vx)(\vx_i - \vx_j)}
 $$\label{eq:gmm_dist}
 
 Essentially we have moved the path integral inside the square-root where it is entirely captured by the local Riemannian metric $G(\vx)$. Moving from $\vx_i \to \vx_j$, the Riemannian metric becomes
@@ -88,7 +88,7 @@ b &= \vv^T S_k^{-1}\vu \\
 g &= \vu^T S_k^{-1}\vu \\
 Z &= g + b / a \\
 \vv &= \vx_j - \vx_i \\
-\vu &= \vx_i - \vmu_k 
+\vu &= \vx_i - \vmu_k
 \end{aligned}
 $$\label{eq:path_int}
 
@@ -104,7 +104,7 @@ We can make some observations about the above result. First, for $k=1$, the abov
 import numpy as np
 from scipy import special
 
-def GMMDist(x1: np.array, x2:np.array, 
+def GMMDist(x1: np.array, x2:np.array,
             mu: np.array, Sigma:np.array, lambdas:np.array) -> float:
     """
     Computes the Riemannian distance for Gaussian Mixture Models.
@@ -116,7 +116,7 @@ def GMMDist(x1: np.array, x2:np.array,
         lambdas (np.array): Coefficients of the Gaussiam mixtures
 
     Returns:
-        float: Riemannian distance between x1 and x2 
+        float: Riemannian distance between x1 and x2
                for the given GMM model
     """
 
@@ -137,18 +137,18 @@ def GMMDist(x1: np.array, x2:np.array,
 
         const = np.sqrt(np.pi / (2* a))
         path_int[k] = const * np.exp(0.5 * Z)
-        path_int[k] *= (special.erf((b+a)/np.sqrt(2 * a)) - 
+        path_int[k] *= (special.erf((b+a)/np.sqrt(2 * a)) -
                         special.erf(b/np.sqrt(2 * a)))
 
     # Compute the path integral over each component
     for k in range(K):
         _compute_k_path_integral(k)
 
-    # Reweight the inverse covariance matrices with the 
+    # Reweight the inverse covariance matrices with the
     # path integral and the mixture coefficient
     w = lambdas * path_int
-    
-    eps = np.finfo(float).eps 
+
+    eps = np.finfo(float).eps
     G = (S_inv*w[:, None, None]).sum(0) / (w.sum() + eps)
 
     return np.sqrt(np.dot(np.dot(v.T, G), v))
@@ -159,6 +159,7 @@ Finally, the following figure compares the contour plots of both the GMM Riemann
 
 !!!
 <img  style="width:100%;min-width:400px;"  src="/media/post_images/gmm_dist.webp" alt="GMM Distance Contour plot">
+<p class = "caption-text">Comparison between GMM Riemannian distance (<i>left</i>) and Mahalanobis distance (<i>right</i>) from the point $p_1$ for the same underlying densit.</p>
 !!!
 
 The clustering problem is a direct application of the above distance metrics - more specifically the class of model-based clustering techniques. Given some data samples, we fit a model (inductive bias) - say a Gaussian or a GMM, and we can use the above distance metrics to group them into clusters. Or even detect outliers.
