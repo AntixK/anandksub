@@ -47,7 +47,7 @@ Where $\vw$ is the input to the function $h$, $\vu$ is a random director vector,
 
 Observe that the it is not necessary to relax the constraints of the solver to make it differentiable. The solver itself can be a blackbox and our concern is mainly the input-ouput ($\vw \to \vy$) mapping of the solver. Similar to equation \eqref{eq:zo}, we can get gradient estimates without modifying the solver in any way. The trick is now to get *informed* directions $\vu$ along which we have to perturb the blackbox to get optimal (and sample-efficient) gradient estimates.
 
-If we can convert the piecewise constant loss landscape to piecewise *affine*, then we can just take the gradients along the direction that has the maximum slope. To perturb the predicted input $\hat{\vw}$ to the solver, we can use the gradient $\nabla_{\vy}L$ at the predicted output $\hat{\vy}$.
+If we can convert the piecewise constant loss landscape to piecewise *affine*, then we can just take the gradients along the direction that has the maximum slope. During the backward pass, to perturb the predicted input $\hat{\vw}$ to the solver, we can use the gradient $\nabla_{\vy}L$ at the predicted output $\hat{\vy}$.
 
 $$
 \begin{aligned}
@@ -69,7 +69,7 @@ Although the above technique for combinatorial solvers was proposed in a 2020 IC
 
 $$
 \nabla_{\vw} L = \lim_{\lambda \to 0} \frac{1}{\lambda} \left [h \left ( \vw + \lambda \nabla_{h} L \right) - h(\vw)\right ]
-$$
+$$ \label{eq:domke}
 
 
 ### Code
@@ -127,7 +127,7 @@ class BlackBoxSolver(torch.autograd.Function):
 ```
 
 
-&emsp; The downside of the above technique is that the smoothed loss landscape can be come non-convex, even if the original loss was convex. The earlier figure shows that as $\lambda$ increases, the loss landscape becomes dramatically different, where some optima are even lost. In fact, $\lambda$ must be high enough to make the landscape piecewise *affine*. This actually goes against the idea of step sizes being small ($\lambda \to 0$) in usual finite-difference methods.
+&emsp; The downside of the above technique is that the smoothed loss landscape can be come non-convex, even if the original loss was convex. The earlier figure shows that as $\lambda$ increases, the loss landscape becomes dramatically different, where some optima are even lost. In fact, $\lambda$ must be high enough to make the landscape piecewise *affine*. This actually goes against the idea of step sizes being small ($\lambda \to 0$) in usual finite-difference methods (refer the limit in equation \eqref{eq:domke}).
 
 The perturbation value $\lambda$ is, therefore, quite important while training - where a balance between the smoothness of the loss landscape and the optimality of the solution must be struck. The general rule of thumb is to make sure that the magnitude of $\vw_\lambda$ is not heavily altered from $\vw$.
 
