@@ -59,7 +59,7 @@ In 1540–41, hundreds of temples were razed, their assets appropriated for Chri
 :::
 
 
-:::multilinequote
+:::multilinequoteActivity
 The irony, of course, as the scholar Alexander Henn reminds us, is that Catholics were stricking at Goa's idols—and idolator—in the same period that Protestants attacked their icons in Europe under the charge of idolatry. But precisely for this reason, there was no sympathy; the Portuguese had to demonstrate with fire and blood that they were authentic Christians. And Hindus suffered in the process.
 :::
 ranam:
@@ -176,11 +176,33 @@ On the otherside, the white men, from the late 18th and 19th centuries, started 
 F. Max Muller, the celebrated Vedic expert, wrote of the Vedas as 'the root of Hinduism'. But while superior to living, Puranic traditions, this was, he added nontheless, 'childish and crude'-to show Hindus 'what that root is, is, I feel surel, the only way of uprooting all that has sprung from it during the last 3000 years'.... Or a collegue wrote to Muller, 'Your work will form a new era in the efforts for the conversion of India...by enabling us to compare that early false religion [of the Vedas] with the true.
 :::
 
-Hindus too, in their own way, started to take part in and influenced this rise of subcontinental Orientalism. The associates to the British (now increasingly Brahmin), say what the British esteemed and pointed out Hindu parallels, prejudiced against Buddhist and Jain thought. Ironically, this orientalism  enabled the Indians to viewe themselves as not inferior to the British and would slowly give rise to the Indian resistance. Even as early as 1857, the British sensed the use of Indian texts that they treasured like the *Gita* were begining to be used as motive for resistance.
+Hindus too, in their own way, started to take part in and influenced this rise of subcontinental Orientalism - just like they did with the incoming of the Islamic empires. The associates to the British (now increasingly Brahmin), say what the British esteemed and pointed out Hindu parallels, prejudiced against Buddhist and Jain thought. Ironically, this orientalism  enabled the Indians to viewe themselves as not inferior to the British and would slowly give rise to the Indian resistance. Even as early as 1857, the British sensed the use of Indian texts that they treasured like the *Gita* were begining to be used as motive for resistance.
 
 :::multilinequote
 If on the British side, powerful interests wished to use Sanskrit, impart Western ideas to lites through this medium and leave them to filter dowm, influencial 'natives' wanted direct access to English.
 :::
+
+However, by the 1830s, as the missionaries failed to see significant success in their mission, they turned to influencing the Governors to restrict their activities that were done to appease the native Hindus (like participating in festivals, honoring and protecting pilgrimage sites). New laws such as the "Pilgrim tax" were introduced. The intellectuals (from the higher castes) who eagerly learnt English and the western sciences were still not considered for positions of any marginal power. Amidst all these, the conversions of any high caste Hindus was advertized and praised publicly. The British haughtiness and arrogance was not lost on the Indians. For instance Bhaskar Pandurang (1816-47) records
+
+:::multilinequote
+Conquest was a fact of history; he would not begrudge the British that they ha seized India by the rules of power. But what then? Unless conquered people were invested in the new order, resistance was natural. And yet, instead of conciliating India, 'You keep yourselves aloof' and 'conduct yourselves with such haughtiness and pride as if you were quite a distinct and superior order of beings'. Racism would not do. India 'gained nothing' from British rule, Pandurang added, the white man's claims of bringing the land peace being 'humbug'. 'Natives', for example, were asked to be grateful that the Company had ended the predations of mercenary armies and dangerous tribes. And yet 'your trading system' had 'more effectively emptied our purses in a few years than the predatory excursions of these tribes could do in some five or six hundred years'. 'You plunder us on all sides', he went on, and 'pompously' point to 'petty thing' like public infrastructure. Sure, the British might not oppress like 'Barbarians'. but this was because they didn't need to;' 'under the garb of law and justice' they possessed fancier tools of extraction. Oppression was still the primary feature of empire, and no quantity of gloss and sophistry could mask this.
+:::
+
+Then the 1857 rebellion happened. Although the British narrative was to draw a strawman that the natives were enraged over the use of cow and pig fat in the cartridges, the rebellion was a culmination of decades of resentment against the British rule. There were instances as early as 1809 in Travancore where the Britisher's 'ingratitude and treachery' was noted and the dewan Velu Thampi even tried to oust the Company out of the Kindgom. Intellectuals like Ram Mohan Roy began standing up against the British.
+
+In fact, this period also saw the rise of Hindu religious reformers. As with earlier reformers like Nanak and Kabir who tried to bridge or tried to abstract away religious practical differences, now in the early 19th century various intellectuals and even God men attempted to reinterpret Hinduism and Hindu practices in light of the White man's influence and Western knowledge. This development can also be partly attributed to the frenzy in "discovering" and translating the ancient Hindu texts. Hinduism started to reshape itself, yet again.
+
+In fact, ideas like rejection of idolatory, a more egalitarian access of the religious experience to all - the ideas that had precedence over 700 years before Roy[^sank]- were now being reinterpreted and reinstated. In a sense, this development also partly reflected the actual inter-religious practice of many Indians. As noted by a Deccan writer in the early 1830s,
+
+:::multilinequote
+he and his family, albeit not Brahmins, viewed vegetarianism as purer; yet theyr continued to each meat, speaking in code of fish as 'water beans', mutton as 'red vegetables'. They bowed to Brahmin-led temples, but Brahmins likewise participated in their goddess rites featuring flesh and liquor; His father diligently read the Gita, meanwhile uncle paid visits to a Muslim sufi. The women of the household prayed to serpants but also made vows on Muharram. 'My life' the author concludedm 'was marked by grossest inconsistencies', and 'contradictory doctrines'.
+:::
+
+
+
+### Thoughts
+
+
 
 ----
 
@@ -194,3 +216,5 @@ All the above excerpts are attributed to their original author(s). Book info -
 
 
 [^drav]: Conveniently omitting the Dravidian languages and their independent evolution.
+
+[^sank]: Sankara, for instance had argued that image/idol worship was a subordinate practice. Basava was staunchly against idol worship and Brahminical ritualism. Namdev and other Bhakti poets believed in a devotional cuture where the religious experience was accessible to all.
