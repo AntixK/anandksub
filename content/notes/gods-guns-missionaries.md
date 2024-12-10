@@ -226,6 +226,9 @@ Savarkar, through his historical revisionism (Pillai notes "conscripting the pas
 
 The view that Hindus were 'historically too tolerant' and the then activities and demands of the Muslim League made Savarkar and his followers acidic towards Muslims. However, the majority of Hindus then backed Gandhi and his views (thankfully!), and as such, Savarkar's Mahasabha saw little success in wooing Hindus together. But, in the recent decades, his ideas and rhetoric are now well underway, attempting to remake the Indian state in its own image.
 
+:::multilinequote
+The ultimate violence which colonialism does to its victims is that it creates culture in which the ruled are constantly tempted to fight theit rulers within the psychological limits set by the latter.
+:::
 
 ----
 
