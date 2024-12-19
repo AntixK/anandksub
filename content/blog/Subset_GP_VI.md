@@ -9,7 +9,11 @@
 @def has_math = true
 
 
-&emsp; GPs[^update]
+&emsp; Gaussian Processes (GPs) are infamous for their high computational complexity with respect $\fO(N^3)$
+
+
+
+GPs[^update]
 
 
 
