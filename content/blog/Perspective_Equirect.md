@@ -2,24 +2,18 @@
 @def published = "5 December 2024"
 @def description = "Inverting the common procedure of converting equirectangular images to perspective images."
 @def tags = ["math","geometric-projection", "image-processing", "code"]
-@def is_draft = true
+@def is_draft = false
 @def show_info = true
 @def has_code = true
 @def has_chart = false
 @def has_math = true
 
 
-&emsp;
+&emsp; Recently I had a task to convert between perspective and equirectangular projections. Equirectangular projections can be found in VR and 360 degree image/video content. Although there are more efficient projection available today for 360 media content[^eac], equirectangular remains the simplest and a widely supported format. In any case, it is a good first projection to understand before moving onto the more sophisticated ones.
 
 ### Perspective Projection
 
-Perpsective projections are what you get when you take a photo with your camera. Objects that are further away from the camera appear smaller and all the lines appead to project toward *vanishing points* (i.e. where the parallel lines seem to converge).
-
-Difference between rectilinear projection and perspective projection.
-
-Note about fisheyelens.
-
-What is gnomonic projection?
+&emsp; Perpsective projections are what you get when you take a photo of your camera. Objects that are further away from the camera appear smaller and all the lines appear to project toward *vanishing points* (i.e. where the parallel lines seem to converge).
 
 Recall that the Pinhole Camera model (bet used for a perspective projection), where some real-world point $p$ with coordinates $(x, y,z)$ is projected onto the image plane at $(u, v)$ as
 
@@ -52,7 +46,7 @@ $$
 \end{aligned}
 $$
 
-Where $K$ is the *intrinsic* camera matrix, $R$ is the *extrinsic* camera matrix, $f_x, f_y$ are the focal lengths of the camera, $c_x, c_y$ are the principal points, and $t_1, t_2, t_3$ are the translation components [^cam]. Therefore, given the matrices $K$ and $R$, we can convert between pixel coordinates and the world coordinates.
+Where $K$ is the *intrinsic* camera matrix, $R$ is the *extrinsic* camera matrix, $f_x, f_y$ are the focal lengths of the camera, $c_x, c_y$ define the optical centre, and $t_1, t_2, t_3$ are the translation components [^cam]. Therefore, given the matrices $K$ and $R$, we can convert between pixel coordinates and the world coordinates. A quick not about the axis convention - the $z-$axis is the optical axis of the camera, the $x-$axis is the horizontal axis, and the $y-$axis is the vertical axis.
 
 ```python
 def camera_to_world(points: np.ndarray, K: np.ndarray, R:np.ndarray) -> np.ndarray:
@@ -98,7 +92,12 @@ def world_to_camera(points: np.ndarray, K: np.ndarray, R:np.ndarray) -> np.ndarr
     return camera_points
 ```
 
-To get the camera matrix $K$ from a given image, we only need two parameters - the field-of-view (FOV) and the image dimensions $(W, H)$.
+To get the camera matrix $K$ from a given image, we only need two parameters - the field-of-view (FOV) and the image dimensions $(W, H)$. The focal lengths $f_x$ and $f_y$ can be computed from the FOV as
+
+$$
+f_x =f_y = \frac{W}{2 \tan (\text{FOV}/2)}
+$$
+
 
 ```python
 def get_camera_matrix(FOV: float, width: int, height: int) -> np.ndarray:
@@ -146,14 +145,20 @@ def get_extrinsic_matrix(THETA:float, PHI:float):
 
 ### Equirectangular Projection
 
+&emsp; Equirectangular projections are derived from the *Spherical* camera model and not the Perspective (linear) model discussed above.
+
+!!!
+<img  style="width:100%;min-width:400px;"  src="/media/post_images/equirect.webp" alt="Equirectangular Projection">
+!!!
+
 Mapping from 3D world coordinates $p$ to 2D equirectangular coordinates $(x_{eq}, y_{eq})$ is a two-step procedure. Since the Equirectangular projection is a projection of a sphere unto a 2D surface, we first convert the 3D world coordinates to *spherical coordinates* $(\theta, \phi)$ as
 
 $$
 (\theta, \phi) = \left ( \text{atan2} (x, z), \arcsin \left (\frac{y}{\rho} \right ) \right )
 $$
 
-Where $\rho = \sqrt{x^2 + y^2 + z^2}$.
-Mention the link with latitude and longitude.
+Where $\rho = \sqrt{x^2 + y^2 + z^2}$, $\theta$ is the Azimuth angle, and $\phi$ is the elevation angle. The Azimuth is also called as the longitude and the elevation the latitude in map projections.
+
 
 ```python
 def cartesian_to_spherical(points: np.ndarray) -> np.ndarray:
@@ -218,16 +223,14 @@ Next, the above spherical cooridinates are mapped to the 2D equirectangular coor
 
 $$
 \begin{aligned}
-  x_{eq} &= \left ( \frac{\theta }{ 2\pi} + 0.5 \right ) W \\
-  y_{eq} &= \left ( \frac{\phi}{\pi} \right ) H
+  x_{eq} &= \left ( \frac{\theta + \pi }{ 2\pi} \right ) W \\
+  y_{eq} &= \frac{H}{\pi} \left ( \phi + \frac{\pi}{2} \right )
 \end{aligned}
 $$
+Where $W$ and $H$ are the width and height of the equirectangular image respectively. Let's take a minute to quickly demystify the above formula. The $\phi=0$ latitude and $\theta=0$ longitude corresponds to the center of the equirectangular image $ \Rightarrow x_{eq} = W /2, y_{eq} = H/2$.Furthermore, according to practical convention, "upwards" is positive and "downwards" in negative. Therefore, the $\phi$ and $\theta$ are normalized to the ranges $[-\pi, \pi]$ and $[-\pi/2, \pi/2]$ respectively, and mapped to the 2D image with a offset equal to half of their corresponding range.
 
-explain the 0.5.
+As the ranges of $\theta$ and $\phi$ have the ratio 2:1, the resultant equiangular image will have a 2:1 aspect ratio as well, hence the name Equi-rectangular.
 
-
-
-Where $W$ and $H$ are the width and height of the equirectangular image respectively. As evident from the above formula, the resultant mapping to the 2D plane is a distorted one, with the poles of the sphere being stretched out. However, compared to other similar cylindrical projections like the Mercator or the Lambert's, the equirectangular is the simplest as the latitude and longitudes are directly mapped to the 2D plane and as such
 
 ```python
 def spherical2equirect(sp_coords: np.ndarray,
@@ -250,13 +253,26 @@ def spherical2equirect(sp_coords: np.ndarray,
     return np.stack([x, y], dtype=np.float32).transpose(2, 1, 0) # (width, height, 2)
 ```
 
-reference: https://marksmath.org/classes/common/MapProjection.pdf
+As evident from the above formula, the resultant mapping to the 2D plane is a distorted one, with the poles of the sphere being stretched out. However, compared to other similar cylindrical projections like the Mercator or the Lambert's, the equirectangular is the simplest as the latitude and longitudes are directly mapped to the 2D plane. As a result, the latitude and longitude lines appear as a regular (equidistant) grid. This is in contrast to the actual longitudinal lines that get closer to each other as they approach the poles. Nontheless, this projection is widely used in panoramic photography to create immersive 360-degree images.
 
-reference: https://hugin.sourceforge.io/docs/manual/Projections.html
 
-Where is equirectagnular projection actually useful? VR? Panoramic Images?
+#### Equirectangular to Perspective
 
-The equirectangular projection is widely used for spherical panorama viewers.
+&emsp; With the above knowledge, we can easily convert a given equirectangular image to a perspective image. Converting from equirectangular to perspective is useful when a natural looking portion of the image is required. For example, in a VR application, the user's head movement can be used to render the perspective image from the equirectangular image.
+
+!!!
+<img  style="width:100%;min-width:400px;"  src="/media/post_images/equi_pers.webp" alt="Equirectangular to Perspectivce Projection">
+<p class = "caption-text">Procedure for mapping from Equirectangular to Perspective projection.</p>
+!!!
+
+::: important
+The procedure is as follows -
+1. Generate a uniform grid of points that represent the perspective image.
+2. Convert the grid points to world coordinates using the camera matrix $K$ and the extrinsic matrix $R$.
+3. Convert the world coordinates to spherical coordinates using the `cartesian_to_spherical` function.
+4. Convert the spherical coordinates to equirectangular coordinates using the `spherical2equirect` function.
+5. Use the `cv2.remap` function to generate the perspective image with the above equirectangular coordinates.
+:::
 
 ```python
 def Equirec2Perspec(img:np.ndarray,
@@ -313,8 +329,23 @@ def Equirec2Perspec(img:np.ndarray,
     return persp
 ```
 
-Once we have the above forward function, it is simple to invert the process to get the perspective image from the equirectangular image.
 
+#### Perspective to Equirectangular
+
+!!!
+<img  style="width:100%;min-width:400px;"  src="/media/post_images/pers_equirect.webp" alt="Perspective to Equirectangular  Projection">
+<p class = "caption-text">Procedure for mapping from Perspective to Equirectangular projection.</p>
+!!!
+
+::: important
+The procedure for mapping from perspective to equirectangular (illustrated above) is as follows
+1. Generate a uniform grid of points that represent the equirectangular image. This can be done by generating a grid of points between $[0, 1]$ and mapping them top the spherical coordinates.
+2. Convert the uniform spherical coordinates to Cartesian (world) coordinates using the `spherical_to_cartesian` function.
+3. Convert the world coordinates to camera coordinates using the `world_to_camera` function and the camera matrix $K$ and the extrinsic matrix $R$.
+4. Project the camera coordinates to the image plane and normalize the x, y coordinates.
+5. Mask out the degenerate points that are "behind" the camera and outside the image plane. Note that since we sampled uniformly from the sphere, there is no guarantee that all those points will be visible in the perspective image.
+6. Use the `cv2.remap` function to generate the equirectangular image with the above camera coordinates.
+:::
 
 ```python
 
@@ -392,6 +423,13 @@ def Perspec2Equirec(img: np.ndarray,
 
   ```
 
+!!!
+<img  style="width:100%;min-width:400px;"  src="/media/post_images/equirect_transform.webp" alt="Equirectangular to Perspective Projection">
+<p class = "caption-text">Mapping from Perspective to Equirectangular and back</p>
+!!!
+
 ----
+
+[^eac]: Cubemaps are another popular 360 degree projection format. Google's [Equiangular Cubemap](https://blog.google/products/google-ar-vr/bringing-pixels-front-and-center-vr-video/) (EAC) have become quite popular for efficient and others like GoPro have even adopted this format. For map projections, although Equirectagnular is one of the oldest, due to its high distortion (neither areas nor angles between cruves are preserved), it is seldom used.
 
 [^cam]: A couple of good references for camera model and their history can be found [here](https://cvgl.stanford.edu/teaching/cs231a_winter1415/lecture/lecture2_camera_models_note.pdf) and [here](https://www.cse.psu.edu/~rtc12/CSE486/lecture12.pdf).
