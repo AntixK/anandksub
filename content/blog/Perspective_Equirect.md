@@ -227,7 +227,7 @@ $$
   y_{eq} &= \frac{H}{\pi} \left ( \phi + \frac{\pi}{2} \right )
 \end{aligned}
 $$
-Where $W$ and $H$ are the width and height of the equirectangular image respectively. Let's take a minute to quickly demystify the above formula. The $\phi=0$ latitude and $\theta=0$ longitude corresponds to the center of the equirectangular image $ \Rightarrow x_{eq} = W /2, y_{eq} = H/2$.Furthermore, according to practical convention, "upwards" is positive and "downwards" in negative. Therefore, the $\phi$ and $\theta$ are normalized to the ranges $[-\pi, \pi]$ and $[-\pi/2, \pi/2]$ respectively, and mapped to the 2D image with a offset equal to half of their corresponding range.
+Where $W$ and $H$ are the width and height of the equirectangular image respectively. Let's take a minute to quickly demystify the above formula. The $\phi=0$ latitude and $\theta=0$ longitude corresponds to the center of the equirectangular image $ \Rightarrow x_{eq} = W /2, y_{eq} = H/2$. Furthermore, according to practical convention, "upwards" is positive and "downwards" in negative. Therefore, the $\phi$ and $\theta$ are normalized to the ranges $[-\pi, \pi]$ and $[-\pi/2, \pi/2]$ respectively, and mapped to the 2D image with a offset equal to half of their corresponding range.
 
 As the ranges of $\theta$ and $\phi$ have the ratio 2:1, the resultant equiangular image will have a 2:1 aspect ratio as well, hence the name Equi-rectangular.
 
