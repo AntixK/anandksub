@@ -139,7 +139,7 @@ Now, the trick is in understanding that during truncation, we have to consider b
 
 [^anima]: The general form was described in the paper - Li, Zongyi, et al. *Neural operator: Graph kernel network for partial differential equations.* arXiv preprint arXiv:2003.03485 (2020).
 
-[^trunc]: The bandlimited assumption may not always hold and yet we truncate to $p_{\text{max}}$ modes. Hence, it is usualy recommended to play around with the maximum frequency $p_{\text{max}}$ for each application. The original FNO paper recommends $p_{\text{max}, j} = 12$ for each $d$.
+[^trunc]: The bandlimited assumption may not always hold and yet we truncate to $p_{\text{max}}$ modes. Hence, it is usualy recommended to play around with the maximum frequency $p_{\text{max}}$ for each application. The original FNO paper recommends $p_{\text{max}, j} = 12$ for each channel/feature dimension $j$.
 
 [^trick]: A clean implementation of the Fourier multiplication can be found [here](https://github.com/neuraloperator/neuraloperator/blob/13c7f112549bfcafe09a4c5512a90206141b3511/neuralop/layers/spectral_convolution.py#L526).
 
