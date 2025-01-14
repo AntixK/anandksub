@@ -37,6 +37,15 @@ It is notable that the above non-Vedic schools, while rejecting the Vedas, did n
 In this way, one can study the various philosophies as an interaction or a conversation, especially since the modern religious extensions of these schools have become more dogmatic, and have exuberant in their practices and rituals.
 
 ## 1. Pramana Sastra (Theory of Knowledge)
+Two Sanskrit terms that were often used, especially in the Upanishads were *cit* and *jnana* - Mohanty translates them as "consciousness" and "congnition" respectively [^cog]. He also defines knowledge as *paramajnana* (the congnitions that are True).
+
+Take for instance the question - what is the ontological nature of consciousness? The various answers considered were
+
+- It is a quality (essential or an emergent) of the self to which it belongs
+- It is an act of the self
+- It is a "substance" that is identical with the self or that self is consciousness.
+
+The *Samkya*, *Vendanta*, and the Buddhist *Vijnanavadin* schools align with the third view, but with subtle differences.
 
 
 ----
@@ -48,3 +57,5 @@ All the above excerpts are attributed to their original author(s). Book info -
 ----
 
 [^nas]: Although there is a lot of nuance and re-interpretation in the meaning of *Nastika* and *Astika*, a generally accepted distinction is that the former denies the authority of the Vedas, while the latter accepts it.
+
+[^cog]: Cognition is often defined as a representational state whereas knowledge is a propositional state that includes a judgement.
