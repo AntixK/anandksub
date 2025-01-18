@@ -1,0 +1,155 @@
+
+\input{common/note_style.tex}
+
+\title{Notes of Point Cloud Processing}
+\author{Anand K Subramanian}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+Computer Vision has been redefining itself to incorporate the addition of a third dimension to its processing capabilities - either along the temporal axis (Video processing) or the spatial axis (3D point cloud processing). A 3D point cloud is an unstructured unordered collection of points in three-dimensional space, representing the surface of the object. Optionally, additional information such as RGB color, surface normals may be embedded depending on sensor used to capture the point cloud. This note aims to provide the essential knowledge required to get started with 3D point cloud processing. Furthermore, mesh processing techniques are beyond the scope of this note, although one can view mesh processing as an extension of point cloud processing.
+
+
+\section{Point Cloud Acquisition}
+\subsection{LiDAR}
+In contrast to the optical phenomena of 2D images, 3D point cloud formation is a geometric process. Commonly, 3D point clouds are acquired using LiDAR (Light Detection and Ranging) sensors. The same technology, across different domains are alternatively called LADAR (following the naming convention of RADAR) or laser altimetry. A typical LiDAR consists of three components -
+\begin{enumerate}
+    \item Laser Emitter: This emits a high intensity laser beam, usualy in the near-infrared band. The light travels in a straight line (rectilinear propagation of light) until it hits an object. On hitting the object, it is then reflected back (called \textit{pulse echo}). The emitter can either produce a discrete laser (very short, high intensity pulse), or a continuous laser.  Pulserate, wavelength. Point spacing, return number.
+    \item Scanner - The scanner is a rotating mirror that rotates the beam in a plane at high speed. This spreads the beam in a swath. angular resolution, range resolution.
+    \item Detector - The reflected laser beam is them captured by a photodetector - particularly sensitive to the specific wavelength of the laser.
+\end{enumerate}
+
+The measuring vector is essentially the laser beam with energy $E$ and specific wavelength $\lambda$ related as $E = \frac{hc}{\lambda}$, where $h$ is the Planck's constant and $c$ is the speed of light. 
+
+In case of discrete lasers, the time of flightr (TOF) is the fundamental measurement. TOF ($\tau$) is the precise measurement of time the laser takes to travel the distance between the sensor and the target and back. From this, the range or the distance of the object from the sensor can be calculated as
+$$
+\begin{aligned}
+R &= \frac{1}{2} c \cdot \tau \\
+\delta R &= \frac{1}{2}\delta c \cdot \tau + \frac{1}{2} c \cdot \delta \tau = \frac{1}{2} c \cdot \delta \tau
+\end{aligned}
+$$
+where $c$ is the constant speed of light ($\delta c = 0$), and $\delta R$ is the range precision and $\delta \tau$ is the time precision. 
+
+In case of continuous laser beams, the range is derived based on the phase comparison between the transmitted and received beams. This alternative provides a way to circumvent the measurement limitations of sensing the discrete received pulses.
+
+$$
+\begin{aligned}
+R &= \frac{M \lambda + \delta \lambda}{2} \\
+\delta \lambda &= \frac{\phi}{2 \pi} \lambda
+\end{aligned}
+$$
+Where $M$ is the number of full wavelengths, $\lambda$ is the known wavelength of the laser, and $\delta \lambda$ is the fractional part of the wavelength calculated from the phase angle $\phi$.
+
+Another type of laser ranger - called as \textit{reflectorless} laser range is often used to profile a cross section. Terresstrial or ground--based LiDARs fall under this category. The measurement of the terrain profile is executed in a series of steps with the successive measured distances (here called slant ranges) and vertical angles $\nu$.
+
+$$
+\begin{aligned}
+    D &= R \cos \nu \\
+    \delta H &= R \sin \nu
+\end{aligned}
+$$
+Where $D$ is the horizontal distance, $R$ is the measured slant range, $\nu$ is the measured vertical angle, and $\delta H$ is the difference between the laser ranger and the terrain point being measured.
+
+\subsubsection{Terrain-based LiDAR}
+
+\subsubsection{Airborne LiDAR}
+
+\subsubsection{Things to Consider in a LiDAR System}
+
+\subsection{Depth Cameras}
+
+\section{Point Cloud Representation}
+
+\subsection{Data Formats}
+
+\subsubsection{PLY}
+
+\subsubsection{PCD}
+
+\subsubsection{XYZ}
+
+\subsubsection{Voxelization}
+
+\subsubsection{Meshing Point Clouds}
+
+
+\subsubsection{LAS}
+The current standard for LiDAR data format is the LAS format
+
+\section{Quality Control}
+Unlike photogrammetric techniques, LiDAR calibration is not a transparent process and remain restricted to the system's manufacturer. One does not have the associated measures (e.g. variance component of unit weight and variance-covariance matrices of the derived parameters) that can be used to evaluate the quality of the final product. In this regard, LiDAR systems are viewed as blackboxes that lack a well-defined set of quality assurance and quality control procedures. 
+
+The most important activity in QA is the system calibration and QC procedures involve verifying geometric accuracy of a LiDAR point cloud. The main premise of the proposed QC procedures is that overlapping LiDAR strips will be compatible only if there are no biases in the derived surfaces. QA encompasses management activities that are carried out prior to data collection to ensure that the way and derived data are of the quality required by the user. These management controls over the calibration, planning, implementation, and review of data collection activities. QC, on the other hand, takes place after the data collection to determine where the desired quality has been achieved. This involves routines and consistent checks to ensure the integrity, correctness, and completeness of the raw and derived data.
+
+
+
+
+\section{Point Cloud Compression}
+With the advancement of scanning technologies, the size od point cloud data has been dramatically increasing. For example, Pandar128E3X of Hesai Technology can generate point clouds at 6.9 million points per second. The consequent data volume from such sensors presents a challenge in terms of storage, and communication. This also impedes the downstream processing of such point clouds. Although it is patent that some form of compression technique is required, unlike the mature digital image/video compression, point cloud compression is still in its infancy and can be challenging due to the unstructured nature of point clouds. Moreover, real-time codecs have also become the need of the hour to transmit the point cloud data losslessly over a network.
+
+There are a few challenges in developing point cloud compression techniques - 1. The unstructured nature of point clouds makes it difficult for predictive coding. 2. With LiDAR sensors generating high density point clouds, it is all the more important to develop real-time codecs for large-scale point cloud compression. 3. LiDARs are often coupled with other sensors such as cameras, GPS, IMUs and a joint compression of multi-sensor data is also required.
+
+
+MPEG (Moving Picture Experts Group) 3D graphics coding (3DG) group has been working on standardizing point cloud compression formats and has identifies 3 categories of common test cases. Category 1 contains static objects and scenes across varying levels of density - solid (point clouds are so dense that they represent continuous surfaces), dense, and sparse point clouds. Category 2 has dynamic objects. Category 3 includes point clouds acquired dynamically, say via LiDAR mounted on a vehicle. Accordingly, MPEG has 2 standards for handling the above 3 categories - G-PCC (Geometry-based Point Cloud Compression) for categories 1 and 3 and V-PCC (Video-based Point Cloud Compression) for category 2. For a detailed listing of the test cases, refer to \cite{mpegx2013MPEG}.
+
+\subsection{Technical Details}
+
+\subsection{LASzip}
+
+\subsubsection{Compression Metrics}
+
+For lossy compression, two commondly used metrics are $D1-$PSNR, and $D2-$PSNR \cite{tian2017geometric}. Given a reconstructed point cloud $\hat{P}$ and its reference point cloud $P$, the metrics are defined as
+$$
+\begin{aligned}
+    D1 = \max \Bigg \{ & \frac{1}{|\hat{P}|} \sum_{q \in \hat{P}} \min_{p \in P} \|q -p\|^2, \\ 
+    & \frac{1}{|P|} \sum_{p \in P} \min_{q \in \hat{P}} \|p -q\|^2 \Bigg \} \\
+    D2 = \max \Bigg \{ &\frac{1}{|\hat{P}|} \sum_{q \in \hat{P}} \cos^2 \theta_{\hat{P}}\min_{p \in P} \|q -p\|^2, \\
+    & \frac{1}{|P|} \sum_{p \in P} \cos^2 \theta_{P}\min_{q \in \hat{P}} \|p -q\|^2 \Bigg  \} \\
+    D1-\text{PSNR} &= 10 \log_{10} \frac{3\rho^2}{D1}  \\
+    D2-\text{PSNR} &= 10 \log_{10} \frac{3\rho^2}{D2} 
+\end{aligned}
+$$
+Where $|P|$ and $|\hat{P}|$ are the number of points in the reference and reconstructed point clouds respectively, $\theta_P$ represents the angle between the error vector $p - q$ and the \textit{perceived} normal vector $n_q$ at the point $q$ and $\theta_{\hat{P}}$ represents the angle between the error vector $q - p$ and the \textit{perceived} normal vector $n_p$ at the point $p$. The normalizer $\rho$ is called as the \textit{peak value} defined as the diagonal distance of a bounding box of the point cloud. As such, these metrics cannot be used to compare point clouds of different scales as $\rho$ value would be different. Alternatively, one can redefine $\rho$ based on the intrinsic resolution of the point cloud as the max nearest neighbor distance between the points in the point cloud.
+
+$$
+\rho = \max_{\forall p \in P} \underbrace{\min_{\forall r \in P, r \neq p} \|p - r\|}_{\text{Nearest Neighbor Distance}}
+$$
+
+$D1-$PSNR is the typical point-to-point distance metric where a point $p\in P$ from the source is compared with the corresponding point in $q \in \hat{P}$ (found via nearest neighbor search). To account for the fact that the points actually represent a surface, $D2-$PSNR computes the point-to-surface distance metric as well, but without constructing a mesh beforehand. This is done by approximating the neighborhood as a plane and projecting the error vector $p - q$ onto the \textit{perceived} normal vector $n_p$ at the point $p$. For each $q$, the normal vector $n_p$ is computed from the collection of points in $P$ whose nearest neighbor is $q$ (i.e. clustering $P$ based on $q$ as a centroid) and their normals are averaged to get $n_p$.
+
+Hausdorff distance
+
+Chamfer distance
+
+\section{Point Cloud Processing}
+
+\subsection{Nearest Neighbor Search}
+Due to the unstructured nature of point clouds, querying the point cloud for neighbors at a given point is the most fundamental operation.
+
+\subsection{Sampling}
+
+\subsubsection{Downsampling}
+
+\subsubsection{Upsampling}
+
+\subsection{k$-d$ Tree}
+
+\subsection{Octree}
+
+\subsection{Feature Extraction}
+
+
+\subsection{Registration}
+Point cloud registration is the process of aligning two or more point clouds. The task boils down to find the spatial transformation that aligns two point clouds - either through rigid transformation (rotation and translation) or non-rigid transformation (those that introduce deformations such as affine transformations, perspective transformations).
+
+
+
+\nocite{*}
+\bibliographystyle{apalike}
+\bibliography{ref}
+
+\end{document}
