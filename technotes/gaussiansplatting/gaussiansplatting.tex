@@ -1,0 +1,51 @@
+
+\input{common/note_style.tex}
+
+\title{Notes on 3D Gaussian Splatting}
+\author{Anand K Subramanian}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% https://arxiv.org/pdf/2411.16392
+% https://arxiv.org/pdf/2407.12306
+% https://arxiv.org/pdf/2501.13928
+% https://arxiv.org/pdf/1906.04173
+% https://arxiv.org/pdf/1607.00662
+% % https://graphics.stanford.edu/~mapauly/Pdfs/perspective_accurate_splatting.pdf
+
+\section{Surface Splatting}
+
+3D representations can either be rasterized (voxels, multi-view RGB(D) images) or geometric like point clouds, and polygon meshes.
+
+\section{Differentiable Rendering}
+Rendering is the term used for the creation of shaded images from 3D computer models. For out purposes, we shall only consider the output image to be a pixel (raster) image rather than a vector image. This forward rendering process consists of projecting the vertices of a mesh onto the screen coordinate system and generating an image through regular grid sampling (rasterization). Each step in this process is often purpose-built and optimized well for the specific task. Off-the-shelf renderers are not built to be invertrible or differentiable.
+
+Conceptually inverting the rendering process means the recovery of object shape, camera parameters, motion, and illumination. DR allows for explicitly relating changes in the observed image with changes in the model parameters. \cite{loper2014opendr}.
+
+
+
+Consider a 3D mesh with a set of $N$ vertices $\fV = \{\vv_1, \vv_2, \ldots, \vv_N\}$ and $M$ faces (consisting of the indices of its vertices) $\fF = \{\vf_1, \vf_2, \ldots, \vf_M\}$ where $\vv_i \in \R^3, \vf_i \in \N^3$. To render this mesh, the vertices are projected from the object space onto the 2D screen. This projection - usually a series of transformations - is differentiable \cite{shirley2009fundamentals}.
+
+
+A differentiable renderer (DR) $\fR$ takes a scene-level information $\theta$ such as a 3D coordinates, normals, colors, lighting, material, and camera position as input and outputs a synthesized image $I = \fR(\theta)$. Any changes in the image $I$ can thus be propagated to the parameters $\theta$, allowing for image-based manipulation of the scene. In practice, we want the rendered image to match a reference image $I^*$ as closely as possible.
+
+
+$$
+\argmin_{\theta} \fL(\fR(\theta), I^*)
+$$
+
+Where $\fL$ is a loss function that measures the difference between the rendered image and the reference image. When the loss function $\fL$ is differentiable, the parameters $\theta$ can be optimized to minimize the loss via the gradient $\nabla_{\theta}\fL$. This view provides a generic and powerful shape-from-rendering framework where vast image datasets, deep learning models can be coupled with it. The challenge is to compute the partial gradient $\frac{\partial I}{\partial \theta}$ in the renderer $\fR$.
+
+Rezende et. al uses openGL renderer and REINFORCE algorithm to get gradient estimates.
+
+Any sort of rendering requires some primitives like points, meshes, voxels, or surfels.
+
+DR methods can be classified into three categories - voxel-based, mesh-based, and point-based.
+\nocite{*}
+\bibliographystyle{apalike}
+\bibliography{ref}
+
+\end{document}

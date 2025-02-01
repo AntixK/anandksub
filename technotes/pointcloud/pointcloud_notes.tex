@@ -23,7 +23,7 @@ In contrast to the optical phenomena of 2D images, 3D point cloud formation is a
     \item Detector - The reflected laser beam is them captured by a photodetector - particularly sensitive to the specific wavelength of the laser.
 \end{enumerate}
 
-The measuring vector is essentially the laser beam with energy $E$ and specific wavelength $\lambda$ related as $E = \frac{hc}{\lambda}$, where $h$ is the Planck's constant and $c$ is the speed of light. 
+The measuring vector is essentially the laser beam with energy $E$ and specific wavelength $\lambda$ related as $E = \frac{hc}{\lambda}$, where $h$ is the Planck's constant and $c$ is the speed of light.
 
 In case of discrete lasers, the time of flightr (TOF) is the fundamental measurement. TOF ($\tau$) is the precise measurement of time the laser takes to travel the distance between the sensor and the target and back. From this, the range or the distance of the object from the sensor can be calculated as
 $$
@@ -32,7 +32,7 @@ R &= \frac{1}{2} c \cdot \tau \\
 \delta R &= \frac{1}{2}\delta c \cdot \tau + \frac{1}{2} c \cdot \delta \tau = \frac{1}{2} c \cdot \delta \tau
 \end{aligned}
 $$
-where $c$ is the constant speed of light ($\delta c = 0$), and $\delta R$ is the range precision and $\delta \tau$ is the time precision. 
+where $c$ is the constant speed of light ($\delta c = 0$), and $\delta R$ is the range precision and $\delta \tau$ is the time precision.
 
 In case of continuous laser beams, the range is derived based on the phase comparison between the transmitted and received beams. This alternative provides a way to circumvent the measurement limitations of sensing the discrete received pulses.
 
@@ -74,14 +74,14 @@ Where $D$ is the horizontal distance, $R$ is the measured slant range, $\nu$ is 
 
 \subsubsection{Voxelization}
 
-\subsubsection{Meshing Point Clouds}
+\subsubsection{Meshing Point Clouds (3D Reconstruction)}
 
 
 \subsubsection{LAS}
 The current standard for LiDAR data format is the LAS format
 
 \section{Quality Control}
-Unlike photogrammetric techniques, LiDAR calibration is not a transparent process and remain restricted to the system's manufacturer. One does not have the associated measures (e.g. variance component of unit weight and variance-covariance matrices of the derived parameters) that can be used to evaluate the quality of the final product. In this regard, LiDAR systems are viewed as blackboxes that lack a well-defined set of quality assurance and quality control procedures. 
+Unlike photogrammetric techniques, LiDAR calibration is not a transparent process and remain restricted to the system's manufacturer. One does not have the associated measures (e.g. variance component of unit weight and variance-covariance matrices of the derived parameters) that can be used to evaluate the quality of the final product. In this regard, LiDAR systems are viewed as blackboxes that lack a well-defined set of quality assurance and quality control procedures.
 
 The most important activity in QA is the system calibration and QC procedures involve verifying geometric accuracy of a LiDAR point cloud. The main premise of the proposed QC procedures is that overlapping LiDAR strips will be compatible only if there are no biases in the derived surfaces. QA encompasses management activities that are carried out prior to data collection to ensure that the way and derived data are of the quality required by the user. These management controls over the calibration, planning, implementation, and review of data collection activities. QC, on the other hand, takes place after the data collection to determine where the desired quality has been achieved. This involves routines and consistent checks to ensure the integrity, correctness, and completeness of the raw and derived data.
 
@@ -105,12 +105,12 @@ MPEG (Moving Picture Experts Group) 3D graphics coding (3DG) group has been work
 For lossy compression, two commondly used metrics are $D1-$PSNR, and $D2-$PSNR \cite{tian2017geometric}. Given a reconstructed point cloud $\hat{P}$ and its reference point cloud $P$, the metrics are defined as
 $$
 \begin{aligned}
-    D1 = \max \Bigg \{ & \frac{1}{|\hat{P}|} \sum_{q \in \hat{P}} \min_{p \in P} \|q -p\|^2, \\ 
+    D1 = \max \Bigg \{ & \frac{1}{|\hat{P}|} \sum_{q \in \hat{P}} \min_{p \in P} \|q -p\|^2, \\
     & \frac{1}{|P|} \sum_{p \in P} \min_{q \in \hat{P}} \|p -q\|^2 \Bigg \} \\
     D2 = \max \Bigg \{ &\frac{1}{|\hat{P}|} \sum_{q \in \hat{P}} \cos^2 \theta_{\hat{P}}\min_{p \in P} \|q -p\|^2, \\
     & \frac{1}{|P|} \sum_{p \in P} \cos^2 \theta_{P}\min_{q \in \hat{P}} \|p -q\|^2 \Bigg  \} \\
     D1-\text{PSNR} &= 10 \log_{10} \frac{3\rho^2}{D1}  \\
-    D2-\text{PSNR} &= 10 \log_{10} \frac{3\rho^2}{D2} 
+    D2-\text{PSNR} &= 10 \log_{10} \frac{3\rho^2}{D2}
 \end{aligned}
 $$
 Where $|P|$ and $|\hat{P}|$ are the number of points in the reference and reconstructed point clouds respectively, $\theta_P$ represents the angle between the error vector $p - q$ and the \textit{perceived} normal vector $n_q$ at the point $q$ and $\theta_{\hat{P}}$ represents the angle between the error vector $q - p$ and the \textit{perceived} normal vector $n_p$ at the point $p$. The normalizer $\rho$ is called as the \textit{peak value} defined as the diagonal distance of a bounding box of the point cloud. As such, these metrics cannot be used to compare point clouds of different scales as $\rho$ value would be different. Alternatively, one can redefine $\rho$ based on the intrinsic resolution of the point cloud as the max nearest neighbor distance between the points in the point cloud.
@@ -127,8 +127,23 @@ Chamfer distance
 
 \section{Point Cloud Processing}
 
+
 \subsection{Nearest Neighbor Search}
 Due to the unstructured nature of point clouds, querying the point cloud for neighbors at a given point is the most fundamental operation.
+
+
+
+\subsection{k$-d$ Tree}
+A k$-d$ tree is a space-partitioning data structure that stores a set of k-dimensional points in a tree structure that enables efficient range searches, nearest neighbor searchers and fast lookup.
+
+Suppose we wish to store a set $P = \{p_1, p_2, \ldots, p_N\}$ of $N$ points in $d-$dimensional space. In case of binary trees, each point naturally splits the real line in two. In 2D if we run a vertical and horizontal real lines through the point, it naturally subdivides the plane into four \textit{quadrants} centered at that point. The resulting data structure is called a \textit{quadtree}. Each node has four possible children corresponding to each quadrant. In this unbalanced binary tree structure, points are inserted one by one, descending through the tree structure in the usual way. Each node in the tree is naturally associated with a rectangular region of space (called cells) and the root node corresponds to the entire space.
+
+Although the above algorithm can be extended to $k$ dimensions, it is not very efficient as every node will have $2^k$ children. k$-d$ tree is a more efficient data structure that always results in a binary tree even at higher dimensions.
+
+
+The classical k$-d$ tree algorithm is efficient in low dimensions, but in high dimensions the performance rapidly degrades. To obtain a speedup over linear search it becomes necessary to settle for an approximate nearest-neighbor. A commonly used extension is the randomized k$-d$ tree algorithm.
+
+\subsection{Octree}
 
 \subsection{Sampling}
 
@@ -136,17 +151,24 @@ Due to the unstructured nature of point clouds, querying the point cloud for nei
 
 \subsubsection{Upsampling}
 
-\subsection{k$-d$ Tree}
 
-\subsection{Octree}
 
 \subsection{Feature Extraction}
 
+The two most widely used geometric features of a point cloud are the underlying surface's estimated curvature and the normal at a query point $p$. These local features are characterized by the local information provided by its nearest neighbors.
+
+The general technique to compute these local features is to compute the eigenvectorsa and eigenvalues of the $k$-neighborhood surface patch. The eigenvector corresponding to the smallest eigenvalue will approximate the surface normal at that query point, while the surface curvature can be computed from the eigenvalues as
+
+$$
+\kappa = \frac{\lambda_1 + \lambda_2}{2}
+$$
+
+where $\lambda_1$ and $\lambda_2$ are the eigenvalues of the covariance matrix of the $k$-neighborhood surface patch.
 
 \subsection{Registration}
 Point cloud registration is the process of aligning two or more point clouds. The task boils down to find the spatial transformation that aligns two point clouds - either through rigid transformation (rotation and translation) or non-rigid transformation (those that introduce deformations such as affine transformations, perspective transformations).
 
-
+https://github.com/zxy-bjtu/PointCloudToolBox/tree/b4de6d3b75908e7ee93a45520f037f4930db1e12
 
 \nocite{*}
 \bibliographystyle{apalike}
