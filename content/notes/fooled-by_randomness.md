@@ -9,7 +9,7 @@
 @def has_math = false
 
 
-&emsp; Taleb in his idisyntratic blunt manner prefaces the book saying that these are his personal wisdom gained over years of experience and research and not a piece of "scientific reporting" nor has he taken considerable effort in writing the book - written for fun and aimed to be read the same. A quote that caught my eye - *Aut tace aut loquere meliora silencio* (Be as silent as you can, or say something better than silence.)
+&emsp; Taleb in his idiosyntratic blunt manner prefaces the book saying that these are his personal wisdom gained over years of experience and research and not a piece of "scientific reporting" nor has he taken considerable effort in writing the book - written for fun and aimed to be read the same. A quote that caught my eye - *Aut tace aut loquere meliora silencio* (Be as silent as you can, or say something better than silence.)
 
 :::multilinequote
 It certainly takes bravery to remain skeptical; it takes inordinate courage to introspect, to confront oneself, to accept one's limitations - scientists are seeming more and more evidence that we are specifically designed by mother nature to fool ourselves.
