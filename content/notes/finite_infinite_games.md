@@ -1,7 +1,7 @@
 @def title = "Finite and Infinite Games - James Carse"
-@def description = "Notes on Carse's ..."
+@def description = "Notes on Carse's theory of the gradual evolution of human life and society from simple principles."
 @def published = "7 February 2025"
-@def tags = ["philosophy", "game"]
+@def tags = ["philosophy", "game", "culture", "art", "life"]
 @def is_draft = true
 @def show_info = true
 @def has_code = false
@@ -11,7 +11,7 @@
 
 ## Chapter 1: There are at least two kinds of games
 
-&emsp; There are two kinds of games - finite (played for the purpose of winning) and infinite (played for the *purpose of continuing to play*). Games, as the author puts it, is when the outcome or the future is unknown.
+&emsp; Carse starts by putting forth his axioms - there are two kinds of games - finite (played for the purpose of winning) and infinite (played for the *purpose of continuing to play*). Games, as the author puts it, is when the outcome or the future is unknown.
 
 Finite games have a definitive end when a winner is declared *i.e* when all other players concur on the winning player. This agreement among the *players* - not the referees nor the spectators - is the only requirement to identify the winner and immediately end the game.
 
@@ -91,3 +91,40 @@ A powerful person is one who brings the past to an outcome, settling all its unr
 
 
 ## Chapter 2: No one can play a game alone
+
+:::multilinequote
+One cannot be human by oneself. There is no selfhood where there is no community. We do not relate to others as the persons we are; we are who we are in relating to others.
+:::
+
+Infinite games prescribe that only that which can change can continue. These players realize the fluidity of our humanness where life is an infinite game. Sentiments such as heroism, patriotism and so on are seen with their self-contradictions in full display and theatricality. However, if these infinite players choose to engage in such finite games as warfare, politics, or the act of simply engaging in a society, they must do so with the necessary seriousness.
+
+
+:::multilinequote
+...it is often the strategy of a society to initiate and embrace a culture as exclusively its own. Culture so bounded may even be so lavishly subsidized and encouraged by society that it has the appearance of open-ended activity, but in fact it is designed to serve societal interests in every case.
+:::
+
+
+:::multilinequote
+It is essential to the identity of a society to forget that it has forgotten that society is always a species of culture. its citizens must find ways of persuading themselves that their own particular boundaries have been imposed on them, and were not freely chosen by them.
+:::
+
+As such, societies must and will provide as many titles or rewards as possible for the winners within that society - the winners then go on to be memorialized and are often identified with that society. Such tiles naturally give way to power, and properties. A crucial part of the society emerges - the ones who frame titles, design / produce properties, memorials, those who remember what has been forgotten - the *poietai* or simply the creative artists. Winning players leverage these artist players to suit their agenda - Alexander and Napoleon took their poets with them to battle to enlarge their triumph.
+
+:::multilinequote
+What confounds a society is not serious opposition, but the lack of seriousness altogether.
+:::
+
+Art, or the activity of art itself is an infinite game (has no outcome, no conclusion) and the players often straddle the boundaries of the finite games - like society, warfare etc. Art is often considered dangerous as the titles, properties and memorials may be ridiculed and the such finite games may not find audience nor players.
+
+:::multilinequote
+Since art is never possession, and always a possibility, nothing possessed can have the status of art. If art cannot become property, property is never art-as property.
+:::
+
+:::multilinequote
+...poets do not "fit" into society, not because a place is denied them but because they do not take their "places" seriously. They openly see its roles as theatrical, its styles as poses, its clothing costumes, its rules conventional, its crises arranged, its conflicts performed, and its metaphysics ideological.
+:::
+
+Infinite games, however, may have horizons. THis means, the players cannot see beyond the horizon. THere is nothing in the horizon itself that limits the vision, for the horizon opens onto all that lies beyond itself. What limits the vision is the incompleteness of the vision. Because of such horizons, infinite games such as culture may appear to have boundaries.
+
+
+## Chapter 3: I am the genius of Myself
