@@ -2,7 +2,7 @@
 @def published = "16 March 2025"
 @def description = "Warping images based on depth and camera viewpoints for novel view synthesis"
 @def tags = ["computer-vision", "geometric-projection", "image-processing", "math", "torch", "code", "camera"]
-@def is_draft = true
+@def is_draft = false
 @def show_info = true
 @def has_code = true
 @def has_chart = false
