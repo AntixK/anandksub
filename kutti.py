@@ -502,8 +502,8 @@ def get_footer(config:dict) -> str:
         &copy; {curr_year} {author} <span class="vl"></span>
         <a href="/license">License</a> <span class="vl"></span>
         <a href="/design">Design</a> <span class="vl"></span>
-        Built with Kutti
-        <span style="color: #e25555;">&hearts;</span>
+        Built with Kutti &nbsp;
+        <img  class="icon-image" src="/assets/icons/heart.svg" />
     </div>
     """
 

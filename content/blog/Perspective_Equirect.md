@@ -1,7 +1,7 @@
 @def title = "Converting Between Perspective and Equirectangular Projections"
 @def published = "5 December 2024"
 @def description = "Inverting the common procedure of converting equirectangular images to perspective images."
-@def tags = ["math","geometric-projection", "image-processing", "code"]
+@def tags = ["math","geometric-projection", "image-processing", "computer-vision", "code"]
 @def is_draft = false
 @def show_info = true
 @def has_code = true

@@ -331,9 +331,7 @@ code {
 /* ==================================================================
     MEDIA (FIGURES, IMAGES & VIDEOS)
 ================================================================== */
-video,
 img {
-    /* width: 70%; */
     text-align: center;
     display: block;
     float: none;
@@ -341,7 +339,17 @@ img {
     margin-right: auto;
     width: 90%;
     height: auto;
-    min-width: 350px;
+    min-width: 450px;
+}
+video {
+    text-align: center;
+    display: block;
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    height: auto;
+    min-width: 450px;
 }
 
 .icon-image {

@@ -1,7 +1,7 @@
 @def title = "About that Trick in Fourier Neural Operators"
 @def published = "14 January 2025"
 @def description = "Notes on some implementation details of Fourier Neural Operators."
-@def tags = ["math", "fourier", "ml", "code", "pytorch"]
+@def tags = ["math", "fourier", "ml", "code", "torch"]
 @def has_math = true
 @def is_draft = false
 @def show_info = true
