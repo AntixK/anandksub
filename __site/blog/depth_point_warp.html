@@ -189,7 +189,8 @@ def get_camera_transformation(depthmap:torch.Tensor,
 
 
     Returns:
-        Transformation tensor that maps coordinates from the first camera view to the second camera view
+        Transformation tensor that maps coordinates from the first
+        camera view to the second camera view
     """
 
     height, width = depthmap.shape
@@ -254,20 +255,24 @@ def get_uv_coords(height:int,
                  flowmap: torch.Tensor,
                  do_exp_weights: bool = False) -&gt; Tuple[torch.Tensor, torch.Tensor]:
     """
-    Splat the image pixels onto the transformed positions as dictated by the flowmap
-    and the depth weights. This function uses the inverse bilinear interpolation to form
-    the neighboring pixels and then splats the image pixels onto the transformed positions.
+    Splat the image pixels onto the transformed positions as
+    dictated by the flowmap and the depth weights. This function uses
+    the inverse bilinear interpolation to construct the neighboring
+    pixels and then splats the image pixels onto the transformed positions.
 
     Args:
         image (torch.Tensor): Input image tensor of shape (H, W, C).
         weights (torch.Tensor): Depth weights tensor of shape (H, W).
         flowmap (torch.Tensor): Flow map tensor of shape (H, W, 2).
-        do_exp_weights (bool): Whether to use exponential weights. Default is False.
+        do_exp_weights (bool): Whether to use exponential weights.
+                               Default is False.
 
     Returns:
         Tuple[torch.Tensor, torch.Tensor]: A tuple containing:
-            - splat_image (torch.Tensor): The splatted image tensor of shape (H, W, C).
-            - mask (torch.Tensor): A mask tensor of shape (H, W) indicating valid splatted pixels.
+            - splat_image (torch.Tensor): The splatted image tensor
+              of shape (H, W, C).
+            - mask (torch.Tensor): A mask tensor of shape (H, W)
+              indicating valid splatted pixels.
     """
 
     if not torch.is_floating_point(image):
@@ -386,8 +391,10 @@ def forward_warping(image: torch.Tensor,
 
     Returns:
         Tuple[torch.Tensor, torch.Tensor]: A tuple containing:
-            - warped_image (torch.Tensor): The warped image tensor of shape (H, W, C).
-            - mask (torch.Tensor): A mask tensor of shape (H, W) indicating valid warped pixels.
+            - warped_image (torch.Tensor): The warped image tensor of
+              shape (H, W, C).
+            - mask (torch.Tensor): A mask tensor of shape (H, W)
+              indicating valid warped pixels.
     """
 
     image = image.float()
