@@ -3,7 +3,7 @@
 @def show_info = false
 @def has_code = false
 @def has_chart = false
-@def has_math = true
+@def has_math = false
 
 
 # Life

@@ -27,14 +27,13 @@ The vector $\vn$, called the $moment$, is orthogonal to the plane containing the
 
 Plücker coordinates are invariant to scaling *i.e.* $(\vp, \vn) = \lambda (\vp, \vn); \lambda > 0$ as the line itself does not change. Furthermore, the Plücker coordinate is independent of the choice of point $\vp$. Plücker coordinates also provide elegant ways of computing angles, signed distances between rays and more. With such convenient geometric calculations, Plücker coordinates were so far quite popular in robotics.
 
-&emsp; Camera parameterization using Plücker coordinates is basically a representation of the 3D scene, using all the light rays that are incident on image plane. Instead of a simple projective geometry,
+&emsp; The use of Plücker coordinates in camera projection and multi-view geometry is actually well-studied, described in Hartley and Zisserman's book *Multiple View Geometry in Computer Vision*. The idea there was to parameterize 3D lines in the world onto the image plane using Plücker coordinates.  However, camera parameterization _using_ Plücker coordinates is relatively new where the light rays incident on the image plane is parameterized. It is, therefore, a representation of the 3D scene, instead of a simple projective geometry.
 
 !!!
 <img  style="width:80%" src="/media/post_images/plucker_camera.webp" alt="Plücker coordinates for camera">
 !!!
 
-
-Consider the scenario where the image $\fI$ of size $H \times W$ and the camera parameters are known, including intrinsics $\vK \in \R^{3 \times 3}$ and extrinsic pose $\vE=[\vR; \vt] \in \R^{3 \times 4}$ where $\vR \in \R^{3 \times 3}$ is the rotation matrix and $\vt \in \R^{3 \times 1}$ is the translation vector. Then, the pixel value at $(u, v)$ on the image represents the intensity of the light ray incident at that position on the film as captured by the camera. Therefore, the unit direction $\vd$ of that light ray can be reconstructed as
+Consider the scenario where the image $\fI$ of size $H \times W$ and the camera parameters are known, including intrinsics $\vK \in \R^{3 \times 3}$ (mapping from camera coordinates to the pixel coordinates) and extrinsic pose $\vE=[\vR; \vt] \in \R^{3 \times 4}$ (mapping from the world coordinates to camera coordinates) where $\vR \in \R^{3 \times 3}$ is the rotation matrix and $\vt \in \R^{3 \times 1}$ is the translation vector. Then, the pixel value at $(u, v)$ on the image represents the intensity of the light ray incident at that position on the film as captured by the camera. Therefore, the unit direction $\vd$ of that light ray can be reconstructed as
 
 $$
 \begin{aligned}
@@ -42,7 +41,7 @@ $$
 u \\
 v \\
 1
-\end{pmatrix} + \vt \\
+\end{pmatrix} + \vt ; \qquad \; (\vR^{-1} = \vR^T) \\
 \vd &= \frac{\vd'}{\|\vd'\|}
 \end{aligned}
 $$
@@ -60,6 +59,7 @@ The advantage of the above Plücker parameterization is that it can uniformly re
 
 Why is the Plücker coordinates for camera inverse of the usual way ?
 Advantage over homogeneous camera parameterization. Continuous? Differentiable?
+
 
 
 ```python
