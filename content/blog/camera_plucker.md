@@ -2,7 +2,7 @@
 @def published = "27 February 2025"
 @def description = "Plücker coordinates provide a smooth and convenient camera parameterization."
 @def tags = ["computer-vision", "math", "torch", "code", "camera"]
-@def is_draft = true
+@def is_draft = false
 @def show_info = true
 @def has_code = true
 @def has_chart = false
@@ -23,17 +23,17 @@ $$
 </p>
 !!!
 
-The vector $\vn$, called the $moment$, is orthogonal to the plane containing the ray $l$ and the origin. If $\vn=0$, then the ray passes through the origin and is defined only its direction $\vd$.
+The vector $\vn$, called the $moment$, is orthogonal to the plane containing the ray $l$ and the origin. If $\vn=0$, then the ray passes through the origin and is defined only its direction $\vd$. A quick note: observe that the above  Plücker coordinates are 6 dimensional, while a line in 3D only requires 4 dimensions to completely represent it. But, we also have the constraint $\vn^T\vp = 0$. Reconciling these two, we note that the Plücker coordinates lie on a curved 4-dimensional manifold in $\R^6$.
 
-Plücker coordinates are invariant to scaling *i.e.* $(\vp, \vn) = \lambda (\vp, \vn); \lambda > 0$ as the line itself does not change. Furthermore, the Plücker coordinate is independent of the choice of point $\vp$. Plücker coordinates also provide elegant ways of computing angles, signed distances between rays and more. With such convenient geometric calculations, Plücker coordinates were so far quite popular in robotics.
+Plücker coordinates are invariant to scaling *i.e.* $(\vp , \vn) = \lambda (\vp , \vn); \lambda > 0$ as the line itself does not change. Furthermore, the Plücker coordinate is independent of the choice of point $\vp$. Plücker coordinates also provide elegant ways of computing angles, signed distances between rays and more. With such convenient geometric calculations, Plücker coordinates were so far quite popular in robotics.
 
-&emsp; The use of Plücker coordinates in camera projection and multi-view geometry is actually well-studied, described in Hartley and Zisserman's book *Multiple View Geometry in Computer Vision*. The idea there was to parameterize 3D lines in the world onto the image plane using Plücker coordinates.  However, camera parameterization _using_ Plücker coordinates is relatively new where the light rays incident on the image plane is parameterized. It is, therefore, a representation of the 3D scene, instead of a simple projective geometry.
+&emsp; The use of Plücker coordinates in camera projection and multi-view geometry is actually well-studied, described in Hartley and Zisserman's book *Multiple View Geometry in Computer Vision*. The idea there is to parameterize 3D lines in the world onto the image plane using Plücker coordinates. Such lines can then be used for camera calibration, and this technique has been used for in-the-wild camera calibration without the need for pre-calibrated markers. On the other hand, camera parameterization _using_ Plücker coordinates is relatively a recent development, where the light rays incident on the image plane are parameterized. In other words, the camera is parameterized by all the incident rays, and can be thought as a representation of the real 3D scene.
 
 !!!
 <img  style="width:80%" src="/media/post_images/plucker_camera.webp" alt="Plücker coordinates for camera">
 !!!
 
-Consider the scenario where the image $\fI$ of size $H \times W$ and the camera parameters are known, including intrinsics $\vK \in \R^{3 \times 3}$ (mapping from camera coordinates to the pixel coordinates) and extrinsic pose $\vE=[\vR; \vt] \in \R^{3 \times 4}$ (mapping from the world coordinates to camera coordinates) where $\vR \in \R^{3 \times 3}$ is the rotation matrix and $\vt \in \R^{3 \times 1}$ is the translation vector. Then, the pixel value at $(u, v)$ on the image represents the intensity of the light ray incident at that position on the film as captured by the camera. Therefore, the unit direction $\vd$ of that light ray can be reconstructed as
+Consider the scenario where the image $\fI$ of size $H \times W$ and the camera parameters are known, including intrinsics $\vK \in \R^{3 \times 3}$ (mapping from camera coordinates to the pixel coordinates) and extrinsic pose $\vE=[\vR; \vt] \in \R^{3 \times 4}$ (mapping from the world coordinates to camera coordinates) where $\vR \in \R^{3 \times 3}$ is the rotation matrix and $\vt \in \R^{3 \times 1}$ is the translation vector. Then, the pixel value at $(u, v)$ on the image represents the intensity of the light ray incident at that position on the film as captured by the camera. The unit direction vector $\vd$ of that light ray can be reconstructed in the world coordinates as
 
 $$
 \begin{aligned}
@@ -46,18 +46,18 @@ v \\
 \end{aligned}
 $$
 
-Firstly, the above ray passes through the camera focal point (origin) as well the pixel coordinates $(u, v)$ in the world coordinate frame as shown by the figure above.
+The above ray passes through the camera focal point (origin) as well the pixel coordinates $(u, v)$ in the world coordinate frame as shown by the figure above. Given this direction vector, the moment vector $\vn$ can can be computed as the cross product between the camera origin and the direction vector.
 
-You may note that the above procedure is the inverse of the camera projection process.
+$$
+\vn = \vo \x \vd
+$$
 
-
-The effectiveness of Plücker coordinates over traditional methods in robotics or computer graphics may be questionable[^rant], their use in deep learning is indeed effective.
+The Plücker coordinates for the incident ray is a 6-tuple $(\vn, \vd)$. Based on this, the Plücker camera parameterization can be constructed as the set of Plücker coordinates of all the rays, *i.e.* $\R^{HW \x 6}$.
 
 !!!
        <div id="canvas-container"></div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
         <script>
@@ -384,32 +384,31 @@ The effectiveness of Plücker coordinates over traditional methods in robotics o
         </script>
 !!!
 
-TODO: Talk about the effectiveness of Plücker coordinates
+Although the Plücker camera parameterization has too many parameters compared to the usual intrinsic-extrinsic matrices, there are quite a few advantages &mdash; 1) it is complete *i.e* can uniformly represent all incident light rays in the scene uniformly; 2) The invariance to scaling, and the invariance to the selection of point on the ray, means that these coordinates are indeed _homogeneous_; 3) It is smooth and differentiable.
 
-The advantage of the above Plücker parameterization is that it can uniformly represent all oriented light rays in space without singular direction or special cases.
-
-Why is the Plücker coordinates for camera inverse of the usual way ?
-Advantage over homogeneous camera parameterization. Continuous? Differentiable?
+The above characteristics make Plücker camera parameterization quite suitable for learning-based methods.
 
 
+## Code
 
 ```python
 import torch
 
-def convert_to_plucker(K_inv: torch.Tensor, M_inv: torch.Tensor, H: int, W: int) -> torch.Tensor:
+def convert_to_plucker(K_inv: torch.Tensor,
+                       M_inv: torch.Tensor,
+                       H: int,
+                       W: int) -> torch.Tensor:
     """
     Function to compute the  Plucker coordinates for the camera based on the
-    rays incident on the image plane, using the camera's intrinsic and extrinsic parameters.
+    rays incident on the image plane, using the camera's
+    intrinsic and extrinsic parameters.
 
     Args:
-        K_inv: torch.Tensor
-            Inverse of the camera intrinsic matrix. Shape (3, 3).
-        M_inv: torch.Tensor
-            Inverse of the camera extrinsic matrix (camera-to-world transform). Shape (4, 4).
-        H: int
-            Height of the image in pixels.
-        W: int
-            Width of the image in pixels.
+        K_inv: (torch.Tensor) Inverse of the c3x3 amera intrinsic matrix.
+        M_inv: (torch.Tensor) Inverse of the 4x4 camera extrinsic matrix
+               (camera-to-world transform).
+        H: (int) Height of the image in pixels.
+        W: (int) Width of the image in pixels.
 
     Returns:
         Tuple containing:
@@ -433,15 +432,14 @@ def convert_to_plucker(K_inv: torch.Tensor, M_inv: torch.Tensor, H: int, W: int)
 
     uv = torch.dstack([u, v, torch.ones_like(u)]) # (H, W, 2)
 
-    d =  Rot[None, None,] @ (K_inv[None, None, ...] @ uv.unsqueeze(-1)) + trans[None, None]
+    d =  Rot[None, None,] @ (K_inv[None, None, ...] @ uv.unsqueeze(-1)) \
+         + trans[None, None]
 
     # Normalize the ray direction to get a unit direction vector
     d = d / torch.linalg.norm(d, dim=-2, keepdim=True)
-    d_ = d.clone()
 
     # Camera origin in world coordinates
-    o_world = M_inv[...,:3, 3]  # This is also the translation vector. So what happens when you do cross product?
-
+    o_world = M_inv[...,:3, 3]
     # uv in world coordinates
     uv_world = uv @ Rot + o_world
 
@@ -450,10 +448,6 @@ def convert_to_plucker(K_inv: torch.Tensor, M_inv: torch.Tensor, H: int, W: int)
 
     # compute the moment
     n = torch.cross(o_world.expand_as(d_world), d_world, dim=-1)
-
-    # Sanity check if the moment is perpendicular to the direction
-    assert (torch.sum(n * d_world, dim=-1) < 1e-6).all(), f"The moment is not perpendicular to the direction {torch.sum(n * o_world.expand_as(d_world), dim=-1).max()}"
-    assert (torch.sum(n * o_world.expand_as(d_world), dim=-1) < 1e-4).all(), f"The moment is not perpendicular to the Origin point {torch.sum(n * o_world.expand_as(d_world), dim=-1).max()}"
 
     plucker_coords = torch.cat([n, d_world], dim=-1)
 
@@ -465,6 +459,3 @@ def convert_to_plucker(K_inv: torch.Tensor, M_inv: torch.Tensor, H: int, W: int)
 [^ref]: The use of Plücker coordinates to model camera viewpoints via parameterizing the incident light rays was first popularized in the context of deep learning by Sitzmann, et. al. in their 2021 NeurIPS paper - *Light field networks: Neural scene representations with single-evaluation rendering* [ArXiv Link](https://arxiv.org/abs/2106.02634).
 
 [^plu]: The standard reference to all things Plücker coordinates is Yan-Bin Jia's notes - *Plücker Coordinates for Lines in the Space* [Link](https://faculty.sites.iastate.edu/jia/files/inline-files/plucker-coordinates.pdf)
-
-
-[^rant]: Refer to Christer Ericson's great article against the use of Plücker coordinates - [Plücker coordinates considered harmful!](https://realtimecollisiondetection.net/blog/?p=13)
