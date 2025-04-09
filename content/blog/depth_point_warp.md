@@ -18,7 +18,7 @@ While estimating camera parameters can itself be challenging[^camest], we will a
 Consider the following alternative idea $-$ given a perspective image $\fI$ of the scene, its camera parameters $K$, and its corresponding depth-map $\fD$, the goal is to generate different perspectives of the same scene with the depth information intact. This can be seen as the first step of a NVS pipeline[^nvs] where the different perspectives of the scene (estimated based on the depth-map) are then inpainted, thanks to the amazing diffusion models, to get the final result.
 
 !!!
-<img  style="width:100%" src="/media/post_images/alley.webp" alt="perspective- images comparison.">
+<img  style="width:80%" src="/media/post_images/alley.webp" alt="perspective- images comparison.">
 <p class="caption-text">Perspective transformation results in depth-based pixel translation. Source: matousekfoto - Freeman Alley Dataset.
 </p>
 !!!
@@ -26,7 +26,7 @@ Consider the following alternative idea $-$ given a perspective image $\fI$ of t
 But before we jump into solving the problem, let's quickly check if the new proposal is even reasonable to begin with? When a scene is captured from two different camera viewpoints (as shown in the figure above), various objects in the image are transformed based on their distance to the camera and movement of the camera from the first position to the next. Note that we already know the camera transformation from one position to the next based on their extrinsic matrices. Since the depth-map provides the necessary relative offsets between various objects in the scene, the problem can indeed be solved. In fact, this procedure can be thought as the inverse of the *depth estimation from stereo images* problem. In fact, this inverse problem is sometimes referred to as *Depth-based Image Rendering* or DBIR for short[^dbir].
 
 !!!
-<img  style="width:80%" src="/media/post_images/depth_warp.webp" alt="perspective- images comparison.">
+<img  style="width:100%" src="/media/post_images/depth_warp.webp" alt="perspective- images comparison.">
 <p class="caption-text">Depth-Based Image Rendering
 </p>
 !!!

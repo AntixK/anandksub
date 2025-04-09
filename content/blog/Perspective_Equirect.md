@@ -148,7 +148,7 @@ def get_extrinsic_matrix(THETA:float, PHI:float):
 &emsp; Equirectangular projections are derived from the *Spherical* camera model and not the Perspective (linear) model discussed above.
 
 !!!
-<img  style="width:100%;min-width:400px;"  src="/media/post_images/equirect.webp" alt="Equirectangular Projection">
+<img  style="width:100%;"  src="/media/post_images/equirect.webp" alt="Equirectangular Projection">
 !!!
 
 Mapping from 3D world coordinates $p$ to 2D equirectangular coordinates $(x_{eq}, y_{eq})$ is a two-step procedure. Since the Equirectangular projection is a projection of a sphere unto a 2D surface, we first convert the 3D world coordinates to *spherical coordinates* $(\theta, \phi)$ as
