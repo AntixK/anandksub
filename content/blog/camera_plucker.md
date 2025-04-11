@@ -96,8 +96,6 @@ The Plücker coordinates for the incident ray is a 6-tuple $(\vn, \vd)$. Based o
                         .invert(),
                 );
 
-                console.log("Camera center in world coordinates:", C);
-
                 // Function to get ray direction for a pixel
                 function pixelToRay(u, v) {
                     // Homogeneous pixel coordinates
@@ -131,19 +129,8 @@ The Plücker coordinates for the incident ray is a 6-tuple $(\vn, \vd)$. Based o
                     );
 
                     // Sanity check for orthogonality between moment and direction
-                    var dotProduct = moment.dot(direction);
-                    if (Math.abs(dotProduct) > 1e-10) {
-                        console.warn(
-                            `Moment and direction vectors are not orthogonal. Dot product: ${dotProduct}`,
-                        );
-                    }
-
-                    dotProduct = moment.dot(C);
-                    if (Math.abs(dotProduct) > 1e-10) {
-                        console.warn(
-                            `Moment and camera origin vectors are not orthogonal. Dot product: ${dotProduct}`,
-                        );
-                    }
+                    // var dotProduct = moment.dot(direction);
+                    // dotProduct = moment.dot(C);
 
                     rays.push({
                         worldOrigin: new THREE.Vector3(),
@@ -199,6 +186,9 @@ The Plücker coordinates for the incident ray is a 6-tuple $(\vn, \vd)$. Based o
             controls.dampingFactor = 0.25;
             controls.screenSpacePanning = false;
             controls.maxPolarAngle = Math.PI;
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.autoRotate = false;
 
             // Add axes helper
             const axesHelper = new THREE.AxesHelper(5);
@@ -300,7 +290,6 @@ The Plücker coordinates for the incident ray is a 6-tuple $(\vn, \vd)$. Based o
                 cameraOrigin.y,
                 cameraOrigin.z,
             );
-            console.log(camOriginSphere.position);
             scene.add(camOriginSphere);
 
             // =====================================================
@@ -310,12 +299,11 @@ The Plücker coordinates for the incident ray is a 6-tuple $(\vn, \vd)$. Based o
                 new THREE.MeshBasicMaterial({ color: 0x000000 }),
             );
             originSphere.position.set(0, 0, 0);
-            console.log(originSphere.position);
             scene.add(originSphere);
             // =====================================================
 
             // Position camera
-            camera.position.set(17, 17, -7);
+            camera.position.set(11, 17, -19);
             // camera.lookAt(0, 0, 0);
 
             // Handle window resize
@@ -339,6 +327,7 @@ The Plücker coordinates for the incident ray is a 6-tuple $(\vn, \vd)$. Based o
             legendContainer.style.position = "absolute";
             legendContainer.style.bottom = "20px";
             legendContainer.style.left = "20px";
+            legendContainer.style.border = "1px solid black";
             legendContainer.style.backgroundColor = "rgba(255, 255, 255, 0.7)";
             legendContainer.style.padding = "10px";
             legendContainer.style.borderRadius = "5px";
