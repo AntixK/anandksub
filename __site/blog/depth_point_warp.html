@@ -182,10 +182,10 @@ def get_camera_transformation(depthmap:torch.Tensor,
 
     Args:
         depthmap: Depth map tensor of shape (H, W)
-        K1: Camera intrinsic matrix for the first camera of shape (3, 3)
-        K2: Camera intrinsic matrix for the second camera of shape (3, 3)
-        M1: Camera extrinsic matrix for the first camera of shape (4, 4)
-        M2: Camera extrinsic matrix for the second camera of shape (4, 4)
+        K1: First Camera (3, 3) intrinsic matrix
+        K2: Second Camera (3, 3) intrinsic matrix
+        M1: First Camera (4, 4) extrinsic matrix
+        M2: Second Camera (4, 4) extrinsic matrix
 
 
     Returns:
@@ -213,13 +213,16 @@ def get_camera_transformation(depthmap:torch.Tensor,
     # Transform the world coordinates based on the transformation
     # between the two cameras.
     # but before that,  make the world coords homogeneous
-    world_coords = torch.dstack([world_coords, torch.ones(height, width)[..., None, None]]) # (H, W, 4, 1)
-    world_coords_trans = T21[None, None] @ world_coords # (1, 1, 4, 4) @ (H, W, 4, 1) -&gt; (H, W, 4, 1)
+    world_coords = torch.dstack([world_coords,
+                                 torch.ones(height, width)[..., None, None]]) # (H, W, 4, 1)
+    world_coords_trans = T21[None, None] @ world_coords
+    # (1, 1, 4, 4) @ (H, W, 4, 1) -&gt; (H, W, 4, 1)
 
     world_coords_trans = world_coords_trans[..., :3, :] # (H, W, 3, 1)
     # Reproject the transformed world coordinates to the
     # 2nd camera viewpoint
-    trans_coords = K2[None, None, ...] @ world_coords_trans # (1, 1, 3, 3) @ (H, W, 3, 1) -&gt; (H, W, 3, 1)
+    trans_coords = K2[None, None, ...] @ world_coords_trans
+    # (1, 1, 3, 3) @ (H, W, 3, 1) -&gt; (H, W, 3, 1)
 
     return trans_coords[..., 0] # ignore the last dim in the homogeneous form
 
@@ -250,7 +253,7 @@ def get_uv_coords(height:int,
         uv_coords = torch.dstack([uv_coords, ones]) # (H, W, 1)
 
     return uv_coords.float()
-</code></pre><video width=20% autoplay muted loop><source src=/media/post_images/optical_flow.mp4 type=video/mp4;></video><p class="caption-text ">Flowmap</p><h3>Splatting</h3><p>In its basic sense, the technique of splatting can be described as the weighted sum of the projected elements. These elements can be pixels, as in our case, or more sophisticated elements like 3D Gaussians, as in Gaussian splatting. In our case, the splatting function $\psi$ can be written as a function of the input image $\fI_1$ to be warped, the transformation of the pixels from the 1st camera viewpoint to the second (<em>i.e</em> the flowmap) $\fF_{12}$ and some weights $\vw$.</p><p>$$ \psi = \frac{\sum \vw \cdot \fI_1 \ast \fF_{12}}{\sum \vw \cdot \fF_{12}} $$ <a id=eq:splat class=anchor></a></p><p>Where $\ast$ operator represents the splatting/mapping of the weighted pixels into the transformed coordinates. Computing the pixel weights based on the depth is an interesting problem $-$ a simple inverse scaling such as $\vw_i = 1/z_i$ weights all objects proportionally, resulting in farther objects being smeared and closer objects with good separation between them, even though the relative distances between them might be the same. A couple of common improvements to address this problem and reduce visual flickering are neighborhood scaling where the depth is the average of the neighbors from inverse bilinear interpolation<sup id=fnref:bilin><a class=fnref href=#fndef:bilin>[4]</a></sup> $\vw_i = \frac{1}{N}\sum_j \frac{1}{z_j}$, and exponential scaling<sup id=fnref:exp><a class=fnref href=#fndef:exp>[5]</a></sup> $\vw_i = \exp(1/z_i)$.</p><pre><code class=language-python>def splat_points(image:torch.Tensor,
+</code></pre><video autoplay muted loop><source src=/media/post_images/optical_flow.mp4 type=video/mp4;></video><p class="caption-text ">Flowmap</p><h3>Splatting</h3><p>In its basic sense, the technique of splatting can be described as the weighted sum of the projected elements. These elements can be pixels, as in our case, or more sophisticated elements like 3D Gaussians, as in Gaussian splatting. In our case, the splatting function $\psi$ can be written as a function of the input image $\fI_1$ to be warped, the transformation of the pixels from the 1st camera viewpoint to the second (<em>i.e</em> the flowmap) $\fF_{12}$ and some weights $\vw$.</p><p>$$ \psi = \frac{\sum \vw \cdot \fI_1 \ast \fF_{12}}{\sum \vw \cdot \fF_{12}} $$ <a id=eq:splat class=anchor></a></p><p>Where $\ast$ operator represents the splatting/mapping of the weighted pixels into the transformed coordinates. Computing the pixel weights based on the depth is an interesting problem $-$ a simple inverse scaling such as $\vw_i = 1/z_i$ weights all objects proportionally, resulting in farther objects being smeared and closer objects with good separation between them, even though the relative distances between them might be the same. A couple of common improvements to address this problem and reduce visual flickering are neighborhood scaling where the depth is the average of the neighbors from inverse bilinear interpolation<sup id=fnref:bilin><a class=fnref href=#fndef:bilin>[4]</a></sup> $\vw_i = \frac{1}{N}\sum_j \frac{1}{z_j}$, and exponential scaling<sup id=fnref:exp><a class=fnref href=#fndef:exp>[5]</a></sup> $\vw_i = \exp(1/z_i)$.</p><pre><code class=language-python>def splat_points(image:torch.Tensor,
                  weights: torch.Tensor,
                  flowmap: torch.Tensor,
                  do_exp_weights: bool = False) -&gt; Tuple[torch.Tensor, torch.Tensor]:
@@ -414,7 +417,6 @@ def forward_warping(image: torch.Tensor,
     uv_coords = get_uv_coords(height, width)  # empty pixel coordinates
     # Compute pixel flow
 
-    # print(trans_coords.shape, uv_coords.shape, trans_depth.shape)
     flow = (trans_coords[:, :, :2] / trans_depth) - uv_coords
 
     # Step 2: Splat
@@ -423,14 +425,16 @@ def forward_warping(image: torch.Tensor,
     depth_weights = get_weights_from_depthmap(depthmap=trans_depth,
                                               gamma=gamma)
 
-    warped_image, mask = splat_points(image=image, weights=depth_weights, flowmap=flow)
+    warped_image, mask = splat_points(image=image,
+                                      weights=depth_weights,
+                                      flowmap=flow)
 
     # normalize the warped image
     warped_image = warped_image.clamp(min=0, max=255)
     warped_image = warped_image.round_().to(torch.uint8)
 
     return (warped_image, mask, flow, depth_weights)
-</code></pre><video autoplay muted loop><source src=/media/post_images/image_warp_depth.mp4 type=video/mp4;></video><p class="caption-text ">Pixel warping based on depth and camera viewpoint</p><p>Lastly, the above implementation is differentiable with respect to the camera parameters and the depthmap, making is quite amenable to learning-based techniques as described in the beginning.</p><hr><p><table class=fndef id=fndef:camest><tr><td class=fndef-backref><a href=#fnref:camest>[1]</a></td><td class=fndef-content>Recall that camera pose estimation from a single image is an under-determined problem. There has been recent developments, like <a href=https://arxiv.org/pdf/2405.15364>Mast3R</a>, that address the problem of estimating the camera pose and the intrinsic parameters from 2 or more images based neural networks. The classical techniques often require either multiple ($\geq3$) images (calibrated or in-the-wild) to estimate the camera parameters.</td></tr></table></p><p><table class=fndef id=fndef:nvs><tr><td class=fndef-backref><a href=#fnref:nvs>[2]</a></td><td class=fndef-content>There has been some literature based on this idea - Check out <em>Nvs-solver: Video diffusion model as zero-shot novel view synthesizer</em> - <a href=https://arxiv.org/pdf/2405.15364>ArXiv Link</a> and <em>Synsin: End-to-end view synthesis from a single image</em> - <a href=https://arxiv.org/abs/1912.08804>ArXiv Link</a>.</td></tr></table></p><p><table class=fndef id=fndef:dbir><tr><td class=fndef-backref><a href=#fnref:dbir>[3]</a></td><td class=fndef-content>Another good article by Doan Huu Noi on this topic - <a href=https://noidh.github.io/pages/notes/ip/dibr/dibr.html>Link</a>.</td></tr></table></p><p><table class=fndef id=fndef:bilin><tr><td class=fndef-backref><a href=#fnref:bilin>[4]</a></td><td class=fndef-content>Bao, W., Lai, W. S., Ma, C., Zhang, X., Gao, Z., &amp; Yang, M. H. (2019). Depth-aware video frame interpolation. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition. <a href=https://arxiv.org/abs/1904.00830>ArXiv Link</a&lt;></tr></table></p><p><table class=fndef id=fndef:exp><tr><td class=fndef-backref><a href=#fnref:exp>[5]</a></td><td class=fndef-content>Niklaus, S., &amp; Liu, F. (2020). Softmax splatting for video frame interpolation. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition. <a href=https://arxiv.org/abs/2003.05534>ArXiv Link</a>.</td></tr></table></p></main><div width=100% style="font-size:1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;"> &copy; 2025 Anand K Subramanian <span class=vl></span><a href=/license>License</a> <span class=vl></span><a href=/design>Design</a> <span class=vl></span> Built with Kutti &nbsp; <img class=icon-image src=/assets/icons/heart.svg></div><script src=/_libs/highlight/highlight.min.js></script><script>hljs.highlightAll(); hljs.configure({ tabReplace: '    ' });</script><link rel=stylesheet href=/_libs/highlight/decaf.css><script src=/_libs/clipboard/clipboard.min.js></script><script>
+</code></pre><video autoplay muted loop><source src=/media/post_images/image_warp_depth.mp4 type=video/mp4;></video><p>Lastly, the above implementation is differentiable with respect to the camera parameters and the depthmap, making is quite amenable to learning-based techniques as described in the beginning.</p><hr><p><table class=fndef id=fndef:camest><tr><td class=fndef-backref><a href=#fnref:camest>[1]</a></td><td class=fndef-content>Recall that camera pose estimation from a single image is an under-determined problem. There has been recent developments, like <a href=https://arxiv.org/pdf/2405.15364>Mast3R</a>, that address the problem of estimating the camera pose and the intrinsic parameters from 2 or more images based neural networks. The classical techniques often require either multiple ($\geq3$) images (calibrated or in-the-wild) to estimate the camera parameters.</td></tr></table></p><p><table class=fndef id=fndef:nvs><tr><td class=fndef-backref><a href=#fnref:nvs>[2]</a></td><td class=fndef-content>There has been some literature based on this idea - Check out <em>Nvs-solver: Video diffusion model as zero-shot novel view synthesizer</em> - <a href=https://arxiv.org/pdf/2405.15364>ArXiv Link</a> and <em>Synsin: End-to-end view synthesis from a single image</em> - <a href=https://arxiv.org/abs/1912.08804>ArXiv Link</a>.</td></tr></table></p><p><table class=fndef id=fndef:dbir><tr><td class=fndef-backref><a href=#fnref:dbir>[3]</a></td><td class=fndef-content>Another good article by Doan Huu Noi on this topic - <a href=https://noidh.github.io/pages/notes/ip/dibr/dibr.html>Link</a>.</td></tr></table></p><p><table class=fndef id=fndef:bilin><tr><td class=fndef-backref><a href=#fnref:bilin>[4]</a></td><td class=fndef-content>Bao, W., Lai, W. S., Ma, C., Zhang, X., Gao, Z., &amp; Yang, M. H. (2019). Depth-aware video frame interpolation. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition. <a href=https://arxiv.org/abs/1904.00830>ArXiv Link</a&lt;></tr></table></p><p><table class=fndef id=fndef:exp><tr><td class=fndef-backref><a href=#fnref:exp>[5]</a></td><td class=fndef-content>Niklaus, S., &amp; Liu, F. (2020). Softmax splatting for video frame interpolation. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition. <a href=https://arxiv.org/abs/2003.05534>ArXiv Link</a>.</td></tr></table></p></main><div width=100% style="font-size:1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;"> &copy; 2025 Anand K Subramanian <span class=vl></span><a href=/license>License</a> <span class=vl></span><a href=/design>Design</a> <span class=vl></span> Built with Kutti &nbsp; <img class=icon-image src=/assets/icons/heart.svg></div><script src=/_libs/highlight/highlight.min.js></script><script>hljs.highlightAll(); hljs.configure({ tabReplace: '    ' });</script><link rel=stylesheet href=/_libs/highlight/decaf.css><script src=/_libs/clipboard/clipboard.min.js></script><script>
     (function () {
 
       // Get the elements.

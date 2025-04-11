@@ -78,10 +78,10 @@ def get_camera_transformation(depthmap:torch.Tensor,
 
     Args:
         depthmap: Depth map tensor of shape (H, W)
-        K1: Camera intrinsic matrix for the first camera of shape (3, 3)
-        K2: Camera intrinsic matrix for the second camera of shape (3, 3)
-        M1: Camera extrinsic matrix for the first camera of shape (4, 4)
-        M2: Camera extrinsic matrix for the second camera of shape (4, 4)
+        K1: First Camera (3, 3) intrinsic matrix
+        K2: Second Camera (3, 3) intrinsic matrix
+        M1: First Camera (4, 4) extrinsic matrix
+        M2: Second Camera (4, 4) extrinsic matrix
 
 
     Returns:
@@ -109,13 +109,16 @@ def get_camera_transformation(depthmap:torch.Tensor,
     # Transform the world coordinates based on the transformation
     # between the two cameras.
     # but before that,  make the world coords homogeneous
-    world_coords = torch.dstack([world_coords, torch.ones(height, width)[..., None, None]]) # (H, W, 4, 1)
-    world_coords_trans = T21[None, None] @ world_coords # (1, 1, 4, 4) @ (H, W, 4, 1) -> (H, W, 4, 1)
+    world_coords = torch.dstack([world_coords,
+                                 torch.ones(height, width)[..., None, None]]) # (H, W, 4, 1)
+    world_coords_trans = T21[None, None] @ world_coords
+    # (1, 1, 4, 4) @ (H, W, 4, 1) -> (H, W, 4, 1)
 
     world_coords_trans = world_coords_trans[..., :3, :] # (H, W, 3, 1)
     # Reproject the transformed world coordinates to the
     # 2nd camera viewpoint
-    trans_coords = K2[None, None, ...] @ world_coords_trans # (1, 1, 3, 3) @ (H, W, 3, 1) -> (H, W, 3, 1)
+    trans_coords = K2[None, None, ...] @ world_coords_trans
+    # (1, 1, 3, 3) @ (H, W, 3, 1) -> (H, W, 3, 1)
 
     return trans_coords[..., 0] # ignore the last dim in the homogeneous form
 
@@ -149,7 +152,7 @@ def get_uv_coords(height:int,
 ```
 
 !!!
-<video width="20%" autoplay muted loop>
+<video autoplay muted loop>
     <source src="/media/post_images/optical_flow.mp4" type='video/mp4;'>
 </video>
 <p class = "caption-text ">Flowmap</p>
@@ -331,7 +334,6 @@ def forward_warping(image: torch.Tensor,
     uv_coords = get_uv_coords(height, width)  # empty pixel coordinates
     # Compute pixel flow
 
-    # print(trans_coords.shape, uv_coords.shape, trans_depth.shape)
     flow = (trans_coords[:, :, :2] / trans_depth) - uv_coords
 
     # Step 2: Splat
@@ -340,7 +342,9 @@ def forward_warping(image: torch.Tensor,
     depth_weights = get_weights_from_depthmap(depthmap=trans_depth,
                                               gamma=gamma)
 
-    warped_image, mask = splat_points(image=image, weights=depth_weights, flowmap=flow)
+    warped_image, mask = splat_points(image=image,
+                                      weights=depth_weights,
+                                      flowmap=flow)
 
     # normalize the warped image
     warped_image = warped_image.clamp(min=0, max=255)
@@ -353,7 +357,6 @@ def forward_warping(image: torch.Tensor,
 <video autoplay muted loop>
     <source src="/media/post_images/image_warp_depth.mp4" type='video/mp4;'>
 </video>
-<p class = "caption-text ">Pixel warping based on depth and camera viewpoint</p>
 !!!
 
 Lastly, the above implementation is differentiable with respect to the camera parameters and the depthmap, making is quite amenable to learning-based techniques as described in the beginning.
