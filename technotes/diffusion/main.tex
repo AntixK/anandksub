@@ -161,7 +161,6 @@ Where $p_\theta(\vx , y)$ is the joint distribution of the inputs and the labels
 \end{align}
 Where the energy function is $E_\theta(\vx) = - \sum_y\exp\left (f_\theta(\vx)[y]  \right )$. This can be written as $-\text{LogSumExp}_y \left (f_\theta(\vx)[y]  \right )$. Thus every classifier implicitly learns  the joint density from which we can derive the conditional density as well as the data density.
 
-
 We can now see that naive application for CoV in the EBM framework does not really work.
 
 The standard way of getting around this problem is to compose different transformations to get a more sophisticated transformation. In other words, we make use of the property that a composition of injective functions is another injective function. 
@@ -172,7 +171,7 @@ The standard way of getting around this problem is to compose different transfor
 Where, across $K$ time steps, transformation functions $f_k$ are composed together to construct the final transformation $h$. Let's construct a composite flow based on simple normalizing flows \textit{i.e.} $f_k$ is bijective.
 
 \begin{align}\label{eq:res_flow}
-    f_k(\vx_k) &:= \vx_k + \frac{1}{K}u_k(\vx_k) \\
+    f_k(\vx_k) &:= \vx_k + \frac{1}{K}U_k(\vx_k) \\
     \vx_{k + \Delta k} &= f_k(\vx_k)
 \end{align}
 At each discrete time step $k$, defined by a time span of $\Delta k = 1/K$, the random variable $\vx_k$ is transformed by the function $f_k$ defined above.
@@ -180,11 +179,17 @@ At each discrete time step $k$, defined by a time span of $\Delta k = 1/K$, the 
 The above equation can be made continuous by taking the limit $K \to \infty$ and infinitesimal steps $\Delta k \to 0$. Let's rename the variable $k$ with $t$ to represent the continuous nature of the formula.
 
 \begin{align}\label{eq:flow_ode}
-    u_t(\vx_t) &= \lim_{\Delta t \to 0} \frac{f_t(\vx_t) - \vx_t}{\Delta t} \\
-    &=   \lim_{\Delta t \to 0} \frac{ \vx_{t + \Delta t} - \vx_t}{\Delta t} \\ 
-    &= \frac{d \vx_t}{dt} = 
+    \lim_{\Delta t \to 0} \frac{f_t(\vx_t) - \vx_t}{\Delta t} &= U_t(\vx_t)\\
+    \lim_{\Delta t \to 0} \frac{ \vx_{t + \Delta t} - \vx_t}{\Delta t} &= U_t(\vx_t) \\ 
+    \frac{d \vx_t}{dt} &= U_t(\vx_t)
 \end{align}
-Thus, we have shown that normalizing flows defined by equation \eqref{eq:res_flow} are the discrete form of ODEs.
+Thus, we have shown that normalizing flows defined by equation \eqref{eq:res_flow} are the discrete form of first-order ODEs. To be more concrete, continuous flows are a collection of the solutions of ODEs across different initial conditions. Recall that a solution of an ODE is function that computes the state of the random variable at any given time $t$, based on its initial state $\vx_0$, governed by that ODE. 
+
+
+Note that a vector field, defined a first-order ODE.
+
+According to the Picard-Lindelof theorem, if the vector field is continuously differentiable with bounded derivatives, then the corresponding ODE has a unique solution.
+
 
 
 Such models that use composition of invertible differential transformations for modelling distributions are called flow-based generative models.
@@ -227,6 +232,10 @@ Diffusion is basically infinitesimal compositions.
 
 You can repres
 
+\begin{align}
+    \vx_0 \sim p_0; \quad d\vx_t &= U_t^{\theta}(\vx_t) dt && \text{(Flow Model)} \\
+    \vx_0 \sim p_0; \quad d\vx_t &= U_t^{\theta}(\vx_t) dt + \sigma_t dW_t && \text{(Diffusion Model)}
+\end{align}
 
 
 \section{Modelling Flows via Differential Equations}

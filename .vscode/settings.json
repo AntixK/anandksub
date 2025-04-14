@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
         "Beltrami"
-    ]
+    ],
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 100
 }
