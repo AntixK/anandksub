@@ -1,0 +1,282 @@
+\documentclass[a4paper, 11pt]{article}
+
+\input{defns}
+\usetikzlibrary{quotes, positioning}
+
+\title{Notes of Deep Diffusion Models}
+\author{Anand Subramanian} 
+\date{}
+
+\begin{document} 
+\maketitle
+
+\tableofcontents
+
+
+Energy-based Models (EBMs) are a general class of models for learning probability densities. For some arbitrary probability density $p(\vx)$ for $\vx \in \R^D$, we can express it in a parametric form as
+
+\begin{align}
+p(\vx) = \frac{\exp \left(-E_\theta(\vx)\right)}{Z(\theta)}; \qquad Z(\theta) = \int \exp \left (-E_\theta(\vx) \right) d\vx
+\end{align} 
+
+Where $E_\theta: \R^D \to \R$ is the \textit{energy function} and $Z(\theta)$ is the normalizing constant to yield a proper probability density. The energy function is parameterized by $\theta$ can learn to map the given samples $\vx$ to a scalar value following the actual probability density. The learning problem is then to estimate the parameters $\theta$ such that the distribution $p_\theta(\vx)$ estimated by the above EBM converges to the target distribution $p(\vx)$.
+
+The issue with EBMs when it was originally proposed by \cite{lecun2006tutorial} is that the normalizing constant $Z$ (sometimes called as the \textit{partition function}) is intractable for any remotely interesting distribution. The modern developments since then, have largely been to model to densities using the energy function, entirely ignoring the normalizing constant.
+
+The score function is invariant to scaling. 
+\begin{align}
+    \nabla_{\vx} \log \tilde{p}(\vx) = \nabla_{\vx} \log \left ( p(\vx) Z \right ) = \nabla_{\vx} \left (  \log p(\vx) + \log Z \right ) = \nabla_{\vx} \log  p(\vx)
+\end{align}
+Therefore, the score function can be used even if we only have the unnormalized density $\tilde{p}(\vx)$. 
+
+This is why people moved away from maximizing (log-) likelihood to optimizing the score function. THis make it ubiquitous in injective flows, and EBMs.
+
+
+The fundamental idea is to use the \emph{score function} of the above parametric distribution, defined as 
+
+\begin{align}
+    \frac{\partial \log p_\theta(\vx)}{\partial \theta} = \E 
+\end{align}
+
+
+\section{Generative Modelling via Probability Density Estimation}
+
+If you can sample from a probability density, then you know the density.
+
+\subsection{Impossibility of Probability Density Estimation}
+Impossibility of even conditional probability estimation.
+
+\section{Probability Flows}
+In probability theory, the change of variables (CoV) formula is one of the fundamental formulas, which describes how probability density functions relate under a smooth invertible transformation $-$ think coordinate transformation but for random variables. Say we have a random variable $\vx \sim p(\vx)$ and an invertible differentiable transformation $f: \R^D \to \R^M$ defined as $\vy = f(\vx)$, then the resultant random variable $\vy$ follows the density given by
+\begin{align}
+    \vy \sim q(\vy) = p\left(f^{-1}(\vy) \right)\left |\det \vJ_{f^{-1}} \right|; \qquad \vJ_{f^{-1}} = \frac{\partial f^{-1}(\vy)}{\partial \vy} \in \R^{D \x M}
+\end{align}
+Where $\vJ_{f^{-1}}$ is the Jacobian of the inverse function $f^{-1}$. Since the transformation is invertible, we can also construct the reverse CoV formula as
+
+\begin{align}
+    \vx \sim p(\vx) = q\left(f(\vx) \right)\left |\det \vJ_{f} \right|; \qquad \vJ_{f} = \frac{\partial f(\vx)}{\partial \vx} \in \R^{M \x D}
+\end{align}
+Where $\vJ_{f}$ is the Jacobian of the transformation $f$. The absolute determinant of the Jacobian $\left |\det \vJ_{f} \right|$quantifies the relative change of volume over a small neighborhood around $\vx$ due to the transformation $f$. Geometrically, the space $\R^D$ is warped by the transformation $f$ to mold $p(\vx)$ into $q(\vy)$.
+
+The transformation function $f$, also called \emph{flow}, has no limitation except that it should be differentiable and invertible. Based on this, we can construct few classes of transformations or flows based on different characteristics such as stochasticity, compression, composability, etc (\cite{kothe2023review}).
+
+
+\subsection{Bijective Flows}
+Bijective flows are deterministic transformation between the random variables $\vx, \vy$. As the name suggests, the transformation preserves the dimensions $f: \R^D \to \R^D$ of the random variables. Consequently, $\vJ_{f}, \vJ_{f^{-1}} \in \R^{D \x D}$. An important implication is that the resulting density $q(\vy)$ is properly normalized as normalization factor for each dimension is given by the Jacobian. Thus, Bijective flows are also called \emph{Normalizing Flows} (NF) \cite{papamakarios2021normalizing}. 
+
+\subsubsection{Invertible ResNets as Bijective Flows}
+
+
+\subsubsection{Incompressible Flows}
+A special case of Bijective flows are the class of \emph{incompressible flows}, where $\det \vJ_f = \det \vJ_{f^{-1}} = 1$. Recall the geometric interpretation of Jacobian as the volumetric scaling matrix. When determinant is the same between the transformations, when the "volume" is preserved, and hence flows are incompressible flows. 
+
+Fourier Transforms, PCA are Incompressible flows. 
+
+VQ Flows (assignment), GMM-flows (soft assignment)
+
+
+\subsection{Injective Flows}
+Injective flows are deterministic transformations where the dimensions are not preserved. The random variables $\vx \in R^D$ and $\vy \in \R^M$ can be of different dimensions and as such the resulting PDF is generally unnormalized. Note that injective transformations are still invertible. Interestingly, in this context, one may view the (forward) transformation $f$ as an \emph{encoder} that encodes $\vx$ from one domain to another. The inverse transformation $f^{-1}$ is called as a \emph{decoder}.
+
+
+Composition of injective functions is injective.
+
+
+\subsection{Stochastic Flows}
+Stochastic flows are transformations where the source variable $\vx$ are mapped stochastically to the target variable $\vy$ \emph{conditioned} on $\vx$. The transformation $f$ can be viewed as a stochastic encoder mapping the source distribution to a conditional distribution.
+
+\begin{align}
+    \vy \sim p(\vy | \vx)
+\end{align}
+
+To get the inverse flow of the above equation, we observe that the flow must preserve the joint density $p(\vx, \vy)$ for self consistency.
+
+\begin{align}
+    p(\vx, \vy) = p(\vx)p(\vx | \vy) = p(\vy)p(\vy|\vx)
+\end{align}
+
+The above equation necessitates a stochastic decoder, with the source distribution $p(\vx$) obtained through marginalization over $\vy$.
+
+\begin{align} \label{eq:sto_marg}
+    p(\vx)= \E_{\vy \sim p(\vy) } \left [ p(\vx | \vy) \right ] = \int p(\vx | \vy) p(\vy) d\vy
+\end{align}
+
+\subsubsection{Markov Flows}
+
+\begin{center} 
+    \begin{tikzpicture}[
+        every node/.style={draw, align=center, rounded corners, minimum width=2.5cm, minimum height=1cm},
+        arrow/.style={->, thick}
+    ]
+    
+    % Nodes
+    \node (bijective) {Bijective Flows\\($f: \mathbb{R}^D \to \mathbb{R}^D$)};
+    \node [below=of bijective]  (incomp) {Incompressible Flows\\($\det \vJ_f = \det \vJ_{f^{-1}} = 1$)};
+
+    \node[right=of bijective] (injective) {Injective Flows\\($f: \mathbb{R}^D \to \mathbb{R}^M$, $M > D$)};
+    \node[right=of injective] (stochastic) {Stochastic Flows\\(Randomized Transformations)};
+    \node[below=of incomp] (discrete) {Discrete Flows\\(Step-wise Transformations)};
+    \node[below=of stochastic] (continuous) {Continuous Flows\\(ODE/SDE-based Transformations)};
+    
+    % Arrows
+    % \draw[arrow] (bijective) -- (injective);
+    % \draw[arrow] (bijective) -- (stochastic);
+    % \draw[arrow] (stochastic) -- (discrete);
+    % \draw[arrow] (stochastic) -- (continuous);
+    % \draw[arrow] (bijective) -- (incomp);
+
+    
+    \end{tikzpicture}
+\end{center} 
+
+
+The tipping point for the the Diffusion revolution is to observe that $p(\vx)$ can be a well-defined, easy to sample, easy to model, distribution, while $p(\vy)$ can be an arbitrarily complex distribution, as long as we have a sophisticated transformation $f$ that is smooth and invertible.
+
+
+Dalton Board as Incompressible flow.
+
+\section{Composing Flows}
+Consider the extreme case where the transformation is a vector-to-scalar function $f: \R^D \to \R$. In such case, the CoV formula does not really exist as the transformation can only be specified as a marginalization.
+
+\begin{align} \label{eq:extreme_case}
+    q(\vy) = \int p(\vx) \delta (\vy - f(\vx)) d\vx
+\end{align}
+
+Where $\delta$ is the Dirac delta function. The above formula essentially says that the target distribution exists only where $\vx$ is mapped onto the real line $\R$ with magnitude $p(\vx)$ \textit{i.e.} the it is a degenerate distribution. In the earlier discussion on the various flows, the use case was be to able to sample from one distribution, transform to another distribution, and back. However, we do not have an inverse for the above equation.
+You may observe that the above transformation $f: \R^D \to \R$ is just the energy function $E_\theta(\vx)$ in case of EBMs. In fact, every classifier model is an example of the above case.
+
+Consider a generic classifier model $f_\theta: \R^D \to \R^K$ that learns to classify a given input $\vx \in \R^D$ into one of $K$ classes (real valued logits). The output distribution of the model can be written as conditional probability distribution as
+
+\begin{align}
+    p_\theta(y | \vx) = \frac{\exp\left (f_\theta(\vx)[y]  \right )}{\sum_y \exp\left (f_\theta(\vx)[y]  \right )}
+\end{align}
+Where $f_\theta(\vx)[y]$ is the logit of the $y^{\text{th}}$ label. \cite{grathwohl2019your} observed that $f_\theta(\vx)[y]$ can be simply imagined as the energy function of an EBM defined as
+
+\begin{align}
+    p_\theta(\vx , y) = \frac{\exp\left (f_\theta(\vx)[y]  \right )}{Z(\theta)}
+\end{align}
+Where $p_\theta(\vx , y)$ is the joint distribution of the inputs and the labels. From the input distribution $p_\theta(\vx)$ can then be simply marginalized out (based on equation \eqref{eq:sto_marg}) as
+\begin{align}
+    p_\theta(\vx) = \sum_y p_\theta(\vx , y) = \frac{\sum_y\exp\left (f_\theta(\vx)[y]  \right )}{Z(\theta)}
+\end{align}
+Where the energy function is $E_\theta(\vx) = - \sum_y\exp\left (f_\theta(\vx)[y]  \right )$. This can be written as $-\text{LogSumExp}_y \left (f_\theta(\vx)[y]  \right )$. Thus every classifier implicitly learns  the joint density from which we can derive the conditional density as well as the data density.
+
+
+We can now see that naive application for CoV in the EBM framework does not really work.
+
+The standard way of getting around this problem is to compose different transformations to get a more sophisticated transformation. In other words, we make use of the property that a composition of injective functions is another injective function. 
+
+\begin{align}
+    h = f_1 \circ f_2 \circ  \cdots \circ f_K
+\end{align}
+Where, across $K$ time steps, transformation functions $f_k$ are composed together to construct the final transformation $h$. Let's construct a composite flow based on simple normalizing flows \textit{i.e.} $f_k$ is bijective.
+
+\begin{align}\label{eq:res_flow}
+    f_k(\vx_k) &:= \vx_k + \frac{1}{K}u_k(\vx_k) \\
+    \vx_{k + \Delta k} &= f_k(\vx_k)
+\end{align}
+At each discrete time step $k$, defined by a time span of $\Delta k = 1/K$, the random variable $\vx_k$ is transformed by the function $f_k$ defined above.
+
+The above equation can be made continuous by taking the limit $K \to \infty$ and infinitesimal steps $\Delta k \to 0$. Let's rename the variable $k$ with $t$ to represent the continuous nature of the formula.
+
+\begin{align}\label{eq:flow_ode}
+    u_t(\vx_t) &= \lim_{\Delta t \to 0} \frac{f_t(\vx_t) - \vx_t}{\Delta t} \\
+    &=   \lim_{\Delta t \to 0} \frac{ \vx_{t + \Delta t} - \vx_t}{\Delta t} \\ 
+    &= \frac{d \vx_t}{dt} = 
+\end{align}
+Thus, we have shown that normalizing flows defined by equation \eqref{eq:res_flow} are the discrete form of ODEs.
+
+
+Such models that use composition of invertible differential transformations for modelling distributions are called flow-based generative models.
+
+Challenges of Flow-based models 1. How to learn the invertible function? Or how to model the neural network to be invertible? 2. How to compute the Jacobian efficiently.
+
+
+GANs as EBMs
+
+\begin{center} 
+    \begin{tikzpicture}[
+        every node/.style={draw, align=center, rounded corners, minimum width=2.5cm, minimum height=1cm},
+        arrow/.style={->, thick}
+    ]
+    
+    % Nodes
+    \node (norm) {Normalizing Flows};
+    \node [right=of norm]  (ode) {ODEs};
+    \node [below=of norm]  (markov) {Bayesian Markov Chain \\ Flows};
+    \node [right=of markov]  (sde) {SDEs};
+
+    
+    % Arrows
+    % \draw[arrow] (bijective) -- (injective);
+    % \draw[arrow] (bijective) -- (stochastic);
+    % \draw[arrow] (stochastic) -- (discrete);
+    % \draw[arrow] (stochastic) -- (continuous);
+    % \draw[arrow] (bijective) -- (incomp);
+
+    
+    \end{tikzpicture}
+\end{center} 
+
+
+Diffusion is basically infinitesimal compositions.
+
+\subsection{Discrete Flows}
+
+\subsection{Continuous Flows}
+
+You can repres
+
+
+
+\section{Modelling Flows via Differential Equations}
+
+\subsection{Stochastic Differential Equations}
+Stochastic differential equations (SDEs) are the continuous counterpart of Markov chains, in the same way
+as diffusion by ordinary differential equations is the continuous version of normalizing flows.
+
+\section{Diffusion Models}
+
+
+\subsection{Architecture}
+Earlier, the focus was on designing neural networks that were invertible - NICE, RealNVP, Invertible ResNetS, Glow.
+
+\section{Latent Diffusion Models}
+
+Latent Diffusion Models (LDMs) can be viewed as a development over another well-known class of generative models - Variational AutoEncoders (VAEs) \cite{dieleman2023perspectives}. It is pertinent to have a quick understanding of VAEs and how LDMs improve upon them.
+
+VAEs are Bayesian Markov Flows.
+
+How does ELBO relate to EBM?
+
+
+
+\subsection{Guidance}
+
+\subsection{Sampling}
+
+
+\section{Classifiers are Generative Models}
+
+Optimizing = Gradient Descent
+Sampling = Gradient Descent + noise
+Guidance = ?
+
+Since a generic classifier is not invertible, SGLD is a standard way of sampling from the distribution.
+
+\section{Practical Aspects}
+
+\section{Connections}
+\subsection{Link between EBMs and Diffusion Models}
+\subsection{Link between Neural ODEs and Diffusion Models}
+\subsection{Link between SDG and SGLD}
+
+\appendix
+\section{Mathematical Background}
+\subsection{Probability Theory}
+
+
+\bibliographystyle{apalike}
+\bibliography{references}
+
+\end{document}
