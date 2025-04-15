@@ -58,11 +58,11 @@ Where $\vJ_{f^{-1}}$ is the Jacobian of the inverse function $f^{-1}$. Since the
 \end{align}
 Where $\vJ_{f}$ is the Jacobian of the transformation $f$. The absolute determinant of the Jacobian $\left |\det \vJ_{f} \right|$quantifies the relative change of volume over a small neighborhood around $\vx$ due to the transformation $f$. Geometrically, the space $\R^D$ is warped by the transformation $f$ to mold $p(\vx)$ into $q(\vy)$.
 
-The transformation function $f$, also called \emph{flow}, has no limitation except that it should be differentiable and invertible. Based on this, we can construct few classes of transformations or flows based on different characteristics such as stochasticity, compression, composability, etc (\cite{kothe2023review}).
+The transformation function $f$, also called \emph{flow}, has no limitation except that it should be differentiable and invertible. Based on this, we can construct few classes of transformations or flows based on different characteristics such as stochasticity, compression, composability, etc \citep{kothe2023review}.
 
 
 \subsection{Bijective Flows}
-Bijective flows are deterministic transformation between the random variables $\vx, \vy$. As the name suggests, the transformation preserves the dimensions $f: \R^D \to \R^D$ of the random variables. Consequently, $\vJ_{f}, \vJ_{f^{-1}} \in \R^{D \x D}$. An important implication is that the resulting density $q(\vy)$ is properly normalized as normalization factor for each dimension is given by the Jacobian. Thus, Bijective flows are also called \emph{Normalizing Flows} (NF) \cite{papamakarios2021normalizing}. 
+Bijective flows are deterministic transformation between the random variables $\vx, \vy$. As the name suggests, the transformation preserves the dimensions $f: \R^D \to \R^D$ of the random variables. Consequently, $\vJ_{f}, \vJ_{f^{-1}} \in \R^{D \x D}$. An important implication is that the resulting density $q(\vy)$ is properly normalized as normalization factor for each dimension is given by the Jacobian. Thus, Bijective flows are also called \emph{Normalizing Flows} (NF) \citep{papamakarios2021normalizing}. 
 
 \subsubsection{Invertible ResNets as Bijective Flows}
 
@@ -181,15 +181,41 @@ The above equation can be made continuous by taking the limit $K \to \infty$ and
 \begin{align}\label{eq:flow_ode}
     \lim_{\Delta t \to 0} \frac{f_t(\vx_t) - \vx_t}{\Delta t} &= U_t(\vx_t)\\
     \lim_{\Delta t \to 0} \frac{ \vx_{t + \Delta t} - \vx_t}{\Delta t} &= U_t(\vx_t) \\ 
-    \frac{d \vx_t}{dt} &= U_t(\vx_t)
+    \frac{d \vx_t}{dt} &= U_t(\vx_t) && \text{(ODE)}
 \end{align}
-Thus, we have shown that normalizing flows defined by equation \eqref{eq:res_flow} are the discrete form of first-order ODEs. To be more concrete, continuous flows are a collection of the solutions of ODEs across different initial conditions. Recall that a solution of an ODE is function that computes the state of the random variable at any given time $t$, based on its initial state $\vx_0$, governed by that ODE. 
+Thus, we have shown that normalizing flows defined by equation \eqref{eq:res_flow} are the discrete form of first-order ODEs. To be more concrete, continuous flows are a collection of the solutions of ODEs across different initial conditions. Recall that a solution of an ODE is function that computes the state of the random variable at any given time $t$, based on its initial state $\vx_0$, governed by that ODE. To reiterate, a flow is a deterministic, time-continuous invertible transformation.
+   
 
+Formally, an ODE is defined via a time-dependent vector field $U:[0, 1] \x \R^D \to \R^d$ and the flow is $\psi:[0,1] \x \R^D \to \R^d$ is defined as the solution of the ODE. Intuitively, $U_t$ defines a velocity field that generates the path of the flow $\psi_t$ in thew state space. 
+
+\begin{align}
+    \vx_t := \psi_t(\vx_0) \sim p_t; \quad \forall \vx_0 \sim p_0
+\end{align}
+In other words, we only need the velocity field top model the flow between the initial and final probability distributions.
 
 Note that a vector field, defined a first-order ODE.
 
-According to the Picard-Lindelof theorem, if the vector field is continuously differentiable with bounded derivatives, then the corresponding ODE has a unique solution.
+A standard result regarding the existence and uniqueness of solutions of ODEs is that if the time-dependent vector field $U_t$ is continuously differentiable with bounded derivatives (in particular locally Lipschitz), then the corresponding ODE has a unique solution that is diffeomorphic \citep{perko2013differential}. This result is central to FM models. 
 
+However, this theorem only guarantees \textit{local} existence and uniqueness of the solution. 
+
+Conversely, given a $C^1$ differentiable diffeomorphic flow $\psi$, one can extract its defining velocity field $U_t$ using the ODE. Therefore, the unique velocity field $U_t$ determining the flow $\psi_t$ is 
+
+\begin{align}
+    \frac{d}{dt}\psi_t(\vx'_t) &= U_t(\psi_t(\vx'_t))\\
+    \frac{d}{dt}\psi_t \left (\psi_t^{-1}(\vx) \right) &= U_t(\vx) \qquad \text{Substituting }\vx'_t = \psi_t^{-1}(\vx)
+\end{align}
+
+
+
+\section{Flow Matching}
+The goal is flow matching is to learn a vector field $U_t^{\theta}$ such that its flow $\psi_t$ generates a probability path from the initial distribution $p_0$ to the target distribution $p_T$ \citep{lipman2024flow}. In a Flow Matching (FM) model, the velocity field $U_t$ is modelled using a neural network.
+
+% \begin{Takeaway}{}{}
+
+% \end{Takeaway}
+
+As the name suggests, during training, the velocity field modelled by the FM model is trained to generate a designated probability path between the source and the target distributions $p_0$ and $p_T$ respectively.
 
 
 Such models that use composition of invertible differential transformations for modelling distributions are called flow-based generative models.
@@ -256,7 +282,7 @@ Latent Diffusion Models (LDMs) can be viewed as a development over another well-
 
 VAEs are Bayesian Markov Flows.
 
-How does ELBO relate to EBM?
+How does ELBO relate to EBM? 
 
 
 
@@ -285,7 +311,7 @@ Since a generic classifier is not invertible, SGLD is a standard way of sampling
 \subsection{Probability Theory}
 
 
-\bibliographystyle{apalike}
+\bibliographystyle{unsrtnat} 
 \bibliography{references}
 
 \end{document}

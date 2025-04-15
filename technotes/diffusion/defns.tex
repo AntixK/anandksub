@@ -1,4 +1,3 @@
-\usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{geometry}
@@ -6,6 +5,20 @@
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 \usepackage{tikz}
+\usepackage[most]{tcolorbox}
+\usepackage[backref=page]{hyperref}
+
+
+\definecolor{antiquewhite}{rgb}{0.98, 0.92, 0.84}
+
+\newtcbtheorem{Takeaway}{\bfseries Takeaway}{enhanced,
+  coltitle=black,
+  top=0.3in,
+  colback=antiquewhite,
+  attach boxed title to top left=
+  {xshift=1.5em,yshift=-\tcboxedtitleheight/2},
+  boxed title style={size=small,colback=pink}
+}{Takeaway}
 
 \geometry{left=1.5cm, top=1.5cm, right=1.5cm, bottom=2cm, footskip=.5cm} 
 %dvips -Ppdf -tletter -G0 -o paper.ps paper.dvi
