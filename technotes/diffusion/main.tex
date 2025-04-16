@@ -16,7 +16,7 @@
 Energy-based Models (EBMs) are a general class of models for learning probability densities. For some arbitrary probability density $p(\vx)$ for $\vx \in \R^D$, we can express it in a parametric form as
 
 \begin{align}
-p(\vx) = \frac{\exp \left(-E_\theta(\vx)\right)}{Z(\theta)}; \qquad Z(\theta) = \int \exp \left (-E_\theta(\vx) \right) d\vx
+p(\vx) &= \frac{\exp \left(-E_\theta(\vx)\right)}{Z(\theta)}; \qquad Z(\theta) = \int \exp \left (-E_\theta(\vx) \right) d\vx && \eqcomment{EBM}
 \end{align} 
 
 Where $E_\theta: \R^D \to \R$ is the \textit{energy function} and $Z(\theta)$ is the normalizing constant to yield a proper probability density. The energy function is parameterized by $\theta$ can learn to map the given samples $\vx$ to a scalar value following the actual probability density. The learning problem is then to estimate the parameters $\theta$ such that the distribution $p_\theta(\vx)$ estimated by the above EBM converges to the target distribution $p(\vx)$.
@@ -181,7 +181,7 @@ The above equation can be made continuous by taking the limit $K \to \infty$ and
 \begin{align}\label{eq:flow_ode}
     \lim_{\Delta t \to 0} \frac{f_t(\vx_t) - \vx_t}{\Delta t} &= U_t(\vx_t)\\
     \lim_{\Delta t \to 0} \frac{ \vx_{t + \Delta t} - \vx_t}{\Delta t} &= U_t(\vx_t) \\ 
-    \frac{d \vx_t}{dt} &= U_t(\vx_t) && \text{(ODE)}
+    \frac{d \vx_t}{dt} &= U_t(\vx_t) && \eqcomment{ODE}
 \end{align}
 Thus, we have shown that normalizing flows defined by equation \eqref{eq:res_flow} are the discrete form of first-order ODEs. To be more concrete, continuous flows are a collection of the solutions of ODEs across different initial conditions. Recall that a solution of an ODE is function that computes the state of the random variable at any given time $t$, based on its initial state $\vx_0$, governed by that ODE. To reiterate, a flow is a deterministic, time-continuous invertible transformation.
    
@@ -203,7 +203,7 @@ Conversely, given a $C^1$ differentiable diffeomorphic flow $\psi$, one can extr
 
 \begin{align}
     \frac{d}{dt}\psi_t(\vx'_t) &= U_t(\psi_t(\vx'_t))\\
-    \frac{d}{dt}\psi_t \left (\psi_t^{-1}(\vx) \right) &= U_t(\vx) \qquad \text{Substituting }\vx'_t = \psi_t^{-1}(\vx)
+    \frac{d}{dt}\psi_t \left (\psi_t^{-1}(\vx) \right) &= U_t(\vx) \qquad \eqcomment{Substituting }\vx'_t = \psi_t^{-1}(\vx)
 \end{align}
 
 
@@ -211,9 +211,32 @@ Conversely, given a $C^1$ differentiable diffeomorphic flow $\psi$, one can extr
 \section{Flow Matching}
 The goal is flow matching is to learn a vector field $U_t^{\theta}$ such that its flow $\psi_t$ generates a probability path from the initial distribution $p_0$ to the target distribution $p_T$ \citep{lipman2024flow}. In a Flow Matching (FM) model, the velocity field $U_t$ is modelled using a neural network.
 
-% \begin{Takeaway}{}{}
+What should be the intermediate distributions $p_t$ so that the resultant flow goes from $p_0$ to $p_{\text{data}}$.
 
-% \end{Takeaway}
+\begin{Takeaway}{}{}
+    One important benefit of using flows as generative models is that they allow the tractable computation of exact likelihoods $\log p(\vx), \forall \vx \in \R^D$.
+\end{Takeaway}
+
+
+\begin{align}
+    \frac{d}{dt} p_t(\vx) &= - \diver (p_t U_t)(\vx) && \eqcomment{Continuity Equation}\\
+    \frac{d}{dt} p_t(\cdot | \vz) &= - \diver (p_t(\cdot |\vz) U_t(\cdot |\vz))(\vx)
+\end{align}
+ 
+
+\subsubsection{Instantaneous Change-of-Variable formula}
+
+Proof
+
+\begin{align}
+    \frac{d}{dt} \log p_t(\psi_t(\vx)) &=  \frac{1}{p_t(\psi_t(\vx))}\frac{d}{dt}p_t(\psi_t(\vx)) \\
+    &=  \frac{1}{p_t(\psi_t(\vx))}\left [\frac{d}{d\psi}p_t(\psi_t(\vx)) \frac{d}{dt}\psi_t(\vx) + \frac{d}{dt}p_t(\psi_t(\vx)) \right ]\\
+    &= \frac{1}{p_t(\psi_t(\vx))} \left [\frac{d}{d\psi}p_t(\psi_t(\vx)) \cdot U_t(\psi_t(\vx)) - \diver \left (p_t(\psi_t(\vx)) U_t(\psi_t(\vx)) \right ) \right ] \\
+    &= \frac{1}{p_t(\psi_t(\vx))} \left [\frac{d}{d\psi}p_t(\psi_t(\vx)) \cdot U_t(\psi_t(\vx)) - \frac{d}{d\psi}p_t(\psi_t(\vx)) \cdot U_t(\psi_t(\vx)) - p_t(\psi_t(\vx)) \diver U_t(\psi_t(\vx))  \right ] \\
+    &= \frac{1}{p_t(\psi_t(\vx))} \bigg [- p_t(\psi_t(\vx)) \diver U_t(\psi_t(\vx))  \bigg ] \\
+    &= - \diver U_t(\psi_t(\vx)) \qquad \qquad \eqcomment{Instantaneous CoV}
+\end{align}
+
 
 As the name suggests, during training, the velocity field modelled by the FM model is trained to generate a designated probability path between the source and the target distributions $p_0$ and $p_T$ respectively.
 
@@ -259,8 +282,8 @@ Diffusion is basically infinitesimal compositions.
 You can repres
 
 \begin{align}
-    \vx_0 \sim p_0; \quad d\vx_t &= U_t^{\theta}(\vx_t) dt && \text{(Flow Model)} \\
-    \vx_0 \sim p_0; \quad d\vx_t &= U_t^{\theta}(\vx_t) dt + \sigma_t dW_t && \text{(Diffusion Model)}
+    \vx_0 \sim p_0; \quad d\vx_t &= U_t^{\theta}(\vx_t) dt &&\eqcomment{Flow Model} \\
+    \vx_0 \sim p_0; \quad d\vx_t &= U_t^{\theta}(\vx_t) dt + \sigma_t dW_t && \eqcomment{Diffusion Model}
 \end{align}
 
 
