@@ -4,7 +4,7 @@
 \usetikzlibrary{quotes, positioning}
 
 \title{Notes of Deep Diffusion Models}
-\author{Anand Subramanian} 
+\author{Anand Subramanian}
 \date{}
 
 \begin{document} 
@@ -203,7 +203,7 @@ Conversely, given a $C^1$ differentiable diffeomorphic flow $\psi$, one can extr
 
 \begin{align}
     \frac{d}{dt}\psi_t(\vx'_t) &= U_t(\psi_t(\vx'_t))\\
-    \frac{d}{dt}\psi_t \left (\psi_t^{-1}(\vx) \right) &= U_t(\vx) \qquad \eqcomment{Substituting }\vx'_t = \psi_t^{-1}(\vx)
+    \frac{d}{dt}\psi_t \left (\psi_t^{-1}(\vx) \right) &= U_t(\vx) && \eqcomment{Substituting }\vx'_t = \psi_t^{-1}(\vx)
 \end{align}
 
 
@@ -230,20 +230,86 @@ Proof for the above Instantaneous CoV can be derived as follows (Based on \cite{
 
 \begin{align}
     \frac{d}{dt} \log p_t(\psi_t(\vx)) &=  \frac{1}{p_t(\psi_t(\vx))}\frac{d}{dt}p_t(\psi_t(\vx)) \\
-    &=  \frac{1}{p_t(\psi_t(\vx))}\left [\frac{d}{d\psi}p_t(\psi_t(\vx)) \frac{d}{dt}\psi_t(\vx) + \frac{d}{dt}p_t(\psi_t(\vx)) \right ]\\
+    &=  \frac{1}{p_t(\psi_t(\vx))}\left [\frac{d}{d\psi}p_t(\psi_t(\vx)) \frac{d}{dt}\psi_t(\vx) + \frac{d}{dt}p_t(\psi_t(\vx)) \right ]  \eqcomment{Chain Rule} \\
     &= \frac{1}{p_t(\psi_t(\vx))} \left [\frac{d}{d\psi}p_t(\psi_t(\vx)) \cdot U_t(\psi_t(\vx)) - \diver \left (p_t(\psi_t(\vx)) U_t(\psi_t(\vx)) \right ) \right ] \\
     &= \frac{1}{p_t(\psi_t(\vx))} \left [\frac{d}{d\psi}p_t(\psi_t(\vx)) \cdot U_t(\psi_t(\vx)) - \frac{d}{d\psi}p_t(\psi_t(\vx)) \cdot U_t(\psi_t(\vx)) - p_t(\psi_t(\vx)) \diver U_t(\psi_t(\vx))  \right ] \\
     &= \frac{1}{p_t(\psi_t(\vx))} \bigg [- p_t(\psi_t(\vx)) \diver U_t(\psi_t(\vx))  \bigg ] \\
-    &= - \diver U_t(\psi_t(\vx)) \qquad \qquad \eqcomment{Instantaneous CoV} \label{eq:instant-cov}
-\end{align}
+    &= - \diver U_t(\psi_t(\vx)) \eqcomment{Instantaneous CoV} \label{eq:instant-cov}
+\end{align}  
 
 Where we have used the Continuity equation \eqref{eq:contin-eq} in the 3rd step. However, the original CoV formula relied on the Jacobian, which defined how the probability volume transformed with the change of variables and the transformation function. In the above Instantaneous CoV, the divergence over the velocity field $U_t$ can be written as the trace of the Jacobian.
 
+
 \begin{align}
     \diver U_t = \tr(J(U_t))
-\end{align}
+\end{align} 
 
 \cite{chen2018neural} provide a complete derivation for \eqref{eq:instant-cov} from the perspective of the discrete CoV formula, where the Jacobian is more evident.
+
+\begin{align}
+    U_t^{\text{target}}(\vx) &= \int U_t^{\text{target}}(\vx | \vz) p_t(\vz | \vx) d\vz \\
+    &=  \int U_t^{\text{target}}(\vx | \vz) \frac{p_t( \vx|\vz)p_{\text{data}}(\vz)}{p_t(\vx)} d\vz \label{eq:marg_vel}
+\end{align}
+
+Since the marginal velocity field $U_t(\vx)$ can be obtained from the conditional velocity field $U_t(\vx | \vz)$, the above equation is sometimes called as the \textit{marginalization trick} \citep{flowsanddiffusions2025}.
+
+\begin{align}
+    \fL_{\text{FM}}(\theta) &= \E_{\substack{t \sim \fU[0, 1] \\ 
+    \vz \sim p_{\text{data}} \\
+    \vx \sim p_t(\cdot | \vz)}} \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx) \|^2 \right ] \label{eq:fm_loss}
+\end{align}
+
+However, the flow matching loss function in equation \eqref{eq:fm_loss} is intractable as it involves marginalizing over the data distribution which is unknown. A workaround is to use \textit{conditional} flow matching loss instead.
+
+\begin{align}
+    \fL_{\text{CFM}}(\theta) &= \E_{\substack{t \sim \fU[0, 1] \\ 
+    \vz \sim p_{\text{data}} \\
+    \vx \sim p_t(\cdot | \vz)}} \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx | \vz) \|^2 \right ]\label{eq:cfm_loss}
+\end{align}
+
+This auxiliary loss given by equation \eqref{eq:cfm_loss} is tractable. In fact, it is staightforward to show that  the FM loss and the CFM loss only differ by a constant independent of the parameters $\theta$ \citep{holderrieth2025generatormatchinggenerativemodeling}.
+
+\begin{align}
+    \fL_{\text{FM}}(\theta) &= \fL_{\text{CFM}}(\theta) + C \\
+    \Rightarrow \nabla_{\theta} \fL_{\text{FM}}(\theta) &= \nabla_{\theta}\fL_{\text{CFM}}(\theta)
+\end{align}
+
+In other words, they have the same gradient with respect to the model parameters $\theta$, hence we can use the tractable CFM loss to to train the flow matching model.
+
+
+\begin{align}
+    \fL_{\text{FM}}(\theta) &= \E_{\substack{t \sim \fU[0, 1] \\ 
+    \vz \sim p_{\text{data}} \\
+    \vx \sim p_t(\cdot | \vz)}} \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx) \|^2 \right ] \\
+    &= \E [ \|U_t^{\theta}(\vx) \|^2 ] - 2 \E [U_t^{\theta}(\vx)^T U_t^{\text{target}}(\vx)  ] + \E[\|U_t^{\text{target}}(\vx)\|^2] \\
+    &= \E [ \|U_t^{\theta}(\vx) \|^2 ] - 2 \E [U_t^{\theta}(\vx)^T U_t^{\text{target}}(\vx)  ] + C_1 \\
+    &= \E [ \|U_t^{\theta}(\vx) \|^2 ] - 2 \int_0^1 \int p_t(\vx) U_t^{\theta}(\vx)^T U_t^{\text{target}}(\vx) d\vx dt  + C_1 \\
+    &= \E [ \|U_t^{\theta}(\vx) \|^2 ] - 2 \int_0^1 \int p_t(\vx) U_t^{\theta}(\vx)^T \left [ \int U_t^{\text{target}}(\vx | \vz) \frac{p_t( \vx|\vz)p_{\text{data}}(\vz)}{p_t(\vx)} d\vz \right ] d\vx dt  + C_1 \\
+    &= \E [ \|U_t^{\theta}(\vx) \|^2 ] - 2 \E [U_t^{\theta}(\vx)^T U_t^{\text{target}}(\vx | \vz)  ]  + C_1 \\
+    &= \E \left [ \|U_t^{\theta}(\vx) \|^2  - 2U_t^{\theta}(\vx)^T U_t^{\text{target}}(\vx | \vz)  + \|U_t^{\text{target}}(\vx | \vz)\|^2 - \|U_t^{\text{target}}(\vx | \vz)\|^2 \right ]  + C_1 \\
+    &= \E \left [ \|U_t^{\theta}(\vx) \|^2  - 2U_t^{\theta}(\vx)^T U_t^{\text{target}}(\vx | \vz)  + \|U_t^{\text{target}}(\vx | \vz)\|^2 \right ] + \E \left  [- \|U_t^{\text{target}}(\vx | \vz)\|^2 \right ]  + C_1 \\
+    &= \E \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx | \vz) \|^2 \right ] + \E \left  [- \|U_t^{\text{target}}(\vx | \vz)\|^2 \right ]  + C_1 \\
+    &= \E \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx | \vz) \|^2 \right ] + C_2  + C_1 \\
+    &= \fL_{\text{CFM}}(\theta) + C
+\end{align}
+
+\begin{algorithm}
+    \caption{Flow Matching Training Procedure}\label{alg:fm_train}
+    \begin{algorithmic}[1]
+    \Require Dataset $\fD$ with samples $\vz \sim p_{\text{data}}$, Neural network $U_t^{\theta}$
+    \While{not converged}
+    \State Sample real data points $\vz$ from $\fD$
+    \State Uniformly sample some random time $t \sim \fU[0, 1]$
+    \State Sample $\vx$ from the conditional probability path $\vx \sim p_t(\cdot | \vz)$
+    \State Compute the loss
+    \begin{align*}
+        \fL_{\text{CFM}}(\theta) = \E \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx | \vz) \|^2 \right ]
+    \end{align*}
+    \State Update the model parameters $\theta \leftarrow \theta + \alpha \nabla_{\theta} \fL_{\text{CFM}}(\theta)$
+    \EndWhile
+    \end{algorithmic}
+\end{algorithm}
+    
 
 
 As the name suggests, during training, the velocity field modelled by the FM model is trained to generate a designated probability path between the source and the target distributions $p_0$ and $p_T$ respectively.
