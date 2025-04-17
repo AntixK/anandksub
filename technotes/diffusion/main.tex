@@ -220,8 +220,10 @@ What should be the intermediate distributions $p_t$ so that the resultant flow g
 
 \begin{align}
     \frac{d}{dt} p_t(\vx) &= - \diver (p_t U_t)(\vx) && \eqcomment{Continuity Equation} \label{eq:contin-eq}\\ 
-    \frac{d}{dt} p_t(\cdot | \vz) &= - \diver (p_t(\cdot |\vz) U_t(\cdot |\vz))(\vx)
+    \frac{d}{dt} p_t(\cdot | \vz) &= - \diver (p_t(\cdot |\vz) U_t(\cdot |\vz))(\vx) \label{eq:contin-cond-eq}
 \end{align}
+
+A intuitive way to understand the above continuity equation is as a more general form of the law of conservation of probability mass. The quantity $p_t(\vx)U_t(\vx)$ defines probability flux which is the probability mass flowing via the path $p_t$ per unit time and per unit volume. The equation \eqref{eq:contin-eq} relates how the probability likelihood changes with respect to the probability flux. $- \diver$ is the net of inflow of flux at the point $\vx$, and in an infinitesimal time $dt$, the probability mass accumulated in the neighborhood of $\vx$ defines the probability density at $\vx$.
  
 
 \subsubsection{Instantaneous Change-of-Variable formula}
@@ -251,7 +253,18 @@ Where we have used the Continuity equation \eqref{eq:contin-eq} in the 3rd step.
     &=  \int U_t^{\text{target}}(\vx | \vz) \frac{p_t( \vx|\vz)p_{\text{data}}(\vz)}{p_t(\vx)} d\vz \label{eq:marg_vel}
 \end{align}
 
-Since the marginal velocity field $U_t(\vx)$ can be obtained from the conditional velocity field $U_t(\vx | \vz)$, the above equation is sometimes called as the \textit{marginalization trick} \citep{flowsanddiffusions2025}.
+Since the marginal velocity field $U_t(\vx)$ can be obtained from the conditional velocity field $U_t(\vx | \vz)$, the above equation is sometimes called as the \textit{marginalization trick} \citep{flowsanddiffusions2025}. For our purposes, it suffices to verify that the above marginal velocity field satisfies the continuity equation \eqref{eq:contin-eq}.
+
+\begin{align}
+    \frac{d}{dt} p_t(\vx) &= \frac{d}{dt} \int p_t(\vx | \vz) p_{\text{data}}(\vz) d\vz \\
+    &= \int \frac{d}{dt} p_t(\vx | \vz) p_{\text{data}}(\vz) d\vz \\
+    &= \int - \diver (p_t(\cdot |\vz) U_t(\cdot |\vz))(\vx)  p_{\text{data}}(\vz) d\vz \eqcomment{Substitute equation \eqref{eq:contin-cond-eq}}\\
+    &= - \diver \left ( \int p_t(\vx |\vz)U_t(\vx |\vz)  p_{\text{data}}(\vz) d\vz \right ) \\
+    &= - \diver \left ( p_t(\vx) \int U_t(\vx |\vz) \frac{p_t(\vx |\vz)  p_{\text{data}}(\vz)}{p_t(\vx)} d\vz \right ) \eqcomment{Substitute \eqref{eq:marg_vel}}\\
+    &= - \diver( p_t(\vx)U_t(\vx))
+\end{align}
+
+
 
 \begin{align}
     \fL_{\text{FM}}(\theta) &= \E_{\substack{t \sim \fU[0, 1] \\ 
@@ -305,7 +318,7 @@ In other words, they have the same gradient with respect to the model parameters
     \begin{align*}
         \fL_{\text{CFM}}(\theta) = \E \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx | \vz) \|^2 \right ]
     \end{align*}
-    \State Update the model parameters $\theta \leftarrow \theta + \alpha \nabla_{\theta} \fL_{\text{CFM}}(\theta)$
+    \State Update the model parameters $\theta \gets \theta + \alpha \nabla_{\theta} \fL_{\text{CFM}}(\theta)$
     \EndWhile
     \end{algorithmic}
 \end{algorithm}
@@ -316,6 +329,23 @@ As the name suggests, during training, the velocity field modelled by the FM mod
 
 
 Such models that use composition of invertible differential transformations for modelling distributions are called flow-based generative models.
+
+
+\begin{algorithm}
+    \caption{Euler's Method for Sampling from Flow Models}\label{alg:fm_sample}
+    \begin{algorithmic}[1]
+    \Require (Trained) Neural network $U_t^{\theta}$
+    \State Set $t \gets 0$
+    \State Initialize the step size $h = 1 / N$
+    \State Draw a sample from the initial distribution $\vx \sim p_0(\vx)$
+    \For{$i = 1, \dots, N-1$}
+    \State $\vx_{t+h} \gets \vx_t + h U_t^{\theta}(\vx_t)$
+    \State Update time $t \gets t + h$
+    \EndFor
+    \State \Return $\vx_1$
+    \end{algorithmic}
+\end{algorithm}
+
 
 Challenges of Flow-based models 1. How to learn the invertible function? Or how to model the neural network to be invertible? 2. How to compute the Jacobian efficiently.
 
@@ -368,6 +398,22 @@ Stochastic differential equations (SDEs) are the continuous counterpart of Marko
 as diffusion by ordinary differential equations is the continuous version of normalizing flows.
 
 \section{Diffusion Models}
+
+\begin{algorithm}
+    \caption{Euler-Maruyama Method for Sampling from Diffusion Models}\label{alg:diff_sample}
+    \begin{algorithmic}[1]
+    \Require (Trained) Neural network $U_t^{\theta}$, diffusion coefficient $\sigma_t$
+    \State Set $t \gets 0$
+    \State Initialize the step size $h = 1 / N$
+    \State Draw a sample from the initial distribution $\vx \sim p_0(\vx)$
+    \For{$i = 1, \dots, N-1$}
+    \State Draw sample $\epsilon \in \fN(0, I_D)$
+    \State $\vx_{t+h} \gets \vx_t + h U_t^{\theta}(\vx_t) + \sigma_t \sqrt{h}\epsilon$
+    \State Update time $t \gets t + h$
+    \EndFor
+    \State \Return $\vx_1$
+    \end{algorithmic}
+\end{algorithm}
 
 
 \subsection{Architecture}
