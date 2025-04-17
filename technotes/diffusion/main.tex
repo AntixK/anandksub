@@ -219,14 +219,14 @@ What should be the intermediate distributions $p_t$ so that the resultant flow g
 
 
 \begin{align}
-    \frac{d}{dt} p_t(\vx) &= - \diver (p_t U_t)(\vx) && \eqcomment{Continuity Equation}\\
+    \frac{d}{dt} p_t(\vx) &= - \diver (p_t U_t)(\vx) && \eqcomment{Continuity Equation} \label{eq:contin-eq}\\ 
     \frac{d}{dt} p_t(\cdot | \vz) &= - \diver (p_t(\cdot |\vz) U_t(\cdot |\vz))(\vx)
 \end{align}
  
 
 \subsubsection{Instantaneous Change-of-Variable formula}
 
-Proof
+Proof for the above Instantaneous CoV can be derived as follows (Based on \cite{mathieu2020riemannian}).
 
 \begin{align}
     \frac{d}{dt} \log p_t(\psi_t(\vx)) &=  \frac{1}{p_t(\psi_t(\vx))}\frac{d}{dt}p_t(\psi_t(\vx)) \\
@@ -234,8 +234,16 @@ Proof
     &= \frac{1}{p_t(\psi_t(\vx))} \left [\frac{d}{d\psi}p_t(\psi_t(\vx)) \cdot U_t(\psi_t(\vx)) - \diver \left (p_t(\psi_t(\vx)) U_t(\psi_t(\vx)) \right ) \right ] \\
     &= \frac{1}{p_t(\psi_t(\vx))} \left [\frac{d}{d\psi}p_t(\psi_t(\vx)) \cdot U_t(\psi_t(\vx)) - \frac{d}{d\psi}p_t(\psi_t(\vx)) \cdot U_t(\psi_t(\vx)) - p_t(\psi_t(\vx)) \diver U_t(\psi_t(\vx))  \right ] \\
     &= \frac{1}{p_t(\psi_t(\vx))} \bigg [- p_t(\psi_t(\vx)) \diver U_t(\psi_t(\vx))  \bigg ] \\
-    &= - \diver U_t(\psi_t(\vx)) \qquad \qquad \eqcomment{Instantaneous CoV}
+    &= - \diver U_t(\psi_t(\vx)) \qquad \qquad \eqcomment{Instantaneous CoV} \label{eq:instant-cov}
 \end{align}
+
+Where we have used the Continuity equation \eqref{eq:contin-eq} in the 3rd step. However, the original CoV formula relied on the Jacobian, which defined how the probability volume transformed with the change of variables and the transformation function. In the above Instantaneous CoV, the divergence over the velocity field $U_t$ can be written as the trace of the Jacobian.
+
+\begin{align}
+    \diver U_t = \tr(J(U_t))
+\end{align}
+
+\cite{chen2018neural} provide a complete derivation for \eqref{eq:instant-cov} from the perspective of the discrete CoV formula, where the Jacobian is more evident.
 
 
 As the name suggests, during training, the velocity field modelled by the FM model is trained to generate a designated probability path between the source and the target distributions $p_0$ and $p_T$ respectively.
@@ -328,6 +336,7 @@ Since a generic classifier is not invertible, SGLD is a standard way of sampling
 \subsection{Link between EBMs and Diffusion Models}
 \subsection{Link between Neural ODEs and Diffusion Models}
 \subsection{Link between SDG and SGLD}
+\subsection{Link between Gaussian Processes and SDEs}
 
 \appendix
 \section{Mathematical Background}
