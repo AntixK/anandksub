@@ -1,5 +1,10 @@
+\documentclass[a4paper, 11pt, twocolumn]{article}
+\usepackage{imakeidx}
+\usepackage{multicol}
 
-\input{common/note_style.tex}
+\newcommand{\imp}[1]{\textcolor{RubineRed}{#1}\index{#1}}
+
+\input{../common/defns}
 
 \title{Notes of Point Cloud Processing}
 \author{Anand K Subramanian}
@@ -172,10 +177,10 @@ where $\lambda_1$ and $\lambda_2$ are the eigenvalues of the covariance matrix o
 \subsection{Registration}
 Point cloud registration is the process of aligning two or more point clouds. The task boils down to find the spatial transformation that aligns two point clouds - either through rigid transformation (rotation and translation) or non-rigid transformation (those that introduce deformations such as affine transformations, perspective transformations).
 
-https://github.com/zxy-bjtu/PointCloudToolBox/tree/b4de6d3b75908e7ee93a45520f037f4930db1e12
+https://github.com/zxy-bjtu/PointCloudToolBox/tree/b4de6d3b75908e7ee93a45520f037f4930db1e12 
 
 \nocite{*}
-\bibliographystyle{apalike}
-\bibliography{ref}
+\bibliographystyle{plain} 
+\bibliography{references}
 
 \end{document}

@@ -6,6 +6,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{tikz}
 \usepackage[most]{tcolorbox}
+% \usepackage[dvipsnames]{xcolor}
 \usepackage[backref=page]{hyperref}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -57,7 +58,8 @@
 \newcommand{\diver}{\text{div}\,}
 \newcommand{\eqcomment}[1]{\qquad \blacktriangleright\text{\footnotesize #1}}
 
-
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 
 
 %*********For chapter on binary and categorical data***********
@@ -331,6 +333,7 @@
 \newcommand{\kC}{C}
 \newcommand{\kc}{c}
 \newcommand{\fA}{\mbox{${\cal A}$}}
+\newcommand{\fB}{\mbox{${\cal B}$}}
 \newcommand{\fC}{\mbox{${\cal C}$}}
 \newcommand{\fD}{\mbox{${\cal D}$}}
 \newcommand{\fDx}{\mbox{${\cal D}_x$}}
@@ -340,14 +343,17 @@
 \newcommand{\fH}{\mbox{${\cal H}$}}
 \newcommand{\fHX}{\mbox{${\cal H}_X$}}
 \newcommand{\fHy}{\mbox{${\cal H}_y$}}
-\newcommand{\fI}{\mbox{${\cal I}$}}
+\newcommand{\fJ}{\mbox{${\cal I}$}}
+\newcommand{\fI}{\mbox{${\cal J}$}}
 \newcommand{\fK}{\mbox{${\cal K}$}}
 \newcommand{\fL}{\mbox{${\cal L}$}}
 \newcommand{\fM}{\mbox{${\cal M}$}}
 \newcommand{\fMp}{\mbox{$\calM^+$}}
 \newcommand{\fMm}{\mbox{$\calM^-$}}
 \newcommand{\fN}{\mbox{$\cal N$}}
+\newcommand{\fO}{\mbox{$\cal O$}}
 \newcommand{\fP}{\mbox{${\cal P}$}}
+\newcommand{\fR}{\mbox{${\cal R}$}}
 \newcommand{\fS}{\mbox{${\cal S}$}}
 \newcommand{\fSstar}{\mbox{$\calS_*$}}
 \newcommand{\fT}{\mbox{${\cal T}$}}
@@ -355,6 +361,8 @@
 \newcommand{\fV}{\mbox{${\cal V}$}}
 \newcommand{\fX}{\mbox{${\cal X}$}}
 \newcommand{\fY}{\mbox{${\cal Y}$}}
+\newcommand{\fZ}{\mbox{${\cal Z}$}}
+
 
 
 

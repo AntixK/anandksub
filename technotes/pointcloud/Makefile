@@ -1,18 +1,23 @@
-help: ## Display help
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+.PHONY: all clean init
 
-BUILDDIR="build"
-CURDIR:= $(dir $(abspath $(firstword $(MAKEFILE_LIST))))
-ROOTDIR:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
+# Output filename (without extension)
+DOCUMENT = main
+BUILD_DIR = build
 
-build_pdf:
-	$(info Current Directory = "$(ROOTDIR)")
-	$(info Root Directory = "$(CURDIR)")
+all: init $(BUILD_DIR)/$(DOCUMENT).pdf
+	@echo "PDF created at $(BUILD_DIR)/$(DOCUMENT).pdf"
 
-	if [ -d $(BUILDDIR) ]; then if [ "$(ls -A $(BUILDDIR))" ]; then rm -r $(BUILDDIR)/*; else echo "Build Dir is Clean"; fi else mkdir $(BUILDDIR); fi
+# Creates the build directory if it doesn't exist
+init:
+	mkdir -p $(BUILD_DIR)
 
-	pdflatex -halt-on-error -file-line-error -shell-escape -interaction=nonstopmode -output-directory build pointcloud_notes.tex
-	bibtex build/pointcloud_notes.aux
-	pdflatex -halt-on-error -file-line-error -shell-escape -interaction=nonstopmode -output-directory build pointcloud_notes.tex
-	pdflatex -halt-on-error -file-line-error -shell-escape -interaction=nonstopmode -output-directory build pointcloud_notes.tex
-.PHONY: clean
+# The build process requires multiple runs to resolve references and bibliography
+$(BUILD_DIR)/$(DOCUMENT).pdf: $(DOCUMENT).tex references.bib
+	pdflatex -file-line-error -shell-escape -output-directory=$(BUILD_DIR) $(DOCUMENT)
+	TEXMFOUTPUT=$(BUILD_DIR): bibtex $(BUILD_DIR)/$(DOCUMENT)
+	pdflatex -file-line-error -shell-escape -output-directory=$(BUILD_DIR) $(DOCUMENT)
+	pdflatex -file-line-error -shell-escape -output-directory=$(BUILD_DIR) $(DOCUMENT)
+
+# Clean up build directory
+clean:
+	rm -rf $(BUILD_DIR)

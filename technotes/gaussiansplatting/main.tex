@@ -1,5 +1,10 @@
+\documentclass[a4paper, 11pt, twocolumn]{article}
+\usepackage{imakeidx}
+\usepackage{multicol}
 
-\input{common/note_style.tex}
+\newcommand{\imp}[1]{\textcolor{RubineRed}{#1}\index{#1}}
+
+\input{../common/defns}
 
 \title{Notes on 3D Gaussian Splatting}
 \author{Anand K Subramanian}
@@ -46,6 +51,6 @@ Any sort of rendering requires some primitives like points, meshes, voxels, or s
 DR methods can be classified into three categories - voxel-based, mesh-based, and point-based.
 \nocite{*}
 \bibliographystyle{apalike}
-\bibliography{ref}
+\bibliography{references}
 
 \end{document}
