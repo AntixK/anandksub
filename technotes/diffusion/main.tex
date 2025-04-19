@@ -399,6 +399,52 @@ as diffusion by ordinary differential equations is the continuous version of nor
 
 \section{Diffusion Models}
 
+\begin{center}
+\begin{tikzpicture}[
+    every node/.style={align=center},
+    state/.style={circle, draw, minimum size=1cm, inner sep=0pt},
+    arrow/.style={->, thick},
+    reversearrow/.style={<-, thick, dashed}
+]
+
+% Nodes for forward process
+\node[state] (x0) {$\vx_0$};
+\node[state, right=of x0] (x1) {$\vx_1$};
+\node[state, right=of x1] (x2) {$\vx_2$};
+\node[right=of x2] (dots) {$\cdots$};
+\node[state, right=of dots] (xT) {$\vx_T$};
+
+% Forward arrows
+\draw[arrow] (x0) -- (x1) node[midway, above] {$q(\vx_1|\vx_0)$};
+\draw[arrow] (x1) -- (x2) node[midway, above] {$q(\vx_2|\vx_1)$};
+\draw[arrow] (x2) -- (dots);
+\draw[arrow] (dots) -- (xT) node[midway, above] {$q(\vx_T|\vx_{T-1})$};
+
+% Equation for forward process
+\node[below=1cm of x2, align=center] (forward_eq) {
+    Forward SDE: \\
+    $d\vx_t = U_t^{\theta}(\vx_t)dt + \sigma_t d\vw_t$
+};
+
+
+% Nodes for reverse process
+\node[state, below=2.5cm of x0] (x0_rev) {$\vx_0$};
+\node[state, below=2.5cm of x1] (x1_rev) {$\vx_1$};
+\node[state, below=2.5cm of x2] (x2_rev) {$\vx_2$};
+\node[below=2.5cm of dots] (dots_rev) {$\cdots$};
+\node[state, below=2.5cm of xT] (xT_rev) {$\vx_T$};
+
+
+
+% Equation for reverse process
+\node[below=1cm of x2_rev, align=center] (reverse_eq) {
+    Reverse SDE: \\
+    $d\vx_t = \left[U_t^{\theta}(\vx_t) -\sigma_t^2 \nabla_{\vx_t} \log p_t(\vx_t)\right]dt + \sigma_t d\bar{\vw}_t$
+};
+
+\end{tikzpicture}
+\end{center}
+
 \begin{algorithm}
     \caption{Euler-Maruyama Method for Sampling from Diffusion Models}\label{alg:diff_sample}
     \begin{algorithmic}[1]
