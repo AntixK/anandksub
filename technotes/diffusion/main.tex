@@ -412,6 +412,8 @@ Forward diffusion process of DDPM from Ito SDE.
     \vx_t &= \sqrt{1 - \beta(t)} \vx_{t-1} + \sqrt{\beta(t)} \fN(0, I_D) \eqcomment{$\beta(t) \delta t = \beta(t)$}
 \end{align}
 
+Where $W$ is a Weiner process with standard Gaussian increments, $U_t = -\frac{1}{2} \beta(t) \vx_t$ and $\sigma_t = \sqrt{\beta(t)}$.
+
 \begin{center}
 \begin{tikzpicture}[
     every node/.style={align=center},
