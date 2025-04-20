@@ -399,6 +399,19 @@ as diffusion by ordinary differential equations is the continuous version of nor
 
 \section{Diffusion Models}
 
+
+Forward diffusion process of DDPM from Ito SDE.
+
+\begin{align}
+    d\vx_t &= U_t(\vx) dt + \sigma_t dW \\ 
+    \frac{d\vx_t}{dt} &= U_t(\vx) + \sigma_t \frac{dW}{dt} \\ 
+    \frac{d \vx_t}{dt} &= -\frac{1}{2} \beta(t) \vx_t + \sqrt{\beta(t)} \frac{dW}{dt} \\
+    \lim_{\delta t \to 0} \frac{\vx_t - \vx_{t-1}}{\delta t} &= -\frac{1}{2} \beta(t)\vx_{t-1} +  \sqrt{\beta(t)} \frac{1}{\sqrt{\delta t}} \fN(0, I_D) \\
+    \vx_t &\approx \vx_{t-1} -\frac{1}{2} \beta(t)\delta t \vx_{t-1} + \sqrt{\beta(t)\delta t} \fN(0, I_D) \\
+    \vx_t &= \sqrt{1 - \beta(t)\delta t} \vx_{t-1} + \sqrt{\beta(t)\delta t} \fN(0, I_D) \\
+    \vx_t &= \sqrt{1 - \beta(t)} \vx_{t-1} + \sqrt{\beta(t)} \fN(0, I_D) \eqcomment{$\beta(t) \delta t = \beta(t)$}
+\end{align}
+
 \begin{center}
 \begin{tikzpicture}[
     every node/.style={align=center},
