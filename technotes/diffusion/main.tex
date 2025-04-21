@@ -21,7 +21,7 @@ p(\vx) &= \frac{\exp \left(-E_\theta(\vx)\right)}{Z(\theta)}; \qquad Z(\theta) =
 
 Where $E_\theta: \R^D \to \R$ is the \textit{energy function} and $Z(\theta)$ is the normalizing constant to yield a proper probability density. The energy function is parameterized by $\theta$ can learn to map the given samples $\vx$ to a scalar value following the actual probability density. The learning problem is then to estimate the parameters $\theta$ such that the distribution $p_\theta(\vx)$ estimated by the above EBM converges to the target distribution $p(\vx)$.
 
-The issue with EBMs when it was originally proposed by \cite{lecun2006tutorial} is that the normalizing constant $Z$ (sometimes called as the \textit{partition function}) is intractable for any remotely interesting distribution. The modern developments since then, have largely been to model to densities using the energy function, entirely ignoring the normalizing constant.
+The issue with EBMs when it was originally proposed by \cite{lecun2006tutorial} is that the normalizing constant $Z$ (sometimes called as the \textit{partition function}) is intractable for any remotely interesting distribution. As the notation indicates, $Z(\theta)$ is a constant with respect to $\vx$ but is a function of $\theta$ and the usual learning methods involve computing this integral. The general technique is to use some approximate methods like annealed importance sampling, or similar MCMC methods. However, more modern developments since then, have largely been to model to densities using the energy function, entirely ignoring the normalizing constant.
 
 The score function is invariant to scaling. 
 \begin{align}
@@ -403,16 +403,43 @@ as diffusion by ordinary differential equations is the continuous version of nor
 Forward diffusion process of DDPM from Ito SDE.
 
 \begin{align}
-    d\vx_t &= U_t(\vx) dt + \sigma_t dW \\ 
+    d\vx_t &= U_t(\vx) dt + \sigma_t dW \label{eq:ito-sde}\\ 
     \frac{d\vx_t}{dt} &= U_t(\vx) + \sigma_t \frac{dW}{dt} \\ 
     \frac{d \vx_t}{dt} &= -\frac{1}{2} \beta(t) \vx_t + \sqrt{\beta(t)} \frac{dW}{dt} \\
     \lim_{\delta t \to 0} \frac{\vx_t - \vx_{t-1}}{\delta t} &= -\frac{1}{2} \beta(t)\vx_{t-1} +  \sqrt{\beta(t)} \frac{1}{\sqrt{\delta t}} \fN(0, I_D) \\
     \vx_t &\approx \vx_{t-1} -\frac{1}{2} \beta(t)\delta t \vx_{t-1} + \sqrt{\beta(t)\delta t} \fN(0, I_D) \\
-    \vx_t &= \sqrt{1 - \beta(t)\delta t} \vx_{t-1} + \sqrt{\beta(t)\delta t} \fN(0, I_D) \\
-    \vx_t &= \sqrt{1 - \beta(t)} \vx_{t-1} + \sqrt{\beta(t)} \fN(0, I_D) \eqcomment{$\beta(t) \delta t = \beta(t)$}
+    \vx_t &= \sqrt{1 - \beta(t)\delta t}\, \vx_{t-1} + \sqrt{\beta(t)\delta t}\, \fN(0, I_D) \\
+    \vx_t &= \sqrt{1 - \beta(t)}\, \vx_{t-1} + \sqrt{\beta(t)} \, \fN(0, I_D) \eqcomment{$\beta(t) \delta t = \beta(t)$}
 \end{align}
 
-Where $W$ is a Weiner process with standard Gaussian increments, $U_t = -\frac{1}{2} \beta(t) \vx_t$ and $\sigma_t = \sqrt{\beta(t)}$.
+Where $W$ is a Weiner process with standard Gaussian increments, $U_t = -\frac{1}{2} \beta(t) \vx_t$ and $\sigma_t = \sqrt{\beta(t)}$. These choices of the drift and the diffusion coefficients imply that the above SDE is linear and were first proposed by \cite{ho2020denoising}. This procedure is called as DDPM (Denoising Diffusion  Probabilistic Model). 
+
+DDPMs are Markov Models
+
+
+The Fokker-Planck equation extends the Continuity equation \eqref{eq:contin-eq} from ODEs to SDEs. Given an Ito SDE of the form \eqref{eq:ito-sde}, then $p_t$ is a valid probability path guided by the SDE such that $\vx_t \sim p_t(\vx)$ iff the following Fokker-Planck equation holds.
+\begin{align}
+    \partial_t p_t(\vx) = -\diver (p_t U_t)(\vx) + \frac{\sigma_t^2}{2} \Delta p_t(\vx); \forall \vx \in \R^D, - \leq t \leq 1 \eqcomment{Fokker-Plank Equation} \label{eq:fokker-planck}
+\end{align}
+Where $\Delta p_t(\vx) = \diver (\nabla p_t)(\vx)$ is the Laplacian operator. It is easy to recover the Continuity equation from the above equation \eqref{eq:fokker-planck} when $\sigma_t = 0$.
+
+time reversal of an SDE is another SDE. 
+
+\begin{align}
+    d\vx_t &= \left [U_t^{\text{target}}(\vx_t) + \frac{\sigma_t^2}{2} \nabla \log p_t(\vx_t) \right ] dt + \sigma_t d W_t \\
+    \Rightarrow \vx_t &\sim p_t(\vx); 0 \leq t \leq 1
+\end{align}
+
+We can again verify that the above reverse SDE produces intermediate probability paths $p_t$ using the Fokker-Planck equation (Similar to how we verified the formula for the marginal velocity field using the Continuity equation).
+
+\begin{align}
+    \partial_t p_t(\vx) &= - \diver(p_t U_t^{\text{target}})(\vx) \\
+    &= - \diver(p_t U_t^{\text{target}})(\vx) - \frac{\sigma_t^2}{2}\Delta p_t(\vx) + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \\
+    &= - \diver(p_t U_t^{\text{target}})(\vx) - \diver \left (\frac{\sigma_t^2}{2}\nabla p_t\right )(\vx)  + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \\
+    &= - \diver(p_t U_t^{\text{target}})(\vx) - \diver \left (p_t \left [ \frac{\sigma_t^2}{2}\nabla \log p_t \right ] \right )(\vx)  + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \\
+    &= - \diver \left (p_t \left [U_t^{\text{target}} + \frac{\sigma_t^2}{2} \nabla \log p_t \right ] \right )(\vx)  + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \\
+\end{align}
+
 
 \begin{center}
 \begin{tikzpicture}[
@@ -450,7 +477,6 @@ Where $W$ is a Weiner process with standard Gaussian increments, $U_t = -\frac{1
 \node[state, below=2.5cm of xT] (xT_rev) {$\vx_T$};
 
 
-
 % Equation for reverse process
 \node[below=1cm of x2_rev, align=center] (reverse_eq) {
     Reverse SDE: \\
@@ -461,7 +487,7 @@ Where $W$ is a Weiner process with standard Gaussian increments, $U_t = -\frac{1
 \end{center}
 
 \begin{algorithm}
-    \caption{Euler-Maruyama Method for Sampling from Diffusion Models}\label{alg:diff_sample}
+    \caption{Euler-Maruyama Method for Sampling from Diffusion Models \citep{sarkka2019applied}}\label{alg:diff_sample}
     \begin{algorithmic}[1]
     \Require (Trained) Neural network $U_t^{\theta}$, diffusion coefficient $\sigma_t$
     \State Set $t \gets 0$
@@ -476,6 +502,20 @@ Where $W$ is a Weiner process with standard Gaussian increments, $U_t = -\frac{1
     \end{algorithmic}
 \end{algorithm}
 
+
+\subsubsection{Score Matching (SM)}
+If two continuously differentiable real-valued functions $f(\vx)$ and $g(\vx)$ have equal first derivatives everywhere, then $f(\vx) = g(\vx) + C$. Given two log probability densities $\log p(\vx)$ and $\log q(\vx)$ with equal first derivatives, then the two densities are equivalent.
+
+\begin{align}
+    \nabla \log p(\vx) &= \nabla \log q(\vx) \\ 
+    \exp \left (\nabla \log p(\vx) \right ) &= \exp \left (\nabla \log q(\vx) \right) \\
+    \int \exp \left (\nabla \log p(\vx) \right ) &= \int \exp \left (\nabla \log q(\vx) \right) \\ 
+    \Rightarrow p(\vx) &\equiv  q(\vx)
+\end{align}
+
+The above equation implies that to learn a target distribution from a given (parameterized) distribution, it suffices if we can match its scores (gradient of its log density).
+
+Stein score $\nabla_{\vx} \log p_{\theta}(\vx)$, Fisher score $\nabla_{\theta}\log p_{\theta}(\vx)$.
 
 \subsection{Architecture}
 Earlier, the focus was on designing neural networks that were invertible - NICE, RealNVP, Invertible ResNetS, Glow.
