@@ -437,7 +437,7 @@ We can again verify that the above reverse SDE produces intermediate probability
     &= - \diver(p_t U_t^{\text{target}})(\vx) - \frac{\sigma_t^2}{2}\Delta p_t(\vx) + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \\
     &= - \diver(p_t U_t^{\text{target}})(\vx) - \diver \left (\frac{\sigma_t^2}{2}\nabla p_t\right )(\vx)  + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \\
     &= - \diver(p_t U_t^{\text{target}})(\vx) - \diver \left (p_t \left [ \frac{\sigma_t^2}{2}\nabla \log p_t \right ] \right )(\vx)  + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \\
-    &= - \diver \left (p_t \left [U_t^{\text{target}} + \frac{\sigma_t^2}{2} \nabla \log p_t \right ] \right )(\vx)  + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \\
+    &= - \diver \left (p_t \left [U_t^{\text{target}} + \frac{\sigma_t^2}{2} \nabla \log p_t \right ] \right )(\vx)  + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \label{eq:fp-rev-sde}
 \end{align}
 
 
@@ -447,6 +447,19 @@ We can again verify that the above reverse SDE produces intermediate probability
     \equiv \frac{d\vx_t}{dt} &= U_t(\vx) - \frac{1}{2} \sigma_t^2 \nabla_{\vx} \log p_t(\vx) \label{eq:pf-ode}
 \end{align}
 The above ODE equation \eqref{eq:pf-ode} is called as the \emph{probability flow-ODE} (PF-ODE). THe above two are equivalent in the sense that the trajectories obtained by solving the PF-ODE have the same marginal distributions as the SDE at evert point in time.
+
+The above equivalence can be proved by noting that the Fokker-Planck equation implies that the marginal distributions $p_t$ follow the Ito SDE, just as the Continuity equation implies that $p_t$ follow the ODE. So, it suffices if we can derive the Continuity equation from FP for the PF-ODE \eqref{eq:pf-ode} \citep{nakkiran2024step}.
+
+\begin{align}
+    d\vx_t &= U_t(\vx) + \sigma_t dW \\
+    \Rightarrow \partial_t p_t(\vx) &= -\diver (p_t U_t)(\vx) + \frac{\sigma_t^2}{2} \Delta p_t(\vx) \eqcomment{Fokker-Planck equation}\\
+    &= -\nabla_{\vx} (p_t U_t)(\vx) + \frac{\sigma_t^2}{2} \nabla_{\vx}^2 p_t(\vx) \\ 
+    &= -\nabla_{\vx} (p_t U_t)(\vx) + \frac{\sigma_t^2}{2} \nabla_{\vx} \big (p_t \nabla_{\vx} \log p_t(\vx) \big ) \\ 
+    &= -\nabla_{\vx} \left ( p_t \left [ U_t - \frac{\sigma_t^2}{2}\nabla_{\vx} \log p_t \right ] \right ) (\vx) \\ 
+    &= -\nabla_{\vx} \left ( p_t \widetilde{U}_t\right ) (\vx) \eqcomment{$\widetilde{U}_t = U_t - \frac{\sigma_t^2}{2}\nabla_{\vx} \log p_t$} \\ 
+    &= -\diver \left ( p_t \widetilde{U}_t\right ) (\vx) \eqcomment{Continuity equation}\\
+    \Rightarrow d\vx_t &= \widetilde{U}_t(\vx) \eqcomment{PF-ODE}
+\end{align}
 
 
 However, note that DDPM and DDIM are different formulations - DDPM implements a stochastic map  whose output is a sample from the conditional distribution $\vx_t \sim p_t(\vx | \vz)$ while DDIM is deterministic map such that the output is marginally distribution as $p_{t + \delta t}$ \textit{i.e.} the transformation to push forward from $p_t \to p_{t + \delta t}$ \citep{nakkiran2024step}.
