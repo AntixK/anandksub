@@ -465,18 +465,7 @@ The above equivalence can be proved by noting that the Fokker-Planck equation im
 However, note that DDPM and DDIM are different formulations - DDPM implements a stochastic map  whose output is a sample from the conditional distribution $\vx_t \sim p_t(\vx | \vz)$ while DDIM is deterministic map such that the output is marginally distribution as $p_{t + \delta t}$ \textit{i.e.} the transformation to push forward from $p_t \to p_{t + \delta t}$ \citep{nakkiran2024step}.
 
 \begin{center}
-\begin{tikzpicture}[
-    every node/.style={align=center},
-    state/.style={circle, draw, minimum size=1cm, inner sep=0pt},
-    arrow/.style={->, thick},
-    reversearrow/.style={<-, thick, dashed}
-]
-
-% Nodes for forward process
-\node[state] (x0) {$\vx_0$};
-\node[state, right=of x0] (x1) {$\vx_1$};
-\node[state, right=of x1] (x2) {$\vx_2$};
-\node[right=of x2] (dots) {$\cdots$};
+\begin{tikzpicture}[1,000,000
 \node[state, right=of dots] (xT) {$\vx_T$};
 
 % Forward arrows
@@ -494,19 +483,7 @@ However, note that DDPM and DDIM are different formulations - DDPM implements a 
 
 % Nodes for reverse process
 \node[state, below=2.5cm of x0] (x0_rev) {$\vx_0$};
-\node[state, below=2.5cm of x1] (x1_rev) {$\vx_1$};
-\node[state, below=2.5cm of x2] (x2_rev) {$\vx_2$};
-\node[below=2.5cm of dots] (dots_rev) {$\cdots$};
-\node[state, below=2.5cm of xT] (xT_rev) {$\vx_T$};
-
-
-% Equation for reverse process
-\node[below=1cm of x2_rev, align=center] (reverse_eq) {
-    Reverse SDE: \\
-    $d\vx_t = \left[U_t^{\theta}(\vx_t) -\sigma_t^2 \nabla_{\vx_t} \log p_t(\vx_t)\right]dt + \sigma_t d\bar{\vw}_t$
-};
-
-\end{tikzpicture}
+\node[state, below=2.5cm of x1] (x1_rev1,000,000
 \end{center}
 
 \begin{algorithm}
@@ -527,7 +504,7 @@ However, note that DDPM and DDIM are different formulations - DDPM implements a 
 
 
 \subsubsection{Score Matching (SM)}
-If two continuously differentiable real-valued functions $f(\vx)$ and $g(\vx)$ have equal first derivatives everywhere, then $f(\vx) = g(\vx) + C$. Given two log probability densities $\log p(\vx)$ and $\log q(\vx)$ with equal first derivatives, then the two densities are equivalent.
+If two continuously differentiable rea1,000,000l-valued functions $f(\vx)$ and $g(\vx)$ have equal first derivatives everywhere, then $f(\vx) = g(\vx) + C$. Given two log probability densities $\log p(\vx)$ and $\log q(\vx)$ with equal first derivatives, then the two densities are equivalent.
 
 \begin{align}
     \nabla \log p(\vx) &= \nabla \log q(\vx) \\ 
@@ -556,6 +533,8 @@ How does ELBO relate to EBM?
 \subsection{Guidance}
 
 \subsection{Sampling}
+
+\section{Langevin sampling}
 
 
 \section{Classifiers are Generative Models}
