@@ -1,0 +1,225 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        throwOnError: false,
+        // output: "html",
+        // customised options
+        // • auto-render specific keys, e.g.:
+        delimiters: [
+          { left: '$$', right: '$$', display: true }, // block
+          { left: '$', right: '$', display: false }, // Inline
+          { left: "\begin{align}", right: "\end{align}", display: true }, // block
+          { left: "\begin{aligned}", right: "\end{aligned}", display: true }, // block
+        ],
+        ignoredTags: [
+          "pre",
+          "code",
+          "script",
+          "style",
+        ],
+        macros: {
+          "\\A": "\\mathbb{A}",
+          "\\B": "\\mathbb{B}",
+          "\\C": "\\mathbb{C}",
+          "\\D": "\\mathbb{D}",
+          "\\E": "\\mathbb{E}",
+          "\\F": "\\mathbb{F}",
+          "\\G": "\\mathbb{G}",
+          "\\H": "\\mathbb{H}",
+          "\\I": "\\mathbb{I}",
+          "\\J": "\\mathbb{J}",
+          "\\K": "\\mathbb{K}",
+          "\\L": "\\mathbb{L}",
+          "\\M": "\\mathbb{M}",
+          "\\N": "\\mathbb{N}",
+          "\\O": "\\mathbb{O}",
+          "\\P": "\\mathbb{P}",
+          "\\Q": "\\mathbb{Q}",
+          "\\R": "\\mathbb{R}",
+          "\\S": "\\mathbb{S}",
+          "\\T": "\\mathbb{T}",
+          "\\U": "\\mathbb{U}",
+          "\\V": "\\mathbb{V}",
+          "\\W": "\\mathbb{W}",
+          "\\X": "\\mathbb{X}",
+          "\\Y": "\\mathbb{Y}",
+          "\\Z": "\\mathbb{Z}",
+
+          "\\fA": "\\mathcal{A}",
+          "\\fB": "\\mathcal{B}",
+          "\\fC": "\\mathcal{C}",
+          "\\fD": "\\mathcal{D}",
+          "\\fE": "\\mathcal{E}",
+          "\\fF": "\\mathcal{F}",
+          "\\fG": "\\mathcal{G}",
+          "\\fH": "\\mathcal{H}",
+          "\\fI": "\\mathcal{I}",
+          "\\fJ": "\\mathcal{J}",
+          "\\fK": "\\mathcal{K}",
+          "\\fL": "\\mathcal{L}",
+          "\\fM": "\\mathcal{M}",
+          "\\fN": "\\mathcal{N}",
+          "\\fO": "\\mathcal{O}",
+          "\\fP": "\\mathcal{P}",
+          "\\fQ": "\\mathcal{Q}",
+          "\\fR": "\\mathcal{R}",
+          "\\fS": "\\mathcal{S}",
+          "\\fT": "\\mathcal{T}",
+          "\\fU": "\\mathcal{U}",
+          "\\fV": "\\mathcal{V}",
+          "\\fW": "\\mathcal{W}",
+          "\\fX": "\\mathcal{X}",
+          "\\fY": "\\mathcal{Y}",
+          "\\fZ": "\\mathcal{Z}",
+
+          "\\x": "\\times",
+          "\\vA": "\\mathbf{A}",
+          "\\vB": "\\mathbf{B}",
+          "\\vC": "\\mathbf{C}",
+          "\\vD": "\\mathbf{D}",
+          "\\vE": "\\mathbf{E}",
+          "\\vF": "\\mathbf{F}",
+          "\\vG": "\\mathbf{G}",
+          "\\vH": "\\mathbf{H}",
+          "\\vI": "\\mathbf{I}",
+          "\\vJ": "\\mathbf{J}",
+          "\\vK": "\\mathbf{K}",
+          "\\vL": "\\mathbf{L}",
+          "\\vM": "\\mathbf{M}",
+          "\\vN": "\\mathbf{N}",
+          "\\vO": "\\mathbf{O}",
+          "\\vP": "\\mathbf{P}",
+          "\\vQ": "\\mathbf{Q}",
+          "\\vR": "\\mathbf{R}",
+          "\\vS": "\\mathbf{S}",
+          "\\vT": "\\mathbf{T}",
+          "\\vU": "\\mathbf{U}",
+          "\\vV": "\\mathbf{V}",
+          "\\vW": "\\mathbf{W}",
+          "\\vX": "\\mathbf{X}",
+          "\\vY": "\\mathbf{Y}",
+          "\\vZ": "\\mathbf{Z}",
+
+          "\\va": "\\mathbf{a}",
+          "\\vb": "\\mathbf{b}",
+          "\\vc": "\\mathbf{c}",
+          "\\vd": "\\mathbf{d}",
+          "\\ve": "\\mathbf{e}",
+          "\\vf": "\\mathbf{f}",
+          "\\vg": "\\mathbf{g}",
+          "\\vh": "\\mathbf{h}",
+          "\\vi": "\\mathbf{i}",
+          "\\vj": "\\mathbf{j}",
+          "\\vk": "\\mathbf{k}",
+          "\\vl": "\\mathbf{l}",
+          "\\vl": "\\mathbf{l}",
+          "\\vm": "\\mathbf{m}",
+          "\\vn": "\\mathbf{n}",
+          "\\vo": "\\mathbf{o}",
+          "\\vp": "\\mathbf{p}",
+          "\\vq": "\\mathbf{q}",
+          "\\vr": "\\mathbf{r}",
+          "\\vs": "\\mathbf{s}",
+          "\\vt": "\\mathbf{t}",
+          "\\vu": "\\mathbf{u}",
+          "\\vv": "\\mathbf{v}",
+          "\\vw": "\\mathbf{w}",
+          "\\vx": "\\mathbf{x}",
+          "\\vy": "\\mathbf{y}",
+          "\\vz": "\\mathbf{z}",
+
+          "\\valpha": "\\boldsymbol \\alpha",
+          "\\vbeta": "\\boldsymbol \\beta",
+          "\\vgamma": "\\boldsymbol \\gamma",
+          "\\vdelta": "\\boldsymbol \\delta",
+          "\\vepsilon": "\\boldsymbol \\epsilon",
+          "\\vzeta": "\\boldsymbol \\zeta",
+          "\\veta": "\\boldsymbol \\eta",
+          "\\vtheta": "\\boldsymbol \\theta",
+          "\\viota": "\\boldsymbol \\iota",
+          "\\vkappa": "\\boldsymbol \\kappa",
+          "\\vlambda": "\\boldsymbol \\lambda",
+          "\\vmu": "\\boldsymbol \\mu",
+          "\\vnu": "\\boldsymbol \\nu",
+          "\\vxi": "\\boldsymbol \\xi",
+          "\\vomicron": "\\boldsymbol \\omicron",
+          "\\vpi": "\\boldsymbol \\pi",
+          "\\vrho": "\\boldsymbol \\rho",
+          "\\vsigma": "\\boldsymbol \\sigma",
+          "\\vtau": "\\boldsymbol \\tau",
+          "\\vupsilon": "\\boldsymbol \\upsilon",
+          "\\vphi": "\\boldsymbol \\phi",
+          "\\vchi": "\\boldsymbol \\chi",
+          "\\vpsi": "\\boldsymbol \\psi",
+          "\\vomega": "\\boldsymbol \\omega",
+
+          "\\vzero": "\\mathbf{0}",
+          "\\vone": "\\mathbf{1}",
+          "\argmin": "\mathop{\mathrm{argmin}} \;",
+          "\argmax": "\mathop{\mathrm{argmax}} \;",
+          "\\KL": "\\mathop{D_{\\mathrm{KL}}} \\;",
+
+        },
+        globalGroup: true,
+      });
+    });
+  </script><link rel=stylesheet href=/_libs/katex/katex.min.css><script defer src=/_libs/algorithm/algotype.js crossorigin=anonymous></script><script defer src=/_libs/katex/katex.min.js crossorigin=anonymous>
+  </script></script><script defer src=/_libs/katex/auto-render.min.js crossorigin=anonymous onload=renderMathInElement(document.body);></script><link rel=stylesheet href=/_css/ak.css><link rel=icon href=/assets/icons/favicon.ico type=image/x-icon><title>Estimating Camera Parameters from Depth Maps</title></head><body><header><h1><a href=/ >Anand K Subramanian</a><br><br></h1></header><nav class=navbar><span><a href=/blog/ >Blog</a><span class=vl></span></span><span><a href=/notes/ >Notes</a> <span class=vl></span></span><span><a href=/art/ >Art</a> <span class=vl></span></span><span><a href=/CV>CV</a> <span class=vl></span></span><span><a href=/tags>Tags</a></nav><p class=tags><img class=icon-image src=/assets/icons/bookmark.svg alt=clock-icon>&ensp;<span class=pound>#</span>computer-vision <span class=pound>#</span>geometric-projection <span class=pound>#</span>image-processing <span class=pound>#</span>math <span class=pound>#</span>torch <span class=pound>#</span>code <span class=pound>#</span>camera </p><p class=tags><img class=icon-image src=/assets/icons/calendar.svg alt=clock-icon>&ensp;6 May 2025 </p><p class=tags><img class=icon-image src=/assets/icons/timer.svg alt=clock-icon>&ensp;2 mins </p><h1>Estimating Camera Parameters from Depth Maps</h1><p class=tldr>Warping images based on depth and camera viewpoints for novel view synthesis</p><main><p>  When reading through the Dustr paper, I came across an interesting algorithm.</p><p>How do you estimate the camera intrinsic parameters? Can it be posed as an optimization problem?</p><p>Recall that the intrinsic camera parameters is the matrix $K \in \R^{3\x 3}$ given by $$ K = \begin{pmatrix} f_x &amp; s &amp; x_0 \\ 0 &amp; f_y &amp; y_0 \\ 0 &amp; 0 &amp; 1 \end{pmatrix} $$ where $f_x, f_y$ are the focal lengths along the $x$ and $y$ axes of the image respectively, $s$ is the axis skew, and $x_0, y_0$ are the principal point offsets from the image plane's origin. The principal point is the point where the ray from the camera perpendicular to the image, intersects the image.</p><p>Usually, it is standard practice to assume that the camera is well positioned (without skew) and calibrated that the principal point is at the center of the image plane <em>i.e</em> $x_0 = \frac{W}{2}, y_0 = \frac{H}{2}, s = 0$. Furthermore, we assume that the pixel are almost squares $f_x = f_y$. Thus, we only need to estimate the focal length to get the complete intrinsic matrix.</p><p>The point map $P \in \R^{W \x H \x 3}$ of the given image $I \in \R^{W \x H \x 3}$ and corresponding depth map $D \in \R^{W \x H}$ can be computed in a straightforward manner assume $$ P_{ij} = K^{-1}D_{ij}\begin{pmatrix} i \\ j \\ 1 \end{pmatrix} $$</p><p>Given a point map $P$ (which is naturally expressed in the coordinate frame of its corresponding image $I$), the focal length $f$ can be expressed as the following minimization problem</p><p>$$ f^* = \argmin_f \sum_{i=0}^W \sum_{j=0}^H C_{ij} \left \|(i',j') - f \frac{(P_{ij} - P_{ij})}{P_{ij}} \right \| $$ Where $(i', j') = \left (i - \frac{W}{2}, j - \frac{H}{2} \right )$ are the pixel coordinates with respect to the image center (principal point).</p><p>From the point map, the corresponding pixels can be obtained by projecting the points onto the image plane.</p></main><div width=100% style="font-size:1.2rem; font-family: 'Overpass'; color: var(--c-4); text-align: center; margin-top: 6em; border-width: 75%; border-top: 1px solid var(--c-4); padding-top: 2em; margin-bottom: 4em;"> &copy; 2025 Anand K Subramanian <span class=vl></span><a href=/license>License</a> <span class=vl></span><a href=/design>Design</a> <span class=vl></span> Built with Kutti &nbsp; <img class=icon-image src=/assets/icons/heart.svg></div><script src=/_libs/highlight/highlight.min.js></script><script>hljs.highlightAll(); hljs.configure({ tabReplace: '    ' });</script><link rel=stylesheet href=/_libs/highlight/decaf.css><script src=/_libs/clipboard/clipboard.min.js></script><script>
+    (function () {
+
+      // Get the elements.
+      // - the 'pre' element.
+      // - the 'div' with the 'paste-content' id.
+
+      var pre = document.getElementsByTagName('pre');
+
+      // Add a copy button in the 'pre' element.
+      // which only has the className of 'language-'.
+
+      for (var i = 0; i < pre.length; i++) {
+        var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+        if (isLanguage === 0) {
+          var button = document.createElement('button');
+          button.className = 'copy-button';
+          button.textContent = 'Copy';
+
+          pre[i].appendChild(button);
+        }
+      };
+
+      // Run Clipboard
+
+      var copyCode = new Clipboard('.copy-button', {
+        target: function (trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+
+      // On success:
+      // - Change the "Copy" text to "Copied".
+      // - Swap it to "Copy" in 2s.
+      // - Lead user to the "contenteditable" area with Velocity scroll.
+
+      copyCode.on('success', function (event) {
+        event.clearSelection();
+        event.trigger.textContent = 'Copied';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 2000);
+
+      });
+
+      // On error (Safari):
+      // - Change the  "Press Ctrl+C to copy"
+      // - Swap it to "Copy" in 2s.
+
+      copyCode.on('error', function (event) {
+        event.trigger.textContent = 'Press "Ctrl + C" to copy';
+        window.setTimeout(function () {
+          event.trigger.textContent = 'Copy';
+        }, 5000);
+      });
+
+    })();
+  </script></body></html>
