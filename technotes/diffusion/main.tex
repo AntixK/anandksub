@@ -12,93 +12,81 @@
 
 \tableofcontents
 
+\section{Introduction}
+Deep generative models have seen fascinating developments in the past decade or so - with the rice of VAEs and GANs, and resurgence of diffusion models. Leaving the aside the historical developments aside, it has become all the more pertinent to keep up with the latest techniques. In particular, diffusion models have become quite popular for their high fidelity image (and other high-dimensional data) synthesis overcoming some of the shortcomings of the other models.
 
-Energy-based Models (EBMs) are a general class of models for learning probability densities. For some arbitrary probability density $p(\vx)$ for $\vx \in \R^D$, we can express it in a parametric form as
+With the development of flow matching (FM) techniques, the term diffusion model has become overloaded. With the aim to provide clarity, we have decided to simply categorize the techniques into Flow-Matching(FM) framework and the Score-Matching(SM) framework. The motivation is that historically, these two frameworks were developed with different motivations and perspectives, naturally converging to one another. 
 
+The goal of this note is to concretize our understanding and provide a firm foundation when reading latest research papers on diffusion models, with the hope that it may help others as well.
+With the success of diffusion models, coupled with their convoluted history and mathematical intricacy, there has been considerable lectures, articles, blog posts, clarifying and elucidating various aspects of diffusion models. We thank all those authors and try to consolidate various concepts with the goal of presenting then in relation to one another.
+
+\subsection{Quick Overview and Key Takeaways}
+\begin{itemize}
+    \item A generative model is one that learns a data distribution $p_{\text{data}}(\vx)$ given samples $\vx \sim p_{\text{data}}(\vx) \in \R^{D}$. Ideally, we would like the model to be free of approximations, easy to train, quick to sample from, and scales to higher dimensions.
+    \item We shall start from the simple change-of-variable (CoV) formula and build intution for probabilistic flows.
+    \item Flow Matching(FM) have shown to be easier and faster to train compared to score matching. In fact, we will show that Denoising score matching is equivalent to conditional flow matching up to a constant. Latest diffusion models like Flux \citep{flux2024}, Stable Diffusion 3 \citep{esser2024scaling}, HunyuanVideo, Wan 2.1, models all use Flow Matching to train.
+    \item 
+\end{itemize}
+
+\subsection{Notation}
+We will use $\vx$ to denote the data, sampled from a distribution $p_{\text{data}}$.
+
+
+\section{A Framework for Generative Modelling: EBMs}
+
+\subsection{The Score Function}
+
+\subsection{Langevin Sampling}
+
+\section{CoV Formula and Probabilistic Flows}
+In probability theory, the change of variables (CoV) formula is one of the fundamental formulas, which describes how probability density functions relate under a smooth invertible transformation $-$ think coordinate transformation but for random variables. Say we have a random variable $\vx \sim p(\vx)$ and an invertible differentiable transformation $f: \R^D \to \R^M$ defined as $\vz = f(\vx)$, then the resultant random variable $\vz$ follows the density given by
 \begin{align}
-p(\vx) &= \frac{\exp \left(-E_\theta(\vx)\right)}{Z(\theta)}; \qquad Z(\theta) = \int \exp \left (-E_\theta(\vx) \right) d\vx && \eqcomment{EBM}
-\end{align} 
-
-Where $E_\theta: \R^D \to \R$ is the \textit{energy function} and $Z(\theta)$ is the normalizing constant to yield a proper probability density. The energy function is parameterized by $\theta$ can learn to map the given samples $\vx$ to a scalar value following the actual probability density. The learning problem is then to estimate the parameters $\theta$ such that the distribution $p_\theta(\vx)$ estimated by the above EBM converges to the target distribution $p(\vx)$.
-
-The issue with EBMs when it was originally proposed by \cite{lecun2006tutorial} is that the normalizing constant $Z$ (sometimes called as the \textit{partition function}) is intractable for any remotely interesting distribution. As the notation indicates, $Z(\theta)$ is a constant with respect to $\vx$ but is a function of $\theta$ and the usual learning methods involve computing this integral. The general technique is to use some approximate methods like annealed importance sampling, or similar MCMC methods. However, more modern developments since then, have largely been to model to densities using the energy function, entirely ignoring the normalizing constant.
-
-The score function is invariant to scaling. 
-\begin{align}
-    \nabla_{\vx} \log \tilde{p}(\vx) = \nabla_{\vx} \log \left ( p(\vx) Z \right ) = \nabla_{\vx} \left (  \log p(\vx) + \log Z \right ) = \nabla_{\vx} \log  p(\vx)
-\end{align}
-Therefore, the score function can be used even if we only have the unnormalized density $\tilde{p}(\vx)$. 
-
-This is why people moved away from maximizing (log-) likelihood to optimizing the score function. THis make it ubiquitous in injective flows, and EBMs.
-
-
-The fundamental idea is to use the \emph{score function} of the above parametric distribution, defined as 
-
-\begin{align}
-    \frac{\partial \log p_\theta(\vx)}{\partial \theta} = \E 
-\end{align}
-
-
-\section{Generative Modelling via Probability Density Estimation}
-
-If you can sample from a probability density, then you know the density.
-
-\subsection{Impossibility of Probability Density Estimation}
-Impossibility of even conditional probability estimation.
-
-\section{Probability Flows}
-In probability theory, the change of variables (CoV) formula is one of the fundamental formulas, which describes how probability density functions relate under a smooth invertible transformation $-$ think coordinate transformation but for random variables. Say we have a random variable $\vx \sim p(\vx)$ and an invertible differentiable transformation $f: \R^D \to \R^M$ defined as $\vy = f(\vx)$, then the resultant random variable $\vy$ follows the density given by
-\begin{align}
-    \vy \sim q(\vy) = p\left(f^{-1}(\vy) \right)\left |\det \vJ_{f^{-1}} \right|; \qquad \vJ_{f^{-1}} = \frac{\partial f^{-1}(\vy)}{\partial \vy} \in \R^{D \x M}
+    \vz \sim q(\vz) = p\left(f^{-1}(\vz) \right)\left |\det \vJ_{f^{-1}} \right|; \qquad \vJ_{f^{-1}} = \frac{\partial f^{-1}(\vz)}{\partial \vz} \in \R^{D \x M}
 \end{align}
 Where $\vJ_{f^{-1}}$ is the Jacobian of the inverse function $f^{-1}$. Since the transformation is invertible, we can also construct the reverse CoV formula as
 
 \begin{align}
     \vx \sim p(\vx) = q\left(f(\vx) \right)\left |\det \vJ_{f} \right|; \qquad \vJ_{f} = \frac{\partial f(\vx)}{\partial \vx} \in \R^{M \x D}
 \end{align}
-Where $\vJ_{f}$ is the Jacobian of the transformation $f$. The absolute determinant of the Jacobian $\left |\det \vJ_{f} \right|$quantifies the relative change of volume over a small neighborhood around $\vx$ due to the transformation $f$. Geometrically, the space $\R^D$ is warped by the transformation $f$ to mold $p(\vx)$ into $q(\vy)$.
+Where $\vJ_{f}$ is the Jacobian of the transformation $f$. The absolute determinant of the Jacobian $\left |\det \vJ_{f} \right|$quantifies the relative change of volume over a small neighborhood around $\vx$ due to the transformation $f$. Geometrically, the space $\R^D$ is warped by the transformation $f$ to mold $p(\vx)$ into $q(\vz)$.
 
 The transformation function $f$, also called \emph{flow}, has no limitation except that it should be differentiable and invertible. Based on this, we can construct few classes of transformations or flows based on different characteristics such as stochasticity, compression, composability, etc \citep{kothe2023review}.
 
 
-\subsection{Bijective Flows}
-Bijective flows are deterministic transformation between the random variables $\vx, \vy$. As the name suggests, the transformation preserves the dimensions $f: \R^D \to \R^D$ of the random variables. Consequently, $\vJ_{f}, \vJ_{f^{-1}} \in \R^{D \x D}$. An important implication is that the resulting density $q(\vy)$ is properly normalized as normalization factor for each dimension is given by the Jacobian. Thus, Bijective flows are also called \emph{Normalizing Flows} (NF) \citep{papamakarios2021normalizing}. 
+\subsection{Types of Probabilistic Flows}
 
-\subsubsection{Invertible ResNets as Bijective Flows}
-
-
-\subsubsection{Incompressible Flows}
-A special case of Bijective flows are the class of \emph{incompressible flows}, where $\det \vJ_f = \det \vJ_{f^{-1}} = 1$. Recall the geometric interpretation of Jacobian as the volumetric scaling matrix. When determinant is the same between the transformations, when the "volume" is preserved, and hence flows are incompressible flows. 
+\subsubsection{Bijective Flows}
+Bijective flows are deterministic transformation between the random variables $\vx, \vz$. As the name suggests, the transformation preserves the dimensions $f: \R^D \to \R^D$ of the random variables. Consequently, $\vJ_{f}, \vJ_{f^{-1}} \in \R^{D \x D}$. An important implication is that the resulting density $q(\vz)$ is properly normalized as normalization factor for each dimension is given by the Jacobian. Thus, Bijective flows are also called \emph{Normalizing Flows} (NF) \citep{papamakarios2021normalizing}. A special case of Bijective flows are the class of \emph{incompressible flows}, where $\det \vJ_f = \det \vJ_{f^{-1}} = 1$. Recall the geometric interpretation of Jacobian as the volumetric scaling matrix. When determinant is the same between the transformations, when the "volume" is preserved, and hence flows are incompressible flows. 
 
 Fourier Transforms, PCA are Incompressible flows. 
 
 VQ Flows (assignment), GMM-flows (soft assignment)
 
 
-\subsection{Injective Flows}
-Injective flows are deterministic transformations where the dimensions are not preserved. The random variables $\vx \in R^D$ and $\vy \in \R^M$ can be of different dimensions and as such the resulting PDF is generally unnormalized. Note that injective transformations are still invertible. Interestingly, in this context, one may view the (forward) transformation $f$ as an \emph{encoder} that encodes $\vx$ from one domain to another. The inverse transformation $f^{-1}$ is called as a \emph{decoder}.
+\subsubsection{Injective Flows}
+Injective flows are deterministic transformations where the dimensions are not preserved. The random variables $\vx \in R^D$ and $\vz \in \R^M$ can be of different dimensions and as such the resulting PDF is generally unnormalized. Note that injective transformations are still invertible. Interestingly, in this context, one may view the (forward) transformation $f$ as an \emph{encoder} that encodes $\vx$ from one domain to another. The inverse transformation $f^{-1}$ is called as a \emph{decoder}.
 
 
 Composition of injective functions is injective.
 
 
-\subsection{Stochastic Flows}
-Stochastic flows are transformations where the source variable $\vx$ are mapped stochastically to the target variable $\vy$ \emph{conditioned} on $\vx$. The transformation $f$ can be viewed as a stochastic encoder mapping the source distribution to a conditional distribution.
+\subsubsection{Stochastic Flows}
+Stochastic flows are transformations where the source variable $\vx$ are mapped stochastically to the target variable $\vz$ \emph{conditioned} on $\vx$. The transformation $f$ can be viewed as a stochastic encoder mapping the source distribution to a conditional distribution.
 
 \begin{align}
-    \vy \sim p(\vy | \vx)
+    \vz \sim p(\vz | \vx)
 \end{align}
 
-To get the inverse flow of the above equation, we observe that the flow must preserve the joint density $p(\vx, \vy)$ for self consistency.
+To get the inverse flow of the above equation, we observe that the flow must preserve the joint density $p(\vx, \vz)$ for self consistency.
 
 \begin{align}
-    p(\vx, \vy) = p(\vx)p(\vx | \vy) = p(\vy)p(\vy|\vx)
+    p(\vx, \vz) = p(\vx)p(\vx | \vz) = p(\vz)p(\vz|\vx)
 \end{align}
 
-The above equation necessitates a stochastic decoder, with the source distribution $p(\vx$) obtained through marginalization over $\vy$.
+The above equation necessitates a stochastic decoder, with the source distribution $p(\vx$) obtained through marginalization over $\vz$.
 
 \begin{align} \label{eq:sto_marg}
-    p(\vx)= \E_{\vy \sim p(\vy) } \left [ p(\vx | \vy) \right ] = \int p(\vx | \vy) p(\vy) d\vy
+    p(\vx)= \E_{\vz \sim p(\vz) } \left [ p(\vx | \vz) \right ] = \int p(\vx | \vz) p(\vz) d\vz
 \end{align}
 
 \subsubsection{Markov Flows}
@@ -130,435 +118,88 @@ The above equation necessitates a stochastic decoder, with the source distributi
 \end{center} 
 
 
-The tipping point for the the Diffusion revolution is to observe that $p(\vx)$ can be a well-defined, easy to sample, easy to model, distribution, while $p(\vy)$ can be an arbitrarily complex distribution, as long as we have a sophisticated transformation $f$ that is smooth and invertible.
+The tipping point for the the Diffusion revolution is to observe that $p(\vx)$ can be a well-defined, easy to sample, easy to model, distribution, while $p(\vz)$ can be an arbitrarily complex distribution, as long as we have a sophisticated transformation $f$ that is smooth and invertible.
 
 
 Dalton Board as Incompressible flow.
 
-\section{Composing Flows}
-Consider the extreme case where the transformation is a vector-to-scalar function $f: \R^D \to \R$. In such case, the CoV formula does not really exist as the transformation can only be specified as a marginalization.
 
-\begin{align} \label{eq:extreme_case}
-    q(\vy) = \int p(\vx) \delta (\vy - f(\vx)) d\vx
-\end{align}
-
-Where $\delta$ is the Dirac delta function. The above formula essentially says that the target distribution exists only where $\vx$ is mapped onto the real line $\R$ with magnitude $p(\vx)$ \textit{i.e.} the it is a degenerate distribution. In the earlier discussion on the various flows, the use case was be to able to sample from one distribution, transform to another distribution, and back. However, we do not have an inverse for the above equation.
-You may observe that the above transformation $f: \R^D \to \R$ is just the energy function $E_\theta(\vx)$ in case of EBMs. In fact, every classifier model is an example of the above case.
-
-Consider a generic classifier model $f_\theta: \R^D \to \R^K$ that learns to classify a given input $\vx \in \R^D$ into one of $K$ classes (real valued logits). The output distribution of the model can be written as conditional probability distribution as
-
-\begin{align}
-    p_\theta(y | \vx) = \frac{\exp\left (f_\theta(\vx)[y]  \right )}{\sum_y \exp\left (f_\theta(\vx)[y]  \right )}
-\end{align}
-Where $f_\theta(\vx)[y]$ is the logit of the $y^{\text{th}}$ label. \cite{grathwohl2019your} observed that $f_\theta(\vx)[y]$ can be simply imagined as the energy function of an EBM defined as
-
-\begin{align}
-    p_\theta(\vx , y) = \frac{\exp\left (f_\theta(\vx)[y]  \right )}{Z(\theta)}
-\end{align}
-Where $p_\theta(\vx , y)$ is the joint distribution of the inputs and the labels. From the input distribution $p_\theta(\vx)$ can then be simply marginalized out (based on equation \eqref{eq:sto_marg}) as
-\begin{align}
-    p_\theta(\vx) = \sum_y p_\theta(\vx , y) = \frac{\sum_y\exp\left (f_\theta(\vx)[y]  \right )}{Z(\theta)}
-\end{align}
-Where the energy function is $E_\theta(\vx) = - \sum_y\exp\left (f_\theta(\vx)[y]  \right )$. This can be written as $-\text{LogSumExp}_y \left (f_\theta(\vx)[y]  \right )$. Thus every classifier implicitly learns  the joint density from which we can derive the conditional density as well as the data density.
-
-We can now see that naive application for CoV in the EBM framework does not really work.
+\subsection{Composing Flows into Discrete Flows}
+Prior to diffusion, generative models were trying to learn the mapping function from the complex data distribution to some distribution like $\fN(0, I_d)$ that is easy to sample from. VAEs, GANs, etc all mapped the data distribution back to Gaussian noise distribution and tried to lean the inverse mapping. 
 
 The standard way of getting around this problem is to compose different transformations to get a more sophisticated transformation. In other words, we make use of the property that a composition of injective functions is another injective function. 
 
 \begin{align}
     h = f_1 \circ f_2 \circ  \cdots \circ f_K
 \end{align}
-Where, across $K$ time steps, transformation functions $f_k$ are composed together to construct the final transformation $h$. Let's construct a composite flow based on simple normalizing flows \textit{i.e.} $f_k$ is bijective.
-
-\begin{align}\label{eq:res_flow}
-    f_k(\vx_k) &:= \vx_k + \frac{1}{K}U_k(\vx_k) \\
-    \vx_{k + \Delta k} &= f_k(\vx_k)
+Where, across $K$ time steps, transformation functions $f_k$ are composed together to construct the final transformation $h$. The corresponding CoV formula would be
+\begin{align}
+\log p(\vz) = \log p(h^{-1}(\vz)) + \sum_{k=1}^K \log \det \vJ_{f_k} \eqcomment{CoV for Composed Flows} \label{eq:cov-loglik}
 \end{align}
-At each discrete time step $k$, defined by a time span of $\Delta k = 1/K$, the random variable $\vx_k$ is transformed by the function $f_k$ defined above.
+Note that we have simply written the CoV formula in terms of log of the probability density so as to make it evident that Normalizing flows can be trained by simply maximizing the above log likelihood.
 
-The above equation can be made continuous by taking the limit $K \to \infty$ and infinitesimal steps $\Delta k \to 0$. Let's rename the variable $k$ with $t$ to represent the continuous nature of the formula.
-
-\begin{align}\label{eq:flow_ode}
-    \lim_{\Delta t \to 0} \frac{f_t(\vx_t) - \vx_t}{\Delta t} &= U_t(\vx_t)\\
-    \lim_{\Delta t \to 0} \frac{ \vx_{t + \Delta t} - \vx_t}{\Delta t} &= U_t(\vx_t) \\ 
-    \frac{d \vx_t}{dt} &= U_t(\vx_t) && \eqcomment{ODE}
-\end{align}
-Thus, we have shown that normalizing flows defined by equation \eqref{eq:res_flow} are the discrete form of first-order ODEs. To be more concrete, continuous flows are a collection of the solutions of ODEs across different initial conditions. Recall that a solution of an ODE is function that computes the state of the random variable at any given time $t$, based on its initial state $\vx_0$, governed by that ODE. To reiterate, a flow is a deterministic, time-continuous invertible transformation.
-   
-
-Formally, an ODE is defined via a time-dependent vector field $U:[0, 1] \x \R^D \to \R^d$ and the flow is $\psi:[0,1] \x \R^D \to \R^d$ is defined as the solution of the ODE. Intuitively, $U_t$ defines a velocity field that generates the path of the flow $\psi_t$ in thew state space. 
+The DDPM forward process is defined as follows. At $t=0$, $\vx_0 \sim p_{\text{data}}$ and across $T$ time steps, Gaussian noise is added as shown below.
 
 \begin{align}
-    \vx_t := \psi_t(\vx_0) \sim p_t; \quad \forall \vx_0 \sim p_0
+    \vx_t &= \sqrt{1-\beta_t} \vx_{t-1} + \sqrt{\beta_t}\epsilon; \quad \epsilon \sim \fN(0, I_D) \\
+    &= \sqrt{1-\beta_t} \vx_{t-1} + \fN(0, \beta_t I_D) \\
+    &\sim \fN(\sqrt{1-\beta_t} \vx_{t-1}, \beta_t I_D) = q(\vx_t | \vx_{t-1})
 \end{align}
-In other words, we only need the velocity field top model the flow between the initial and final probability distributions.
-
-Note that a vector field, defined a first-order ODE.
-
-A standard result regarding the existence and uniqueness of solutions of ODEs is that if the time-dependent vector field $U_t$ is continuously differentiable with bounded derivatives (in particular locally Lipschitz), then the corresponding ODE has a unique solution that is diffeomorphic \citep{perko2013differential}. This result is central to FM models. 
-
-However, this theorem only guarantees \textit{local} existence and uniqueness of the solution. 
-
-Conversely, given a $C^1$ differentiable diffeomorphic flow $\psi$, one can extract its defining velocity field $U_t$ using the ODE. Therefore, the unique velocity field $U_t$ determining the flow $\psi_t$ is 
-
+Where $q(\vx_t | \vx_{t-1})$ is the transition probability density from $\vx_{t-1} \to \vx_t$. We can aggregate the $t$ time steps and write the state $\vx_t$ at time $t$ in terms of the initial data samples $\vx_0$ as
 \begin{align}
-    \frac{d}{dt}\psi_t(\vx'_t) &= U_t(\psi_t(\vx'_t))\\
-    \frac{d}{dt}\psi_t \left (\psi_t^{-1}(\vx) \right) &= U_t(\vx) && \eqcomment{Substituting }\vx'_t = \psi_t^{-1}(\vx)
+    \vx_t = \sqrt{\bar{\alpha}_t} \vx_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon
 \end{align}
-
-
-
-\section{Flow Matching}
-The goal is flow matching is to learn a vector field $U_t^{\theta}$ such that its flow $\psi_t$ generates a probability path from the initial distribution $p_0$ to the target distribution $p_T$ \citep{lipman2024flow}. In a Flow Matching (FM) model, the velocity field $U_t$ is modelled using a neural network.
-
-What should be the intermediate distributions $p_t$ so that the resultant flow goes from $p_0$ to $p_{\text{data}}$.
-
-\begin{Takeaway}{}{}
-    One important benefit of using flows as generative models is that they allow the tractable computation of exact likelihoods $\log p(\vx), \forall \vx \in \R^D$.
-\end{Takeaway}
-
+Where $\bar{\alpha}_t = \prod_{i=1}^T (1 -\beta_i)$ and $\epsilon \sim \fN(0, I_D)$. Consequently, the joint distribution of the noisy data $\vx_t$ across $t = 1, \ldots T$ conditioned on the initial data sample $\vx_0$ can be written as
 
 \begin{align}
-    \frac{d}{dt} p_t(\vx) &= - \diver (p_t U_t)(\vx) && \eqcomment{Continuity Equation} \label{eq:contin-eq}\\ 
-    \frac{d}{dt} p_t(\cdot | \vz) &= - \diver (p_t(\cdot |\vz) U_t(\cdot |\vz))(\vx) \label{eq:contin-cond-eq}
+    q(\vx_1, \ldots, \vx_T | \vx_0) = \prod_{t=1}^T q(\vx_t | \vx_{t-1})
 \end{align}
-
-A intuitive way to understand the above continuity equation is as a more general form of the law of conservation of probability mass. The quantity $p_t(\vx)U_t(\vx)$ defines probability flux which is the probability mass flowing via the path $p_t$ per unit time and per unit volume. The equation \eqref{eq:contin-eq} relates how the probability likelihood changes with respect to the probability flux. $- \diver$ is the net of inflow of flux at the point $\vx$, and in an infinitesimal time $dt$, the probability mass accumulated in the neighborhood of $\vx$ defines the probability density at $\vx$.
- 
-
-\subsubsection{Instantaneous Change-of-Variable formula}
-
-Proof for the above Instantaneous CoV can be derived as follows (Based on \cite{mathieu2020riemannian}).
-
-\begin{align}
-    \frac{d}{dt} \log p_t(\psi_t(\vx)) &=  \frac{1}{p_t(\psi_t(\vx))}\frac{d}{dt}p_t(\psi_t(\vx)) \\
-    &=  \frac{1}{p_t(\psi_t(\vx))}\left [\frac{d}{d\psi}p_t(\psi_t(\vx)) \frac{d}{dt}\psi_t(\vx) + \frac{d}{dt}p_t(\psi_t(\vx)) \right ]  \eqcomment{Chain Rule} \\
-    &= \frac{1}{p_t(\psi_t(\vx))} \left [\frac{d}{d\psi}p_t(\psi_t(\vx)) \cdot U_t(\psi_t(\vx)) - \diver \left (p_t(\psi_t(\vx)) U_t(\psi_t(\vx)) \right ) \right ] \\
-    &= \frac{1}{p_t(\psi_t(\vx))} \left [\frac{d}{d\psi}p_t(\psi_t(\vx)) \cdot U_t(\psi_t(\vx)) - \frac{d}{d\psi}p_t(\psi_t(\vx)) \cdot U_t(\psi_t(\vx)) - p_t(\psi_t(\vx)) \diver U_t(\psi_t(\vx))  \right ] \\
-    &= \frac{1}{p_t(\psi_t(\vx))} \bigg [- p_t(\psi_t(\vx)) \diver U_t(\psi_t(\vx))  \bigg ] \\
-    &= - \diver U_t(\psi_t(\vx)) \eqcomment{Instantaneous CoV} \label{eq:instant-cov}
-\end{align}  
-
-Where we have used the Continuity equation \eqref{eq:contin-eq} in the 3rd step. However, the original CoV formula relied on the Jacobian, which defined how the probability volume transformed with the change of variables and the transformation function. In the above Instantaneous CoV, the divergence over the velocity field $U_t$ can be written as the trace of the Jacobian.
+Thus, every transition distribution is Markovian, depending only on its previous state $\vx_{t-1}$.
 
 
-\begin{align}
-    \diver U_t = \tr(J(U_t))
-\end{align} 
-
-\cite{chen2018neural} provide a complete derivation for \eqref{eq:instant-cov} from the perspective of the discrete CoV formula, where the Jacobian is more evident.
-
-\begin{align}
-    U_t^{\text{target}}(\vx) &= \int U_t^{\text{target}}(\vx | \vz) p_t(\vz | \vx) d\vz \\
-    &=  \int U_t^{\text{target}}(\vx | \vz) \frac{p_t( \vx|\vz)p_{\text{data}}(\vz)}{p_t(\vx)} d\vz \label{eq:marg_vel}
-\end{align}
-
-Since the marginal velocity field $U_t(\vx)$ can be obtained from the conditional velocity field $U_t(\vx | \vz)$, the above equation is sometimes called as the \textit{marginalization trick} \citep{flowsanddiffusions2025}. For our purposes, it suffices to verify that the above marginal velocity field satisfies the continuity equation \eqref{eq:contin-eq}.
-
-\begin{align}
-    \frac{d}{dt} p_t(\vx) &= \frac{d}{dt} \int p_t(\vx | \vz) p_{\text{data}}(\vz) d\vz \\
-    &= \int \frac{d}{dt} p_t(\vx | \vz) p_{\text{data}}(\vz) d\vz \\
-    &= \int - \diver (p_t(\cdot |\vz) U_t(\cdot |\vz))(\vx)  p_{\text{data}}(\vz) d\vz \eqcomment{Substitute equation \eqref{eq:contin-cond-eq}}\\
-    &= - \diver \left ( \int p_t(\vx |\vz)U_t(\vx |\vz)  p_{\text{data}}(\vz) d\vz \right ) \\
-    &= - \diver \left ( p_t(\vx) \int U_t(\vx |\vz) \frac{p_t(\vx |\vz)  p_{\text{data}}(\vz)}{p_t(\vx)} d\vz \right ) \eqcomment{Substitute \eqref{eq:marg_vel}}\\
-    &= - \diver( p_t(\vx)U_t(\vx))
-\end{align}
+\subsubsection{Training Discrete Flows}
+The discrete flows have sometimes been called \textbf{Variational Diffusion Models} (VDM) \citep{kingma2021variational} for the reason that they were initially trained using the Evidence Blower Bound (ELBO), similar to VAEs.
 
 
 
 \begin{align}
-    \fL_{\text{FM}}(\theta) &= \E_{\substack{t \sim \fU[0, 1] \\ 
-    \vz \sim p_{\text{data}} \\
-    \vx \sim p_t(\cdot | \vz)}} \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx) \|^2 \right ] \label{eq:fm_loss}
-\end{align}
-
-However, the flow matching loss function in equation \eqref{eq:fm_loss} is intractable as it involves marginalizing over the data distribution which is unknown. A workaround is to use \textit{conditional} flow matching loss instead.
-
-\begin{align}
-    \fL_{\text{CFM}}(\theta) &= \E_{\substack{t \sim \fU[0, 1] \\ 
-    \vz \sim p_{\text{data}} \\
-    \vx \sim p_t(\cdot | \vz)}} \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx | \vz) \|^2 \right ]\label{eq:cfm_loss}
-\end{align}
-
-This auxiliary loss given by equation \eqref{eq:cfm_loss} is tractable. In fact, it is staightforward to show that  the FM loss and the CFM loss only differ by a constant independent of the parameters $\theta$ \citep{holderrieth2025generatormatchinggenerativemodeling}.
-
-\begin{align}
-    \fL_{\text{FM}}(\theta) &= \fL_{\text{CFM}}(\theta) + C \\
-    \Rightarrow \nabla_{\theta} \fL_{\text{FM}}(\theta) &= \nabla_{\theta}\fL_{\text{CFM}}(\theta)
-\end{align}
-
-In other words, they have the same gradient with respect to the model parameters $\theta$, hence we can use the tractable CFM loss to to train the flow matching model.
-
-
-\begin{align}
-    \fL_{\text{FM}}(\theta) &= \E_{\substack{t \sim \fU[0, 1] \\ 
-    \vz \sim p_{\text{data}} \\
-    \vx \sim p_t(\cdot | \vz)}} \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx) \|^2 \right ] \\
-    &= \E [ \|U_t^{\theta}(\vx) \|^2 ] - 2 \E [U_t^{\theta}(\vx)^T U_t^{\text{target}}(\vx)  ] + \E[\|U_t^{\text{target}}(\vx)\|^2] \\
-    &= \E [ \|U_t^{\theta}(\vx) \|^2 ] - 2 \E [U_t^{\theta}(\vx)^T U_t^{\text{target}}(\vx)  ] + C_1 \\
-    &= \E [ \|U_t^{\theta}(\vx) \|^2 ] - 2 \int_0^1 \int p_t(\vx) U_t^{\theta}(\vx)^T U_t^{\text{target}}(\vx) d\vx dt  + C_1 \\
-    &= \E [ \|U_t^{\theta}(\vx) \|^2 ] - 2 \int_0^1 \int p_t(\vx) U_t^{\theta}(\vx)^T \left [ \int U_t^{\text{target}}(\vx | \vz) \frac{p_t( \vx|\vz)p_{\text{data}}(\vz)}{p_t(\vx)} d\vz \right ] d\vx dt  + C_1 \\
-    &= \E [ \|U_t^{\theta}(\vx) \|^2 ] - 2 \E [U_t^{\theta}(\vx)^T U_t^{\text{target}}(\vx | \vz)  ]  + C_1 \\
-    &= \E \left [ \|U_t^{\theta}(\vx) \|^2  - 2U_t^{\theta}(\vx)^T U_t^{\text{target}}(\vx | \vz)  + \|U_t^{\text{target}}(\vx | \vz)\|^2 - \|U_t^{\text{target}}(\vx | \vz)\|^2 \right ]  + C_1 \\
-    &= \E \left [ \|U_t^{\theta}(\vx) \|^2  - 2U_t^{\theta}(\vx)^T U_t^{\text{target}}(\vx | \vz)  + \|U_t^{\text{target}}(\vx | \vz)\|^2 \right ] + \E \left  [- \|U_t^{\text{target}}(\vx | \vz)\|^2 \right ]  + C_1 \\
-    &= \E \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx | \vz) \|^2 \right ] + \E \left  [- \|U_t^{\text{target}}(\vx | \vz)\|^2 \right ]  + C_1 \\
-    &= \E \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx | \vz) \|^2 \right ] + C_2  + C_1 \\
-    &= \fL_{\text{CFM}}(\theta) + C
-\end{align}
-
-\begin{algorithm}
-    \caption{Flow Matching Training Procedure}\label{alg:fm_train}
-    \begin{algorithmic}[1]
-    \Require Dataset $\fD$ with samples $\vz \sim p_{\text{data}}$, Neural network $U_t^{\theta}$
-    \While{not converged}
-    \State Sample real data points $\vz$ from $\fD$
-    \State Uniformly sample some random time $t \sim \fU[0, 1]$
-    \State Sample $\vx$ from the conditional probability path $\vx \sim p_t(\cdot | \vz)$
-    \State Compute the loss
-    \begin{align*}
-        \fL_{\text{CFM}}(\theta) = \E \left [ \|U_t^{\theta}(\vx) - U_t^{\text{target}}(\vx | \vz) \|^2 \right ]
-    \end{align*}
-    \State Update the model parameters $\theta \gets \theta + \alpha \nabla_{\theta} \fL_{\text{CFM}}(\theta)$
-    \EndWhile
-    \end{algorithmic}
-\end{algorithm}
-    
-
-
-As the name suggests, during training, the velocity field modelled by the FM model is trained to generate a designated probability path between the source and the target distributions $p_0$ and $p_T$ respectively.
-
-
-Such models that use composition of invertible differential transformations for modelling distributions are called flow-based generative models.
-
-
-\begin{algorithm}
-    \caption{Euler's Method for Sampling from Flow Models}\label{alg:fm_sample}
-    \begin{algorithmic}[1]
-    \Require (Trained) Neural network $U_t^{\theta}$
-    \State Set $t \gets 0$
-    \State Initialize the step size $h = 1 / N$
-    \State Draw a sample from the initial distribution $\vx \sim p_0(\vx)$
-    \For{$i = 1, \dots, N-1$}
-    \State $\vx_{t+h} \gets \vx_t + h U_t^{\theta}(\vx_t)$
-    \State Update time $t \gets t + h$
-    \EndFor
-    \State \Return $\vx_1$
-    \end{algorithmic}
-\end{algorithm}
-
-
-Challenges of Flow-based models 1. How to learn the invertible function? Or how to model the neural network to be invertible? 2. How to compute the Jacobian efficiently.
-
-
-GANs as EBMs
-
-\begin{center} 
-    \begin{tikzpicture}[
-        every node/.style={draw, align=center, rounded corners, minimum width=2.5cm, minimum height=1cm},
-        arrow/.style={->, thick}
-    ]
-    
-    % Nodes
-    \node (norm) {Normalizing Flows};
-    \node [right=of norm]  (ode) {ODEs};
-    \node [below=of norm]  (markov) {Bayesian Markov Chain \\ Flows};
-    \node [right=of markov]  (sde) {SDEs};
-
-    
-    % Arrows
-    % \draw[arrow] (bijective) -- (injective);
-    % \draw[arrow] (bijective) -- (stochastic);
-    % \draw[arrow] (stochastic) -- (discrete);
-    % \draw[arrow] (stochastic) -- (continuous);
-    % \draw[arrow] (bijective) -- (incomp);
-
-    
-    \end{tikzpicture}
-\end{center} 
-
-
-Diffusion is basically infinitesimal compositions.
-
-\subsection{Discrete Flows}
-
-\subsection{Continuous Flows}
-
-You can repres
-
-\begin{align}
-    \vx_0 \sim p_0; \quad d\vx_t &= U_t^{\theta}(\vx_t) dt &&\eqcomment{Flow Model} \\
-    \vx_0 \sim p_0; \quad d\vx_t &= U_t^{\theta}(\vx_t) dt + \sigma_t dW_t && \eqcomment{Diffusion Model}
+    \text{ELBO}(\vx) = \E[\log p(\vx_0 | \vx_1)] - \D_{KL}(q(\vx_T | \vx_0) \| p(\vx_T)) - \sum_{t=2}^T \E[\D_{KL}(q(\vx_{t-1} | \vx_t, \vx_0) \| p(\vx_{t-1}|\vx_t))]
 \end{align}
 
 
-\section{Modelling Flows via Differential Equations}
+\subsubsection{Issues with Discrete Flows}
+So far, the probabilistic flows have been discrete in time.
 
-\subsection{Stochastic Differential Equations}
-Stochastic differential equations (SDEs) are the continuous counterpart of Markov chains, in the same way
-as diffusion by ordinary differential equations is the continuous version of normalizing flows.
+The difficulty in training such models is that there is no closed-form loss function. The loss function needs to be approximated via an \emph{evidence lower bound} (ELBO).
 
-\section{Diffusion Models}
+During training, it is necessary to choose a time-discretization.
 
-
-Forward diffusion process of DDPM from Ito SDE.
-
-\begin{align}
-    d\vx_t &= U_t(\vx) dt + \sigma_t dW \label{eq:ito-sde}\\ 
-    \frac{d\vx_t}{dt} &= U_t(\vx) + \sigma_t \frac{dW}{dt} \\ 
-    \frac{d \vx_t}{dt} &= -\frac{1}{2} \beta(t) \vx_t + \sqrt{\beta(t)} \frac{dW}{dt} \\
-    \lim_{\delta t \to 0} \frac{\vx_t - \vx_{t-1}}{\delta t} &= -\frac{1}{2} \beta(t)\vx_{t-1} +  \sqrt{\beta(t)} \frac{1}{\sqrt{\delta t}} \fN(0, I_D) \\
-    \vx_t &\approx \vx_{t-1} -\frac{1}{2} \beta(t)\delta t \vx_{t-1} + \sqrt{\beta(t)\delta t} \fN(0, I_D) \\
-    \vx_t &= \sqrt{1 - \beta(t)\delta t}\, \vx_{t-1} + \sqrt{\beta(t)\delta t}\, \fN(0, I_D) \\
-    \vx_t &= \sqrt{1 - \beta(t)}\, \vx_{t-1} + \sqrt{\beta(t)} \, \fN(0, I_D) \eqcomment{$\beta(t) \delta t = \beta(t)$}
-\end{align}
-
-Where $W$ is a Weiner process with standard Gaussian increments, $U_t = -\frac{1}{2} \beta(t) \vx_t$ and $\sigma_t = \sqrt{\beta(t)}$. These choices of the drift and the diffusion coefficients imply that the above SDE is linear and were first proposed by \cite{ho2020denoising}. This procedure is called as DDPM (Denoising Diffusion  Probabilistic Model). 
-
-DDPMs are Markov Models
+Futhermore, the discrete flows require closed-form marginal distributions that are gaussian. As such their forward processes are a special case of probability paths.
 
 
-The Fokker-Planck equation extends the Continuity equation \eqref{eq:contin-eq} from ODEs to SDEs. Given an Ito SDE of the form \eqref{eq:ito-sde}, then $p_t$ is a valid probability path guided by the SDE such that $\vx_t \sim p_t(\vx)$ iff the following Fokker-Planck equation holds.
-\begin{align}
-    \partial_t p_t(\vx) = -\diver (p_t U_t)(\vx) + \frac{\sigma_t^2}{2} \Delta p_t(\vx); \forall \vx \in \R^D, - \leq t \leq 1 \eqcomment{Fokker-Plank Equation} \label{eq:fokker-planck}
-\end{align}
-Where $\Delta p_t(\vx) = \diver (\nabla p_t)(\vx)$ is the Laplacian operator. It is easy to recover the Continuity equation from the above equation \eqref{eq:fokker-planck} when $\sigma_t = 0$. The Fokker-Planck equation can be thought as the heat diffusion equation with drift governed by $U_t$.
-
-time reversal of an SDE is another SDE. 
-
-\begin{align}
-    d\vx_t &= \left [U_t^{\text{target}}(\vx_t) + \frac{\sigma_t^2}{2} \nabla \log p_t(\vx_t) \right ] dt + \sigma_t d W_t \\
-    \Rightarrow \vx_t &\sim p_t(\vx); 0 \leq t \leq 1
-\end{align}
-
-We can again verify that the above reverse SDE produces intermediate probability paths $p_t$ using the Fokker-Planck equation (Similar to how we verified the formula for the marginal velocity field using the Continuity equation).
-
-\begin{align}
-    \partial_t p_t(\vx) &= - \diver(p_t U_t^{\text{target}})(\vx) \\
-    &= - \diver(p_t U_t^{\text{target}})(\vx) - \frac{\sigma_t^2}{2}\Delta p_t(\vx) + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \\
-    &= - \diver(p_t U_t^{\text{target}})(\vx) - \diver \left (\frac{\sigma_t^2}{2}\nabla p_t\right )(\vx)  + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \\
-    &= - \diver(p_t U_t^{\text{target}})(\vx) - \diver \left (p_t \left [ \frac{\sigma_t^2}{2}\nabla \log p_t \right ] \right )(\vx)  + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \\
-    &= - \diver \left (p_t \left [U_t^{\text{target}} + \frac{\sigma_t^2}{2} \nabla \log p_t \right ] \right )(\vx)  + \frac{\sigma_t^2}{2}\Delta p_t(\vx) \label{eq:fp-rev-sde}
-\end{align}
+In case of continuous time, CFM is not a lower bound to FM but equivalent.
 
 
-\cite{song2020score} showed that just as DDPM is the discretized special-case of the reverse-time SDE, DDIM is the discretized special-case of the probability flow ODE. In other words, the Ito SDE in equation \eqref{eq:ito-sde} can be quivalently converted to a \emph{deterministic} ODE of the form 
-\begin{align}
-    d\vx_t &= U_t(\vx)dt + \sigma_t dW \\
-    \equiv \frac{d\vx_t}{dt} &= U_t(\vx) - \frac{1}{2} \sigma_t^2 \nabla_{\vx} \log p_t(\vx) \label{eq:pf-ode}
-\end{align}
-The above ODE equation \eqref{eq:pf-ode} is called as the \emph{probability flow-ODE} (PF-ODE). THe above two are equivalent in the sense that the trajectories obtained by solving the PF-ODE have the same marginal distributions as the SDE at evert point in time.
-
-The above equivalence can be proved by noting that the Fokker-Planck equation implies that the marginal distributions $p_t$ follow the Ito SDE, just as the Continuity equation implies that $p_t$ follow the ODE. So, it suffices if we can derive the Continuity equation from FP for the PF-ODE \eqref{eq:pf-ode} \citep{nakkiran2024step}.
-
-\begin{align}
-    d\vx_t &= U_t(\vx) + \sigma_t dW \\
-    \Rightarrow \partial_t p_t(\vx) &= -\diver (p_t U_t)(\vx) + \frac{\sigma_t^2}{2} \Delta p_t(\vx) \eqcomment{Fokker-Planck equation}\\
-    &= -\nabla_{\vx} (p_t U_t)(\vx) + \frac{\sigma_t^2}{2} \nabla_{\vx}^2 p_t(\vx) \\ 
-    &= -\nabla_{\vx} (p_t U_t)(\vx) + \frac{\sigma_t^2}{2} \nabla_{\vx} \big (p_t \nabla_{\vx} \log p_t(\vx) \big ) \\ 
-    &= -\nabla_{\vx} \left ( p_t \left [ U_t - \frac{\sigma_t^2}{2}\nabla_{\vx} \log p_t \right ] \right ) (\vx) \\ 
-    &= -\nabla_{\vx} \left ( p_t \widetilde{U}_t\right ) (\vx) \eqcomment{$\widetilde{U}_t = U_t - \frac{\sigma_t^2}{2}\nabla_{\vx} \log p_t$} \\ 
-    &= -\diver \left ( p_t \widetilde{U}_t\right ) (\vx) \eqcomment{Continuity equation}\\
-    \Rightarrow d\vx_t &= \widetilde{U}_t(\vx) \eqcomment{PF-ODE}
-\end{align}
+\subsection{Moving from Discrete to Continuous Flows}
 
 
-However, note that DDPM and DDIM are different formulations - DDPM implements a stochastic map  whose output is a sample from the conditional distribution $\vx_t \sim p_t(\vx | \vz)$ while DDIM is deterministic map such that the output is marginally distribution as $p_{t + \delta t}$ \textit{i.e.} the transformation to push forward from $p_t \to p_{t + \delta t}$ \citep{nakkiran2024step}.
+\subsubsection{Issues with Continuous Normalizing Flows}
 
-\begin{center}
-\begin{tikzpicture}[1,000,000
-\node[state, right=of dots] (xT) {$\vx_T$};
+\subsection{Rectified Flows}
 
-% Forward arrows
-\draw[arrow] (x0) -- (x1) node[midway, above] {$q(\vx_1|\vx_0)$};
-\draw[arrow] (x1) -- (x2) node[midway, above] {$q(\vx_2|\vx_1)$};
-\draw[arrow] (x2) -- (dots);
-\draw[arrow] (dots) -- (xT) node[midway, above] {$q(\vx_T|\vx_{T-1})$};
+\section{Flow Matching Framework}
 
-% Equation for forward process
-\node[below=1cm of x2, align=center] (forward_eq) {
-    Forward SDE: \\
-    $d\vx_t = U_t^{\theta}(\vx_t)dt + \sigma_t d\vw_t$
-};
+\subsection{Conditional Flow Matching}
 
+\subsection{Optimal-Transport CFM}
 
-% Nodes for reverse process
-\node[state, below=2.5cm of x0] (x0_rev) {$\vx_0$};
-\node[state, below=2.5cm of x1] (x1_rev1,000,000
-\end{center}
+\section{Score Matching Framework}
 
-\begin{algorithm}
-    \caption{Euler-Maruyama Method for Sampling from Diffusion Models \citep{sarkka2019applied}}\label{alg:diff_sample}
-    \begin{algorithmic}[1]
-    \Require (Trained) Neural network $U_t^{\theta}$, diffusion coefficient $\sigma_t$
-    \State Set $t \gets 0$
-    \State Initialize the step size $h = 1 / N$
-    \State Draw a sample from the initial distribution $\vx \sim p_0(\vx)$
-    \For{$i = 1, \dots, N-1$}
-    \State Draw sample $\epsilon \in \fN(0, I_D)$
-    \State $\vx_{t+h} \gets \vx_t + h U_t^{\theta}(\vx_t) + \sigma_t \sqrt{h}\epsilon$
-    \State Update time $t \gets t + h$
-    \EndFor
-    \State \Return $\vx_1$
-    \end{algorithmic}
-\end{algorithm}
+\subsubsection{Benefit of adding Noise}
 
-
-\subsubsection{Score Matching (SM)}
-If two continuously differentiable rea1,000,000l-valued functions $f(\vx)$ and $g(\vx)$ have equal first derivatives everywhere, then $f(\vx) = g(\vx) + C$. Given two log probability densities $\log p(\vx)$ and $\log q(\vx)$ with equal first derivatives, then the two densities are equivalent.
-
-\begin{align}
-    \nabla \log p(\vx) &= \nabla \log q(\vx) \\ 
-    \exp \left (\nabla \log p(\vx) \right ) &= \exp \left (\nabla \log q(\vx) \right) \\
-    \int \exp \left (\nabla \log p(\vx) \right ) &= \int \exp \left (\nabla \log q(\vx) \right) \\ 
-    \Rightarrow p(\vx) &\equiv  q(\vx)
-\end{align}
-
-The above equation implies that to learn a target distribution from a given (parameterized) distribution, it suffices if we can match its scores (gradient of its log density).
-
-Stein score $\nabla_{\vx} \log p_{\theta}(\vx)$, Fisher score $\nabla_{\theta}\log p_{\theta}(\vx)$.
-
-\subsection{Architecture}
-Earlier, the focus was on designing neural networks that were invertible - NICE, RealNVP, Invertible ResNetS, Glow.
-
-\section{Latent Diffusion Models}
-
-Latent Diffusion Models (LDMs) can be viewed as a development over another well-known class of generative models - Variational AutoEncoders (VAEs) \cite{dieleman2023perspectives}. It is pertinent to have a quick understanding of VAEs and how LDMs improve upon them.
-
-VAEs are Bayesian Markov Flows.
-
-How does ELBO relate to EBM? 
-
-
-
-\subsection{Guidance}
-
-\subsection{Sampling}
-
-\section{Langevin sampling}
-
-
-\section{Classifiers are Generative Models}
-
-Optimizing = Gradient Descent
-Sampling = Gradient Descent + noise
-Guidance = ?
-
-Since a generic classifier is not invertible, SGLD is a standard way of sampling from the distribution.
-
-\section{Practical Aspects}
-
-\section{Connections}
-\subsection{Link between EBMs and Diffusion Models}
-\subsection{Link between Neural ODEs and Diffusion Models}
-\subsection{Link between SDG and SGLD}
-\subsection{Link between Gaussian Processes and SDEs}
-
-\appendix
-\section{Mathematical Background}
-\subsection{Probability Theory}
 
 
 \bibliographystyle{unsrtnat} 
 \bibliography{references}
 
-\end{document}
+\end{document} 
