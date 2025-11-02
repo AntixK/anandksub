@@ -272,4 +272,28 @@ class BlackBoxSolver(torch.autograd.Function):
       });
 
     })();
-  </script></body></html>
+  </script><script>
+(function() {
+  // Only enable hot reload in development (localhost)
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return;
+  }
+
+  function connectReload() {
+    const eventSource = new EventSource('/reload');
+    
+    eventSource.addEventListener('reload', function(event) {
+      eventSource.close();
+      window.location.reload();
+    });
+
+    eventSource.addEventListener('error', function(event) {
+      eventSource.close();
+      // Reconnect after a short delay
+      setTimeout(connectReload, 1000);
+    });
+  }
+
+  connectReload();
+})();
+</script></body></html>

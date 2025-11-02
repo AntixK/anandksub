@@ -38,7 +38,7 @@ The most important sacred text of the Tai Ahom religion is the *Lit Lai Pak Peyn
 The inter-religious dialogues and interactions between Tai Ahom religion and other locally existing religions such as Hinduism, Buddhism gave way to a merging of religious ideologies, gods, and practices. As noted by [3], Langkuri - Shiva, Pha-Pin-Bet - Vishnu, Ban - Surya, Den - Chandra, Chang Dam - Brahma, Lengdon - Indra, Phri Nat Yao - Durga, Ai A Nang - Lakshmi.
 
 
-The Tai Ahoms, settling in the Brahmaputra valley, called their land *Mung Dun Hsun Hkam* or *Svarnabhumi* (land of golden harvest) indicating the valley's  fertile soil.
+The Tai Ahoms, settling in the Brahmaputra valley, called their land *Mung Dun Hsun Hkam* or *Svarnabhumi* (land of golden harvest) indicating the valley's  fertile soil. 
 
 ----
 [^1]: Gogoi, Padmeshwar, "Tai-Ahom Religion and Customs" (1976), Assam Publication Board.

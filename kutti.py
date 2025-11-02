@@ -7,10 +7,13 @@
 import os
 import re
 import math
+import time
 import shutil
 import tomllib
+import threading
 import itertools
 from http import server
+from socketserver import ThreadingMixIn
 from pathlib import Path
 from copy import deepcopy
 from pprint import pformat
@@ -566,6 +569,9 @@ def insert_hfun(file: Path, inserts: dict):
     template = _env.get_template(str(file.relative_to(file.parent)))
     html = template.render(index_data)
 
+    # Inject hot reload script
+    html = inject_hot_reload_script(html)
+
     if DO_MINIFY:
         html = do_minify_html(html)
 
@@ -694,6 +700,9 @@ def render_html(file: Path, config: dict) -> None:
     html_template = env.get_template("article.html")
     html = html_template.render(html_data)
 
+    # Inject hot reload script
+    html = inject_hot_reload_script(html)
+
     if DO_MINIFY:
         html = do_minify_html(html)
 
@@ -701,6 +710,47 @@ def render_html(file: Path, config: dict) -> None:
     save_html(file, html)
 
 # ========================= Utilities =====================#
+
+def inject_hot_reload_script(html: str) -> str:
+    """Inject hot reload JavaScript before </body> tag."""
+    hot_reload_script = """<script>
+(function() {
+  // Only enable hot reload in development (localhost)
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return;
+  }
+
+  function connectReload() {
+    const eventSource = new EventSource('/reload');
+    
+    eventSource.addEventListener('reload', function(event) {
+      eventSource.close();
+      window.location.reload();
+    });
+
+    eventSource.addEventListener('error', function(event) {
+      eventSource.close();
+      // Reconnect after a short delay
+      setTimeout(connectReload, 1000);
+    });
+  }
+
+  connectReload();
+})();
+</script>"""
+    
+    # Find the last </body> tag and inject before it
+    body_end_pattern = re.compile(r'</body>', re.IGNORECASE)
+    matches = list(body_end_pattern.finditer(html))
+    
+    if matches:
+        # Inject before the last </body> tag
+        last_match = matches[-1]
+        insert_pos = last_match.start()
+        return html[:insert_pos] + hot_reload_script + '\n' + html[insert_pos:]
+    
+    # If no </body> tag found, append at the end
+    return html + '\n' + hot_reload_script
 
 def save_html(file: Path, html: str) -> None:
     parent_dir = file.relative_to(CONTENT_DIR).parent
@@ -769,7 +819,7 @@ class ContentMonitor(FileSystemEventHandler):
             return
         elif event.event_type in ["created", "modified"]:
             logger.info(f"Reloading server due to file change: {event.src_path}")
-            build()
+            build(clean=False)
 
 # ============================ Server =========================== #
 
@@ -777,32 +827,39 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
     SUFFIXES = [".html", "/index.html", "/"]
     JS_EXTENSIONS = (".js", ".mjs")
     XML_EXTENSIONS = (".xml", ".rss", ".atom")
-    TXT_EXTENSIONS = (".txt")
+    TXT_EXTENSIONS = (".txt",)
     CSS_EXTENSIONS = (".css", ".scss")
     MEDIA_EXTENSIONS = (".webp", ".svg", ".pdf", ".mp4", ".png", ".jpg", ".jpeg", ".gif")
     FONT_EXTENSIONS = (".woff", ".woff2", ".ttf", ".otf")
+    
+    # Exceptions that indicate client disconnected
+    CONNECTION_ERRORS = (ConnectionError, BrokenPipeError, OSError)
 
     def translate_path(self, path):
-        path = server.SimpleHTTPRequestHandler.translate_path(self, path)
+        path = super().translate_path(path)
         relpath = os.path.relpath(path, os.getcwd())
         fullpath = os.path.join(self.server.base_path, relpath)
         return fullpath
 
     def do_GET(self):
+        if self.path == "/reload":
+            self.handle_reload_sse()
+            return
+
         if self.path not in self.SUFFIXES:
-            # self.path = self.path.lstrip("/")
-            if (not self.path.endswith(".html") and
-                not self.path.endswith("/") and
-                not self.path.endswith(self.MEDIA_EXTENSIONS) and
-                not self.path.endswith(self.JS_EXTENSIONS) and
-                not self.path.endswith(self.CSS_EXTENSIONS) and
-                not self.path.endswith(self.XML_EXTENSIONS) and
-                not self.path.endswith(self.TXT_EXTENSIONS) and
-                not self.path.endswith(self.FONT_EXTENSIONS)):
+            # Check if path needs .html extension
+            all_extensions = (
+                self.MEDIA_EXTENSIONS + self.JS_EXTENSIONS + self.CSS_EXTENSIONS +
+                self.XML_EXTENSIONS + self.TXT_EXTENSIONS + self.FONT_EXTENSIONS
+            )
+            if not any(self.path.endswith(ext) for ext in all_extensions + (".html", "/")):
                 self.path += ".html"
 
-
-        server.SimpleHTTPRequestHandler.do_GET(self)
+        try:
+            super().do_GET()
+        except self.CONNECTION_ERRORS:
+            # Client disconnected before response was fully sent - ignore
+            pass
 
     def send_error(self, code, message=None):
         if code == 404:
@@ -810,7 +867,44 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
                 msg_404 = f.read()
             self.error_message_format = f"""{msg_404}"""
 
-        server.SimpleHTTPRequestHandler.send_error(self, code, message)
+        super().send_error(code, message)
+
+    def handle_reload_sse(self):
+        """Handle Server-Sent Events for hot reload."""
+        # Send SSE headers
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream")
+        self.send_header("Cache-Control", "no-cache")
+        self.send_header("Connection", "keep-alive")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+
+        # Add this connection to the clients list
+        with self.server.clients_lock:
+            self.server.clients.append(self.wfile)
+
+        try:
+            # Send initial connection message
+            self.wfile.write(b": connected\n\n")
+            self.wfile.flush()
+
+            # Keep connection alive by sending periodic keepalives
+            # The connection will be closed when build() completes and sends reload event
+            while True:
+                time.sleep(30)  # Send keepalive every 30 seconds
+                self.wfile.write(b": keepalive\n\n")
+                self.wfile.flush()
+        except self.CONNECTION_ERRORS:
+            # Client disconnected
+            pass
+        finally:
+            # Remove from clients list
+            with self.server.clients_lock:
+                try:
+                    self.server.clients.remove(self.wfile)
+                except ValueError:
+                    # Already removed (shouldn't happen, but safe)
+                    pass
 
     # WARNING: This is a hack to prevent caching of files
     def end_headers(self):
@@ -820,20 +914,63 @@ class SSGHTTPRequestHandler(server.SimpleHTTPRequestHandler):
         super().end_headers()
 
 
-class SSGHTTPServer(server.HTTPServer):
+class SSGHTTPServer(ThreadingMixIn, server.HTTPServer):
+    daemon_threads = True
+    allow_reuse_address = True
+
     def __init__(self, base_path, *args, **kwargs):
-        self.allow_reuse_address = True
-        server.HTTPServer.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.base_path = base_path
+        self.clients = []
+        self.clients_lock = threading.Lock()
 
 
-def build() -> None:
-    render(clean=True)
-    check_for_optimized_image_formats()
-    check_for_optimized_font_files()
+def notify_reload_clients(httpd):
+    """Send reload event to all connected SSE clients."""
+    if not httpd or not hasattr(httpd, 'clients'):
+        return
+    
+    with httpd.clients_lock:
+        # Make a copy of the list to avoid iteration issues
+        clients = list(httpd.clients)
+    
+    # Send reload event to all clients and track disconnected ones
+    disconnected = []
+    reload_message = b"event: reload\ndata: reload\n\n"
+    
+    for client in clients:
+        try:
+            client.write(reload_message)
+            client.flush()
+        except (ConnectionError, BrokenPipeError, OSError, Exception):
+            # Client disconnected or any error - mark for removal
+            disconnected.append(client)
+    
+    # Remove disconnected clients
+    if disconnected:
+        with httpd.clients_lock:
+            for client in disconnected:
+                try:
+                    httpd.clients.remove(client)
+                except ValueError:
+                    # Already removed
+                    pass
+
+# Global reference to HTTP server for reload notifications
+_httpd_instance = None
+
+def build(clean: bool = True) -> None:
+    render(clean=clean)
+    
+    if clean:
+        check_for_optimized_image_formats()
+        check_for_optimized_font_files()
+    
+    # Notify connected clients to reload
+    if _httpd_instance:
+        notify_reload_clients(_httpd_instance)
 
 if __name__ == "__main__":
-
     CONFIG_FILE: Path = Path("config.toml")
 
     config = parse_config(CONFIG_FILE)
@@ -856,7 +993,7 @@ if __name__ == "__main__":
     event_handler = ContentMonitor()
 
     dirs_to_watch = [CONTENT_DIR, TEMPLATE_DIR, LIBS_DIR, ASSETS_DIR, CSS_DIR]
-    observers = []
+    observers: list[Observer] = []
     for directory in dirs_to_watch:
         observer = Observer()
         observer.schedule(event_handler, directory, recursive=True)
@@ -865,16 +1002,22 @@ if __name__ == "__main__":
     for observer in observers:
         observer.start()
 
+    httpd = None
     try:
-        with SSGHTTPServer(str(BUILD_DIR),
-                           (config["server"]["host"], config["server"]["port"]),
-                           SSGHTTPRequestHandler) as httpd:
-            logger.info(f"Starting server at http://{config['server']['host']}:{config['server']['port']}")
-            httpd.serve_forever()
+        httpd = SSGHTTPServer(str(BUILD_DIR),
+                              (config["server"]["host"], config["server"]["port"]),
+                              SSGHTTPRequestHandler)
+        _httpd_instance = httpd
+        logger.info(f"Starting server at http://{config['server']['host']}:{config['server']['port']}")
+        httpd.serve_forever()
 
     except KeyboardInterrupt:
-            for observer in observers:
-                observer.unschedule_all()
-                observer.stop()
-                observer.join()
-            logger.info("Shutting down server...")
+        logger.info("Shutting down server...")
+    finally:
+        _httpd_instance = None
+        if httpd is not None:
+            httpd.server_close()
+        for observer in observers:
+            observer.unschedule_all()
+            observer.stop()
+            observer.join()
